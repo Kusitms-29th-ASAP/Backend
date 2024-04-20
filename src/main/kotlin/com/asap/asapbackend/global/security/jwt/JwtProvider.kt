@@ -16,14 +16,14 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
 
     private val tokenCacheMap: Map<String, Token> = ConcurrentHashMap() // 동시에 동일한 요청이 여럿 들어올 경우 일관성 보장을 위해 사용
 
-    fun generateAccessToken(userClaims: PrivateClaims.UserClaims): String {
+    private fun generateAccessToken(userClaims: PrivateClaims.UserClaims): String {
         return generateBasicToken(
             userClaims.createPrivateClaims(TokenType.ACCESS_TOKEN),
             jwtProperties.accessTokenExpirationTime
         )
     }
 
-    fun generateRefreshToken(userClaims: PrivateClaims.UserClaims): String {
+    private fun generateRefreshToken(userClaims: PrivateClaims.UserClaims): String {
         return generateBasicToken(
             userClaims.createPrivateClaims(TokenType.REFRESH_TOKEN),
             jwtProperties.refreshTokenExpirationTime

@@ -19,47 +19,6 @@ class JwtProviderTest : BehaviorSpec({
 
     val jwtProvider = JwtProvider(jwtProperties, jwtKeyFactory, jwtValidator)
 
-    given("토큰 생성 과정에서") {
-        val userClaims: PrivateClaims.UserClaims = generateFixture()
-        `when`("generateAccessToken를 호출하면 access token이 생성되고") {
-            val result = jwtProvider.generateAccessToken(userClaims)
-            val payload = generateBasicParser(
-                result,
-                jwtKeyFactory.generateKey(),
-                PrivateClaims.retrieveClaimsClassType()
-            ).parseSignedClaims(result).payload
-            then("isser가 ${JwtConst.TOKEN_ISSUER} 여야 한다.") {
-                payload.issuer shouldBe JwtConst.TOKEN_ISSUER
-            }
-            then("tokenType이 ${TokenType.ACCESS_TOKEN} 여야 한다.") {
-                payload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.ACCESS_TOKEN
-            }
-            then("userClaims가 토큰 생성시 사용한 userClaims여야 한다.") {
-                payload.get(JwtConst.USER_CLAIMS, PrivateClaims.UserClaims::class.java)
-                    .shouldBeEqualUsingFields(userClaims)
-            }
-        }
-
-        `when`("generateRefreshToken을 호출하면 refresh token이 생성되고") {
-            val result = jwtProvider.generateRefreshToken(userClaims)
-            val payload = generateBasicParser(
-                result,
-                jwtKeyFactory.generateKey(),
-                PrivateClaims.retrieveClaimsClassType()
-            ).parseSignedClaims(result).payload
-            then("isser가 ${JwtConst.TOKEN_ISSUER} 여야 한다.") {
-                payload.issuer shouldBe JwtConst.TOKEN_ISSUER
-            }
-            then("tokenType이 ${TokenType.REFRESH_TOKEN} 여야 한다.") {
-                payload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.REFRESH_TOKEN
-            }
-            then("userClaims가 토큰 생성시 사용한 userClaims여야 한다.") {
-                payload.get(JwtConst.USER_CLAIMS, PrivateClaims.UserClaims::class.java)
-                    .shouldBeEqualUsingFields(userClaims)
-            }
-        }
-    }
-
     given("토큰 재발급 과정에서") {
         val refreshToken: String = generateFixture()
         val userClaims: PrivateClaims.UserClaims = generateFixture()
@@ -93,7 +52,7 @@ class JwtProviderTest : BehaviorSpec({
 
     given("토큰 추출 과정에서") {
         val userClaims: PrivateClaims.UserClaims = generateFixture()
-        val token: String = jwtProvider.generateAccessToken(userClaims)
+        val token: String = jwtProvider.generateToken(userClaims).accessToken
         every { jwtValidator.initializeJwtParser(TokenType.ACCESS_TOKEN) } returns generateBasicParser(
             token,
             jwtKeyFactory.generateKey(),
