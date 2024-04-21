@@ -3,6 +3,7 @@ package com.asap.asapbackend.global.security.jwt
 import com.asap.asapbackend.fixture.generateFixture
 import com.asap.asapbackend.generateBasicParser
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.equality.shouldBeEqualUsingFields
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -48,6 +49,21 @@ class JwtProviderTest : BehaviorSpec({
                     .shouldBeEqualUsingFields(userClaims)
             }
         }
+
+        `when`("동시에 reissueToken을 호출하면"){
+            val reissueTokenList = (0..9).map {
+                Thread {
+                    Thread.sleep(10)
+                    jwtProvider.reissueToken(refreshToken)
+                }.start()
+            }
+            then("동일한 토큰이 반환되어야 한다."){
+                val firstToken = reissueTokenList[0]
+                reissueTokenList.forEach {
+                    it shouldBeEqualToComparingFields  firstToken
+                }
+            }
+        }
     }
 
     given("토큰 추출 과정에서") {
@@ -65,4 +81,5 @@ class JwtProviderTest : BehaviorSpec({
             }
         }
     }
+
 })

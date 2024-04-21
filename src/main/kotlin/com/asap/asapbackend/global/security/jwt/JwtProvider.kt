@@ -1,7 +1,6 @@
 package com.asap.asapbackend.global.security.jwt
 
 import com.asap.asapbackend.global.util.LockManager
-import com.asap.asapbackend.global.util.lockBasedKey
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import java.util.*
@@ -37,15 +36,15 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
         )
     }
 
-    fun reissueToken(refreshToken: String): Token {
-        tokenCacheMap[refreshToken]?.let { return it }
+    fun reissueToken(refreshToken: String): Token = LockManager.lockByKey(refreshToken) {
+        tokenCacheMap[refreshToken]?.let { return@lockByKey it }
         jwtValidator.validateToken(refreshToken, TokenType.REFRESH_TOKEN)
         val userClaims = extractUserClaimsFromToken(refreshToken, TokenType.REFRESH_TOKEN)
         val token = generateToken(userClaims)
 
         tokenCacheMap.plus(refreshToken to token)
 
-        return token
+        token
     }
 
     fun extractUserClaimsFromToken(token: String, tokenType: TokenType): PrivateClaims.UserClaims {
