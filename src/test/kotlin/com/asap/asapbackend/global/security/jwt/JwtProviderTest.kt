@@ -8,6 +8,7 @@ import io.kotest.matchers.equality.shouldBeEqualUsingFields
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import java.util.concurrent.CountDownLatch
 
 class JwtProviderTest : BehaviorSpec({
     val jwtProperties = JwtProperties(
@@ -51,12 +52,17 @@ class JwtProviderTest : BehaviorSpec({
         }
 
         `when`("동시에 reissueToken을 호출하면"){
-            val reissueTokenList = (0..9).map {
+            val reissueTokenList = mutableListOf<Token>()
+            val countDownLatch = CountDownLatch(10)
+            (0..9).map {
                 Thread {
                     Thread.sleep(10)
-                    jwtProvider.reissueToken(refreshToken)
+                    val result = jwtProvider.reissueToken(refreshToken)
+                    reissueTokenList.add(result)
+                    countDownLatch.countDown()
                 }.start()
             }
+            countDownLatch.await()
             then("동일한 토큰이 반환되어야 한다."){
                 val firstToken = reissueTokenList[0]
                 reissueTokenList.forEach {
