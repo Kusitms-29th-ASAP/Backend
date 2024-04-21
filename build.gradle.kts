@@ -55,6 +55,9 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.5")
     implementation("io.jsonwebtoken:jjwt-impl:0.12.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.5")
+
+    // caffeine
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
 
 tasks.withType<KotlinCompile> {

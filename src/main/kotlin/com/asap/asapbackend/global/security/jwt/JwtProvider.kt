@@ -1,10 +1,12 @@
 package com.asap.asapbackend.global.security.jwt
 
+import com.asap.asapbackend.global.util.CacheManager
 import com.asap.asapbackend.global.util.LockManager
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 
 @Component
 class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
@@ -12,8 +14,6 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     private val jwtKeyFactory: JwtKeyFactory,
     private val jwtValidator: JwtValidator
 ) {
-
-    private val tokenCacheMap: Map<String, Token> = ConcurrentHashMap() // 동시에 동일한 요청이 여럿 들어올 경우 일관성 보장을 위해 사용
 
     private fun generateAccessToken(userClaims: PrivateClaims.UserClaims): String {
         return generateBasicToken(
@@ -37,14 +37,14 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     }
 
     fun reissueToken(refreshToken: String): Token = LockManager.lockByKey(refreshToken) {
-        tokenCacheMap[refreshToken]?.let { return@lockByKey it }
-        jwtValidator.validateToken(refreshToken, TokenType.REFRESH_TOKEN)
-        val userClaims = extractUserClaimsFromToken(refreshToken, TokenType.REFRESH_TOKEN)
-        val token = generateToken(userClaims)
+        CacheManager.cacheByKey(refreshToken){
+            jwtValidator.validateToken(refreshToken, TokenType.REFRESH_TOKEN)
+            val userClaims = extractUserClaimsFromToken(refreshToken, TokenType.REFRESH_TOKEN)
+            val token = generateToken(userClaims)
 
-        tokenCacheMap.plus(refreshToken to token)
+            return@cacheByKey token
+        }
 
-        token
     }
 
     fun extractUserClaimsFromToken(token: String, tokenType: TokenType): PrivateClaims.UserClaims {
