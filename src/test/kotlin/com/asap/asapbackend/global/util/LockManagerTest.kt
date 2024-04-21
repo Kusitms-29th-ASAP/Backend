@@ -64,14 +64,16 @@ class LockManagerTest {
         val key = "key"
         val body = {
             val currentCount = count
-            Thread.sleep(100)
+            Thread.sleep(1)
             count = currentCount + 1
         }
 
-        val countDownLatch = CountDownLatch(2)
+        val countDown = 100
+
+        val countDownLatch = CountDownLatch(countDown)
 
         // When
-        for (i in 0..1) {
+        for (i in 0 until countDown) {
             Thread {
                 LockManager.lockByKey(key, body = body)
                 countDownLatch.countDown()
@@ -81,7 +83,7 @@ class LockManagerTest {
         countDownLatch.await()
 
         // Then
-        count shouldBe 2
+        count shouldBe 100
     }
 
 }
