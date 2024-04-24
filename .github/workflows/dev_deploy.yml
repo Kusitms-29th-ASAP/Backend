@@ -97,7 +97,7 @@ jobs:
           key: ${{ secrets.NCP_SSH_KEY }}
           script: |
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
-            docker pull $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
+            docker pull $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
             docker stop $IMAGE_NAME || true
             docker rm $IMAGE_NAME || true
             docker run -d --name $IMAGE_NAME -p 8080:8080 $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
