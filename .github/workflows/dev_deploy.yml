@@ -26,6 +26,8 @@ jobs:
   push_to_docker_hub:
     needs: application_build
     runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.generate_version.outputs.new_version }}
     steps:
       - name: Generate Version
         id: generate_version
@@ -40,7 +42,7 @@ jobs:
             | jq '.total_count')
           
           echo "new version is $current_date_short_year.$runs_this_month"
-          echo "runs_this_month=$current_date_short_year.$runs_this_month" >> "$GITHUB_OUTPUT"
+          echo "new_version=$current_date_short_year.$runs_this_month" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker
         uses: docker/login-action@v3
@@ -51,14 +53,14 @@ jobs:
 
       - name: Docker build
         env:
-          VERSION: ${{ steps.generate_version.outputs.runs_this_month }}
+          VERSION: ${{ steps.generate_version.outputs.new_version }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
           IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
         run: |
-          docker build -t $DOCKER_REGISTRY/IMAGE_NAME:$VERSION .
-          docker tag $DOCKER_REGISTRY/IMAGE_NAME:$VERSION $DOCKER_REGISTRY/IMAGE_NAME:latest
-          docker push $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
-          docker push $DOCKER_REGISTRY/IMAGE_NAME:latest
+          docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION .
+          docker tag $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION $DOCKER_REGISTRY/$IMAGE_NAME:latest
+          docker push $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
+          docker push $DOCKER_REGISTRY/$IMAGE_NAME:latest
 
 
   run_application:
@@ -71,7 +73,7 @@ jobs:
       - name: Run Docker container
         uses: appleboy/ssh-action@master
         env:
-          VERSION: ${{ needs.push_to_docker_hub.outputs.VERSION }}
+          VERSION: ${{ needs.push_to_docker_hub.outputs.new_version }}
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -86,4 +88,4 @@ jobs:
             docker pull $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
             docker stop $IMAGE_NAME || true
             docker rm $IMAGE_NAME || true
-            docker run -d --name $IMAGE_NAME -p 8080:8080 $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
+            docker run -d --name $IMAGE_NAME -p 8080:8080 $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
