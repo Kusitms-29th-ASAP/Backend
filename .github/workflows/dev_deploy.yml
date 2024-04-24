@@ -1,0 +1,89 @@
+name: dev deployment
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  application_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: java setting
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: gradle setting
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+  push_to_docker_hub:
+    needs: application_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Version
+        id: generate_version
+        run: |
+          current_date=$(date -d "9 hours" +%Y-%m-%d)
+          current_date_short_year=$(date -d "9 hours" +%y-%m-%d)
+          
+          runs_this_month=$(curl -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs?event=push&status=success&per_page=1&created=cats+created:<=$current_date"\
+            | jq '.total_count')
+          
+          echo "new version is $current_date_short_year.$runs_this_month"
+          echo "runs_this_month=$current_date_short_year.$runs_this_month" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+
+      - name: Docker build
+        env:
+          VERSION: ${{ steps.generate_version.outputs.runs_this_month }}
+          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+          IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+        run: |
+          docker build -t $DOCKER_REGISTRY/IMAGE_NAME:$VERSION .
+          docker tag $DOCKER_REGISTRY/IMAGE_NAME:$VERSION $DOCKER_REGISTRY/IMAGE_NAME:latest
+          docker push $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
+          docker push $DOCKER_REGISTRY/IMAGE_NAME:latest
+
+
+  run_application:
+    runs-on: ubuntu-latest
+    needs: push_to_docker_hub
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Docker container
+        uses: appleboy/ssh-action@master
+        env:
+          VERSION: ${{ needs.push_to_docker_hub.outputs.VERSION }}
+          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USERNAME }}
+          password: ${{ secrets.NCP_PASSWORD }}
+          key: ${{ secrets.NCP_SSH_KEY }}
+          script: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
+            docker pull $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
+            docker stop $IMAGE_NAME || true
+            docker rm $IMAGE_NAME || true
+            docker run -d --name $IMAGE_NAME -p 8080:8080 $DOCKER_REGISTRY/IMAGE_NAME:$VERSION
