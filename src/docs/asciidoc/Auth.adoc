@@ -1,0 +1,7 @@
+[[Auth-API]]
+== Auth API
+
+[[Auth-Login]]
+=== 소셜 로그인
+
+operation::AuthControllerTest/socialLogin[snippets='http-request,path-parameters,request-fields,http-response,response-fields']
