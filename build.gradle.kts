@@ -51,13 +51,13 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     // security
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    testImplementation("org.springframework.security:spring-security-test")
+//    implementation("org.springframework.boot:spring-boot-starter-security")
+//    testImplementation("org.springframework.security:spring-security-test")
 
     // kotest
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")  // Test Framework
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion") // Assertions Library
-    testImplementation("io.kotest:kotest-property:$kotestVersion") //
+    testImplementation("io.kotest:kotest-property:$kotestVersion") // Property Testing
 
     testImplementation("io.mockk:mockk:${mockkVersion}") // mockk
 
@@ -78,6 +78,9 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testFixturesImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
+    // webclient
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 }
 
 tasks.withType<KotlinCompile> {
