@@ -20,8 +20,9 @@ class AuthController(
         return authService.executeSocialLogin(socialLoginRequest, provider)
     }
 
-    // 멱등성 보장하지 않기 때문에 POST
-    @PostMapping(AuthApi.V1.REISSUE)
+    // 멱등성 보장하기 때문에 PUT
+    // 초반 동시성을 제외하고 이후 요청에 대한응답은 400으로 반환하기 때문에 멱등성 보장
+    @PutMapping(AuthApi.V1.REISSUE)
     fun reissueToken(@RequestBody reissueRequest: Reissue.Request) : Reissue.Response{
         return authService.reissueToken(reissueRequest)
     }
