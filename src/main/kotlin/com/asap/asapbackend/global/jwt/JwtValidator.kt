@@ -1,8 +1,8 @@
-package com.asap.asapbackend.global.security.jwt
+package com.asap.asapbackend.global.jwt
 
-import com.asap.asapbackend.global.security.jwt.exception.ExpiredTokenException
-import com.asap.asapbackend.global.security.jwt.exception.InvalidTokenException
-import com.asap.asapbackend.global.security.jwt.exception.TokenErrorCode
+import com.asap.asapbackend.global.jwt.exception.ExpiredTokenException
+import com.asap.asapbackend.global.jwt.exception.InvalidTokenException
+import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
 import io.jsonwebtoken.*
 import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.security.SignatureException

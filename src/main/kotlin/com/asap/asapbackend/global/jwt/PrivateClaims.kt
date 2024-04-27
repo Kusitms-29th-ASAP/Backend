@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.security.jwt
+package com.asap.asapbackend.global.jwt
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

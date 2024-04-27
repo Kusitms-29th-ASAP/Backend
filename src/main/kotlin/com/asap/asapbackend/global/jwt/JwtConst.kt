@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.security.jwt
+package com.asap.asapbackend.global.jwt
 
 object JwtConst {
     const val TOKEN_ISSUER: String = "asap"

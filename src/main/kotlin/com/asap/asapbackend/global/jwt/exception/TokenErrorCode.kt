@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.security.jwt.exception
+package com.asap.asapbackend.global.jwt.exception
 
 import com.asap.asapbackend.global.exception.ErrorCode
 import org.springframework.http.HttpStatus
