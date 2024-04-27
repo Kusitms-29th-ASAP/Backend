@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.utils
+package com.asap.asapbackend.global.util
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
