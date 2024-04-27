@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    `java-test-fixtures`
+
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("jvm") version "1.9.23"
@@ -20,6 +22,7 @@ repositories {
 }
 
 val kotestVersion = "5.8.1"
+val mockkVersion = "1.13.10"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -42,8 +45,19 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion") // Assertions Library
     testImplementation("io.kotest:kotest-property:$kotestVersion") //
 
+    testImplementation("io.mockk:mockk:${mockkVersion}") // mockk
+
     // fixture monkey
-    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.14")
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.0.16")
+    testFixturesImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.0.16")
+
+    // JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.12.5")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.5")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.5")
+
+    // caffeine
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
 
 tasks.withType<KotlinCompile> {
