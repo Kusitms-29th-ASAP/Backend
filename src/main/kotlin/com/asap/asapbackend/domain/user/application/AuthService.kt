@@ -6,7 +6,7 @@ import com.asap.asapbackend.domain.user.application.dto.SocialLogin
 import com.asap.asapbackend.domain.user.domain.enum.Provider
 import com.asap.asapbackend.domain.user.domain.service.SocialLoginHandler
 import com.asap.asapbackend.domain.user.domain.service.UserReader
-import com.asap.asapbackend.global.utils.TransactionUtils
+import com.asap.asapbackend.global.util.TransactionUtils
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
