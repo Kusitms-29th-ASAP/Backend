@@ -28,7 +28,7 @@ sealed interface Claims {
     data class RegistrationClaims(
         @param:JsonProperty("social_id")
         @get:JsonProperty("social_id")
-        val socialId: Long,
+        val socialId: String,
         @param:JsonProperty("provider")
         val provider: Provider
     ) : Claims {

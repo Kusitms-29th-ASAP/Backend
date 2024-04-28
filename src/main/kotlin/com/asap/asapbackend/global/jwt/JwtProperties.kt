@@ -7,5 +7,6 @@ class JwtProperties(
     val secret: String,
     val accessTokenExpirationTime: Long,
     val refreshTokenExpirationTime: Long,
+    val registrationTokenExpirationTime: Long
 ) {
 }
