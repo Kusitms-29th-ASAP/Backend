@@ -5,6 +5,7 @@ import com.asap.asapbackend.domain.user.application.AuthService
 import com.asap.asapbackend.domain.user.application.dto.Reissue
 import com.asap.asapbackend.domain.user.application.dto.SocialLogin
 import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.fixture.generateFixture
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -30,11 +31,11 @@ class AuthControllerTest : AbstractRestDocsConfigurer(){
     @DisplayName("소셜 로그인시 사용자가 가입되어 있으면 accessToken, refreshToken을 반환한다.")
     fun socialLoginWithRegisterUser() {
         //given
-        val provider = Provider.KAKAO
-        val requestAccessToken = "accessToken"
+        val provider : Provider= generateFixture()
+        val requestAccessToken : String = generateFixture()
         val socialLoginRequest = SocialLogin.Request(requestAccessToken)
-        val responseAccessToken = "success access token"
-        val responseRefreshToken = "success refresh token"
+        val responseAccessToken : String = generateFixture()
+        val responseRefreshToken : String = generateFixture()
         val socialLoginResponse = SocialLogin.Response.Success(responseAccessToken, responseRefreshToken)
         val request = RestDocumentationRequestBuilders.post(AuthApi.V1.SOCIAL_LOGIN, provider)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -64,10 +65,10 @@ class AuthControllerTest : AbstractRestDocsConfigurer(){
     @DisplayName("소셜 로그인시 사용자가 가입되어 있지 않으면 registerToken을 반환한다.")
     fun socialLoginWithUnRegisterUser() {
         //given
-        val provider = Provider.KAKAO
-        val requestAccessToken = "accessToken"
+        val provider : Provider= generateFixture()
+        val requestAccessToken : String = generateFixture()
         val socialLoginRequest = SocialLogin.Request(requestAccessToken)
-        val responseRegisterToken = "register token"
+        val responseRegisterToken : String = generateFixture()
         val socialLoginResponse = SocialLogin.Response.UnRegistered(responseRegisterToken)
         val request = RestDocumentationRequestBuilders.post(AuthApi.V1.SOCIAL_LOGIN, provider)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -96,10 +97,10 @@ class AuthControllerTest : AbstractRestDocsConfigurer(){
     @DisplayName("토큰 재발급시 accessToken, refreshToken을 반환한다.")
     fun reissueToken() {
         //given
-        val refreshToken = "refreshToken"
+        val refreshToken : String= generateFixture()
         val reissueRequest = Reissue.Request(refreshToken)
-        val reissueAccessToken = "reissue access token"
-        val reissueRefreshToken = "reissue refresh token"
+        val reissueAccessToken : String= generateFixture()
+        val reissueRefreshToken : String= generateFixture()
         val reissueResponse = Reissue.Response(reissueAccessToken, reissueRefreshToken)
         given(authService.reissueToken(reissueRequest)).willReturn(reissueResponse)
         val request = RestDocumentationRequestBuilders.put(AuthApi.V1.REISSUE)
@@ -127,7 +128,7 @@ class AuthControllerTest : AbstractRestDocsConfigurer(){
     @DisplayName("로그아웃 요청시 성공한다.")
     fun logout() {
         //given
-        val refreshToken = "refreshToken"
+        val refreshToken : String= generateFixture()
         val logoutRequest = Reissue.Request(refreshToken)
         val request = RestDocumentationRequestBuilders.delete(AuthApi.V1.LOGOUT)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
