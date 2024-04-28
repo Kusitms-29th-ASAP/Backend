@@ -5,8 +5,6 @@ import com.asap.asapbackend.global.util.LockManager
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
 
 @Component
 class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
@@ -15,50 +13,64 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     private val jwtValidator: JwtValidator
 ) {
 
-    private fun generateAccessToken(userClaims: PrivateClaims.UserClaims): String {
+    fun generateAccessToken(user: Claims.UserClaims): String {
         return generateBasicToken(
-            userClaims.createPrivateClaims(TokenType.ACCESS_TOKEN),
+            user.createPrivateClaims(TokenType.ACCESS_TOKEN),
             jwtProperties.accessTokenExpirationTime
         )
     }
 
-    private fun generateRefreshToken(userClaims: PrivateClaims.UserClaims): String {
+    fun generateRefreshToken(user: Claims.UserClaims): String {
         return generateBasicToken(
-            userClaims.createPrivateClaims(TokenType.REFRESH_TOKEN),
+            user.createPrivateClaims(TokenType.REFRESH_TOKEN),
             jwtProperties.refreshTokenExpirationTime
         )
     }
 
-    fun generateToken(userClaims: PrivateClaims.UserClaims): Token {
-        return Token(
-            accessToken = generateAccessToken(userClaims),
-            refreshToken = generateRefreshToken(userClaims)
+    fun generateRegistrationToken(registrationClaims: Claims.RegistrationClaims): String {
+        return generateBasicToken(
+            registrationClaims.createPrivateClaims(TokenType.REGISTRATION_TOKEN),
+            jwtProperties.accessTokenExpirationTime // TODO : registration token expire time
         )
     }
 
     fun reissueToken(refreshToken: String): Token = LockManager.lockByKey(refreshToken) {
-        CacheManager.cacheByKey(refreshToken){
+        CacheManager.cacheByKey(refreshToken) {
             jwtValidator.validateToken(refreshToken, TokenType.REFRESH_TOKEN)
-            val userClaims = extractUserClaimsFromToken(refreshToken, TokenType.REFRESH_TOKEN)
-            val token = generateToken(userClaims)
+            val userClaims: Claims.UserClaims = extractUserClaimsFromToken(refreshToken, TokenType.REFRESH_TOKEN)
+            val accessToken = generateAccessToken(userClaims)
+            val newRefreshToken = generateRefreshToken(userClaims)
 
-            return@cacheByKey token
+            return@cacheByKey Token(accessToken, newRefreshToken)
         }
-
     }
 
-    fun extractUserClaimsFromToken(token: String, tokenType: TokenType): PrivateClaims.UserClaims {
+    fun extractUserClaimsFromToken(
+        token: String,
+        tokenType: TokenType
+    ): Claims.UserClaims = extractClaimsFromToken(token, tokenType, JwtConst.USER_CLAIMS)
+
+    fun extractRegistrationClaimsFromToken(
+        token: String,
+        tokenType: TokenType
+    ): Claims.RegistrationClaims = extractClaimsFromToken(token, tokenType, JwtConst.REGISTRATION_CLAIMS)
+
+    private inline fun <reified T> extractClaimsFromToken(
+        token: String,
+        tokenType: TokenType,
+        claimsKey: String,
+    ): T {
         return jwtValidator.initializeJwtParser(tokenType)
             .parseSignedClaims(token)
             .payload
-            .get(JwtConst.USER_CLAIMS, PrivateClaims.UserClaims::class.java)
+            .get(claimsKey, T::class.java)
     }
 
-    private fun generateBasicToken(privateClaims: PrivateClaims, expireTime: Long): String {
+    private fun generateBasicToken(claims: PrivateClaims, expireTime: Long): String {
         val now = Date()
         return Jwts.builder()
             .issuer(JwtConst.TOKEN_ISSUER)
-            .claims(privateClaims.convertToClaims())
+            .claims(claims.convertToClaims())
             .issuedAt(now)
             .expiration(Date(now.time + expireTime))
             .signWith(jwtKeyFactory.generateKey())
