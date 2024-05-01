@@ -1,0 +1,61 @@
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+
+  datasource:
+    url: jdbc:mysql://${RDB_HOST}:${RDB_PORT}/${RDB_SCHEMA}?useSSL=false
+    username: ${RDB_USER}
+    password: ${RDB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    mongodb:
+      uri: mongodb+srv://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
+      username: ${MONGO_USER}
+      password: ${MONGO_PASSWORD}
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration-time: 3600000 # 1 hour = 1000 * 60 * 60
+  refresh-token-expiration-time: 86400000 # 1 day = 1000 * 60 * 60 * 24
+  registration-token-expiration-time: 86400000 # 1 day = 1000 * 60 * 60 * 24
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: default
+
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/asap?useSSL=false
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/asap
+      username: root
+      password: root
+
+jwt:
+  secret: "sl;dfas;dhkf;aksdjnaslkdhfalkjsdhflkajsdbmz,ncbxvaliwqyert"
+  access-token-expiration-time: 86400000
+  refresh-token-expiration-time: 86400000
+  registration-token-expiration-time: 86400000
