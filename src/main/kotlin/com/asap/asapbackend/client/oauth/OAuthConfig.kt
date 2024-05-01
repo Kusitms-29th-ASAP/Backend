@@ -14,7 +14,7 @@ class OAuthConfig(
     @Bean
     fun socialLoginHandlerMap(): Map<Provider, SocialLoginHandler>{
         return mapOf(
-            Provider.KAKAO to kakaoSocialLoginHandler
+            kakaoSocialLoginHandler.provider to kakaoSocialLoginHandler
         )
     }
 }

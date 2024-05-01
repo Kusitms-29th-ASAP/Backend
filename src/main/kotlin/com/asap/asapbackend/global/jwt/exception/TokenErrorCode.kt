@@ -10,6 +10,7 @@ enum class TokenErrorCode(
     override val httpStatusCode: HttpStatusCode
 ): ErrorCode {
     INVALID_TOKEN("9000", "유효하지 않는 토큰입니다.", HttpStatus.UNAUTHORIZED),
-    EXPIRED_TOKEN("9001", "만료된 토큰입니다.",HttpStatus.UNAUTHORIZED)
+    EXPIRED_TOKEN("9001", "만료된 토큰입니다.",HttpStatus.UNAUTHORIZED),
+    TOKEN_NOT_FOUND("9002", "토큰이 존재하지 않습니다.", HttpStatus.NOT_FOUND)
     ;
 }

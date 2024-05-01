@@ -102,7 +102,7 @@ tasks.asciidoctor {
     inputs.dir(snippetDir)
     dependsOn(tasks.test)
     configurations(asciidoctorExt)
-//    baseDirFollowsSourceFile()
+    baseDirFollowsSourceFile()
 }
 
 tasks.register<Copy>("copyDocument") {
