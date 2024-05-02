@@ -1,7 +1,7 @@
 package com.asap.asapbackend.domain.timetable.application
 
 import com.asap.asapbackend.domain.timetable.domain.model.TimetableResponse
-import com.asap.asapbackend.domain.timetable.domain.service.TimetableReader
+import com.asap.asapbackend.batch.timetable.service.TimetableReader
 import org.springframework.stereotype.Service
 
 @Service

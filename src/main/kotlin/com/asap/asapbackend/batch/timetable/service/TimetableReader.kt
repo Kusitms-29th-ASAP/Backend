@@ -1,5 +1,6 @@
-package com.asap.asapbackend.domain.timetable.domain.service
+package com.asap.asapbackend.batch.timetable.service
 
+import com.asap.asapbackend.batch.timetable.model.ElsTimetable
 import com.asap.asapbackend.domain.timetable.domain.model.*
 import com.google.gson.Gson
 import com.spot.refactoring.global.NotFoundTimetableException
@@ -32,7 +33,7 @@ class TimetableReader {
                 .bodyToMono(String::class.java)
                 .block()
         val jsonResult = parseXmlData(result)
-        val elsTimetable = Gson().fromJson(jsonResult,ElsTimetable::class.java)
+        val elsTimetable = Gson().fromJson(jsonResult, ElsTimetable::class.java)
         return result?.let { setDataList(elsTimetable) } ?: throw RuntimeException()
     }
 
