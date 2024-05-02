@@ -135,7 +135,8 @@ jobs:
           script: |
             echo "new application version is $VERSION"
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
-            docker pull $DOCKER_REGISTRY/$IMAGE_NAME:lastest
+            docker pull $DOCKER_REGISTRY/$IMAGE_NAME:latest
             docker stop $IMAGE_NAME || true
             docker rm $IMAGE_NAME || true
             docker compose up -d
+            docker image prune -f
