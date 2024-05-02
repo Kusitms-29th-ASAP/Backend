@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   asap-backend:
-    image: ${$DOCKER_REGISTRY}/${$IMAGE_NAME}:${$VERSION}
+    image: ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
     container_name: asap-backend
     ports:
       - "8080:8080"
@@ -19,6 +19,7 @@ services:
     container_name: mysql
     ports:
       - "3306:3306"
+      - "33060:33060"
     networks:
       - asap-backend
     restart: unless-stopped
@@ -28,4 +29,9 @@ services:
       - MYSQL_USER=${RDB_USER}
       - MYSQL_PASSWORD=${RDB_PASSWORD}
     volumes:
-      - mysql-data:/var/lib/mysql
+      - ./mysql-data:/var/lib/mysql
+
+networks:
+  asap-backend:
+    name: asap-backend
+    external: true
