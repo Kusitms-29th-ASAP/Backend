@@ -18,6 +18,16 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: gradle setting
         run: |
           chmod +x gradlew
@@ -72,15 +82,50 @@ jobs:
           DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
           IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
         run: |
-          docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION .
+          docker build -f .deploy/Dockerfile -t $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION .
           docker tag $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION $DOCKER_REGISTRY/$IMAGE_NAME:latest
           docker push $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
           docker push $DOCKER_REGISTRY/$IMAGE_NAME:latest
-
+  
+  config_environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: config environment
+        uses: appleboy/ssh-action@
+        env:
+          RDB_HOST: ${{ secrets.RDB_HOST }}
+          RDB_PORT: ${{ secrets.RDB_PORT }}
+          RDB_SCHEMA: ${{ secrets.RDB_SCHEMA }}
+          RDB_USER: ${{ secrets.RDB_USER }}
+          RDB_PASSWORD: ${{ secrets.RDB_PASSWORD }}
+          MONGO_HOST: ${{ secrets.MONGO_HOST }}
+          MONGO_DB: ${{ secrets.MONGO_DB }}
+          MONGO_USER: ${{ secrets.MONGO_USER }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USERNAME }}
+          password: ${{ secrets.NCP_PASSWORD }}
+          key: ${{ secrets.NCP_SSH_KEY }}
+          script: |
+            sudo rm -rf .env
+            touch .env
+            
+            echo "RDB_HOST=${RDB_HOST}" >> .env
+            echo "RDB_PORT=${RDB_PORT}" >> .env
+            echo "RDB_SCHEMA=${RDB_SCHEMA}" >> .env
+            echo "RDB_USER=${RDB_USER}" >> .env
+            echo "RDB_PASSWORD=${RDB_PASSWORD}" >> .env
+            echo "MONGO_HOST=${MONGO_HOST}" >> .env
+            echo "MONGO_DB=${MONGO_DB}" >> .env
+            echo "MONGO_USER=${MONGO_USER}" >> .env
+            echo "MONGO_PASSWORD=${MONGO_PASSWORD}" >> .env
+            echo "JWT_SECRET=${JWT_SECRET}" >> .env
 
   run_application:
     runs-on: ubuntu-latest
-    needs: push_to_docker_hub
+    needs: [push_to_docker_hub, config_environment]
     steps:
       - name: Run Docker container
         uses: appleboy/ssh-action@master
@@ -97,9 +142,9 @@ jobs:
           key: ${{ secrets.NCP_SSH_KEY }}
           envs: VERSION, DOCKER_REGISTRY, DOCKER_USERNAME, DOCKER_PASSWORD, IMAGE_NAME
           script: |
-            echo "version is $VERSION"
+            echo "new application version is $VERSION"
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
             docker pull $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
             docker stop $IMAGE_NAME || true
             docker rm $IMAGE_NAME || true
-            docker run -d --name $IMAGE_NAME -p 8080:8080 $DOCKER_REGISTRY/$IMAGE_NAME:$VERSION
+            docker compose up -d
