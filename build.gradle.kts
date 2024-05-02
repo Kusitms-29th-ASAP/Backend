@@ -121,6 +121,6 @@ tasks.register<Copy>("copyDocument") {
 
 }
 
-tasks.build {
+tasks.bootJar {
     dependsOn(tasks.getByName("copyDocument"))
 }
