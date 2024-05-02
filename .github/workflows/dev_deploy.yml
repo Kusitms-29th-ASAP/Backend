@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: config environment
-        uses: appleboy/ssh-action@
+        uses: appleboy/ssh-action@master
         env:
           RDB_HOST: ${{ secrets.RDB_HOST }}
           RDB_PORT: ${{ secrets.RDB_PORT }}
