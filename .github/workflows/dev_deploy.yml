@@ -139,3 +139,4 @@ jobs:
             docker stop $IMAGE_NAME || true
             docker rm $IMAGE_NAME || true
             docker compose up -d
+            docker image prune -f
