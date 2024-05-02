@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.user.domain.service
 
-import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.domain.user.domain.model.Provider
 
 interface SocialLoginHandler{
     val provider: Provider
