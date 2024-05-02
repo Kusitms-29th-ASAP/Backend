@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   asap-backend:
-    image: ${$DOCKER_REGISTRY}/${$IMAGE_NAME}:${$VERSION}
+    image: ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest
     container_name: asap-backend
     ports:
       - "8080:8080"
