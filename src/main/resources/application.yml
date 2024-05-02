@@ -16,7 +16,7 @@ spring:
     open-in-view: false
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}
+      uri: mongodb+srv://${MONGO_HOST}/${MONGO_DB}
       username: ${MONGO_USER}
       password: ${MONGO_PASSWORD}
 
