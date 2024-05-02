@@ -1,7 +1,7 @@
 package com.asap.asapbackend.batch.timetable.service
 
 import com.asap.asapbackend.batch.timetable.model.ElsTimetable
-import com.asap.asapbackend.domain.timetable.domain.model.*
+import com.asap.asapbackend.batch.timetable.model.TimetableResponse
 import com.google.gson.Gson
 import com.spot.refactoring.global.NotFoundTimetableException
 import org.json.JSONObject
