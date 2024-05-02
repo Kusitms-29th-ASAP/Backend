@@ -9,8 +9,8 @@ import jakarta.persistence.ManyToOne
 
 @Entity
 class Classroom(
-    val grade: Grade,
-    val classNumber: Int,
+    val grade: Int,
+    val classNumber: String,
     @Embedded
     val year: Year,
     @ManyToOne(fetch = FetchType.LAZY)
