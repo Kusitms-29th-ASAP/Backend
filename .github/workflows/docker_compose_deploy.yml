@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-    path:
+    paths:
       - ".deploy/docker-compose.yml"
 
 jobs:
@@ -21,5 +21,5 @@ jobs:
           username: ${{ secrets.NCP_USERNAME }}
           password: ${{ secrets.NCP_PASSWORD }}
           source: ".deploy/docker-compose.yml"
-          target: "/home/ubuntu/"
+          target: "/root"
           strip_components: 2
