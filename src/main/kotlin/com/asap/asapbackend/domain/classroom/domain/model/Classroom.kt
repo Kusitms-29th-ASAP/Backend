@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne
 
 @Entity
 class Classroom(
-    val garde: Grade,
+    val grade: Grade,
     val classNumber: Int,
     @Embedded
     val year: Year,
