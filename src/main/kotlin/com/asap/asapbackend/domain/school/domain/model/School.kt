@@ -9,7 +9,7 @@ class School(
         val schoolCode: String,
         val name: String,
         val address: String
-):BaseDateEntity() {
+) : BaseDateEntity() {
     init {
         require(name.isNotBlank()) { "학교 이름은 빈 값이 될 수 없습니다." }
         require(address.isNotBlank()) { "주소는 빈 값이 될 수 없습니다." }

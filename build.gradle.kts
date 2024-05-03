@@ -51,6 +51,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.mysql:mysql-connector-j")
 
+    // mongodb
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+
     // security
 //    implementation("org.springframework.boot:spring-boot-starter-security")
 //    testImplementation("org.springframework.security:spring-security-test")
@@ -124,6 +127,6 @@ tasks.register<Copy>("copyDocument") {
 
 }
 
-tasks.build {
+tasks.bootJar {
     dependsOn(tasks.getByName("copyDocument"))
 }

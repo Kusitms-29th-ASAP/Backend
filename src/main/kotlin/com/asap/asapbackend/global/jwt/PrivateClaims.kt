@@ -1,6 +1,6 @@
 package com.asap.asapbackend.global.jwt
 
-import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.domain.user.domain.model.Provider
 import com.fasterxml.jackson.annotation.JsonProperty
 
 

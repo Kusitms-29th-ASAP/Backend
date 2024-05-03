@@ -1,0 +1,25 @@
+name: docker compose deploy
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - ".deploy/docker-compose.yml"
+
+jobs:
+  docker_compose_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: copy docker compose file
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USERNAME }}
+          password: ${{ secrets.NCP_PASSWORD }}
+          source: ".deploy/docker-compose.yml"
+          target: "/root"
+          strip_components: 2

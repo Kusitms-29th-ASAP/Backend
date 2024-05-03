@@ -10,7 +10,7 @@ class UserReader(
 ) {
 
     fun findBySocialIdOrNull(socialId: String): User?{
-        return userRepository.findBySocialId(socialId)
+        return userRepository.findBySocialInfo_SocialId(socialId)
     }
 
 }

@@ -1,6 +1,6 @@
 package com.asap.asapbackend.client.oauth.kakao
 
-import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.domain.user.domain.model.Provider
 import com.asap.asapbackend.domain.user.domain.service.SocialLoginHandler
 import org.springframework.stereotype.Component
 

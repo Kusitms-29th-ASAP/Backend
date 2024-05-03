@@ -4,7 +4,7 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.domain.user.application.AuthService
 import com.asap.asapbackend.domain.user.application.dto.Reissue
 import com.asap.asapbackend.domain.user.application.dto.SocialLogin
-import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.domain.user.domain.model.Provider
 import com.asap.asapbackend.fixture.generateFixture
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ class AuthControllerTest : AbstractRestDocsConfigurer(){
     @DisplayName("소셜 로그인시 사용자가 가입되어 있으면 accessToken, refreshToken을 반환한다.")
     fun socialLoginWithRegisterUser() {
         //given
-        val provider : Provider= generateFixture()
+        val provider : Provider = generateFixture()
         val requestAccessToken : String = generateFixture()
         val socialLoginRequest = SocialLogin.Request(requestAccessToken)
         val responseAccessToken : String = generateFixture()
@@ -65,7 +65,7 @@ class AuthControllerTest : AbstractRestDocsConfigurer(){
     @DisplayName("소셜 로그인시 사용자가 가입되어 있지 않으면 registerToken을 반환한다.")
     fun socialLoginWithUnRegisterUser() {
         //given
-        val provider : Provider= generateFixture()
+        val provider : Provider = generateFixture()
         val requestAccessToken : String = generateFixture()
         val socialLoginRequest = SocialLogin.Request(requestAccessToken)
         val responseRegisterToken : String = generateFixture()
