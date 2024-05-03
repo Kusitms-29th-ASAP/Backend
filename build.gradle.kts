@@ -85,6 +85,12 @@ dependencies {
 
     // webclient
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    //JSON
+    implementation("org.json:json:20231013")
+
+    //Gson
+    implementation("com.google.code.gson:gson:2.8.9")
+
 }
 
 tasks.withType<KotlinCompile> {
