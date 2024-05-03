@@ -30,6 +30,7 @@ class UserControllerTest: AbstractRestDocsConfigurer() {
             it.set("agreement.privacyPolicy", true)
             it.set("agreement.marketing", true)
             it.set("phoneNumber", PhoneNumber("01012345678"))
+            it.set("children", listOf(generateFixture<CreateUser.ChildDetail>()))
         }
         val createUserResponse : CreateUser.Response = generateFixture()
         given(userService.createUser(createUserRequest)).willReturn(createUserResponse)
