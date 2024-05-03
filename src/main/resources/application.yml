@@ -12,7 +12,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     open-in-view: false
   data:
     mongodb:
@@ -55,7 +55,7 @@ spring:
       password: root
 
 jwt:
-  secret: "sl;dfas;dhkf;aksdjnaslkdhfalkjsdhflkajsdbmz,ncbxvaliwqyert"
+  secret: "testSecrettestSecrettestSecrettestSecrettestSecret"
   access-token-expiration-time: 86400000
   refresh-token-expiration-time: 86400000
   registration-token-expiration-time: 86400000
