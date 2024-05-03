@@ -5,5 +5,5 @@ import java.time.Year
 
 @Embeddable
 class Year{
-    val value: Year = Year.now()
+    val year: Year = Year.now()
 }
