@@ -30,9 +30,7 @@ class UserControllerTest: AbstractRestDocsConfigurer() {
             it.set("agreement.privacyPolicy", true)
             it.set("agreement.marketing", true)
             it.set("phoneNumber", PhoneNumber("01012345678"))
-            it.maxSize("children", 2)
         }
-        println(createUserRequest)
         val createUserResponse : CreateUser.Response = generateFixture()
         given(userService.createUser(createUserRequest)).willReturn(createUserResponse)
         val request = RestDocumentationRequestBuilders.post(UserApi.V1.BASE_URL)
