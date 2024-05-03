@@ -11,7 +11,9 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriBuilder
 
 @Service
-class SchoolReader {
+class SchoolOepnApiClient {
+    private var list_total_count: Int = 0
+
     //1~200
     fun getSchool1(): List<SchoolResponse>{
         val apiUrl = "http://openapi.seoul.go.kr:8088/4b78477274736f6d36386d505a614b/xml/neisSchoolInfoJS/1/200/"
@@ -44,7 +46,7 @@ class SchoolReader {
     }
     //401~610
     fun getSchool3(): List<SchoolResponse>{
-        val apiUrl = "http://openapi.seoul.go.kr:8088/4b78477274736f6d36386d505a614b/xml/neisSchoolInfoJS/401/610/"
+        val apiUrl = "http://openapi.seoul.go.kr:8088/4b78477274736f6d36386d505a614b/xml/neisSchoolInfoJS/401/${list_total_count}/"
         val client = WebClient.create(apiUrl)
         val result = client.get()
                 .uri { uriBuilder: UriBuilder ->
@@ -75,6 +77,7 @@ class SchoolReader {
         try{
             val neisSchoolInfoJS = jsonObject.getJSONObject("neisSchoolInfoJS").getJSONArray("row")
             val resultJsonObject = JSONObject().put("neisSchoolInfoJS", neisSchoolInfoJS)
+            list_total_count = jsonObject.getJSONObject("neisSchoolInfoJS").getInt("list_total_count")
             return resultJsonObject.toString(4)
         }catch (e: Exception){
             val message = jsonObject.getJSONObject("RESULT").getString("MESSAGE")

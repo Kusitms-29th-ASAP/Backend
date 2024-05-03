@@ -1,4 +1,4 @@
-package com.asap.asapbackend.batch.school.service
+package com.asap.asapbackend.domain.school.domain.service
 
 import com.asap.asapbackend.batch.school.model.SchoolResponse
 import com.asap.asapbackend.domain.school.domain.model.School

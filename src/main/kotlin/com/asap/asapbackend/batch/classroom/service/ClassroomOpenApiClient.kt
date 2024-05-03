@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriBuilder
 
 @Service
-class ClassroomReader(
+class ClassroomOpenApiClient(
         private val schoolRepository: SchoolRepository
 ) {
     fun getClassroom(): List<ClassroomResponse> {
