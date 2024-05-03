@@ -3,7 +3,7 @@ package com.asap.asapbackend.domain.user.application
 import com.asap.asapbackend.domain.user.application.dto.Logout
 import com.asap.asapbackend.domain.user.application.dto.Reissue
 import com.asap.asapbackend.domain.user.application.dto.SocialLogin
-import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.domain.user.domain.model.Provider
 import com.asap.asapbackend.domain.user.domain.service.SocialLoginHandler
 import com.asap.asapbackend.domain.user.domain.service.UserReader
 import com.asap.asapbackend.global.jwt.Claims

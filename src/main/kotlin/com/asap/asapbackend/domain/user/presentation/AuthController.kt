@@ -4,7 +4,7 @@ import com.asap.asapbackend.domain.user.application.AuthService
 import com.asap.asapbackend.domain.user.application.dto.Logout
 import com.asap.asapbackend.domain.user.application.dto.Reissue
 import com.asap.asapbackend.domain.user.application.dto.SocialLogin
-import com.asap.asapbackend.domain.user.domain.enum.Provider
+import com.asap.asapbackend.domain.user.domain.model.Provider
 import org.springframework.web.bind.annotation.*
 
 @RestController
