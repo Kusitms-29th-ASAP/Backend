@@ -110,7 +110,15 @@ tasks.asciidoctor {
 
 tasks.bootJar{
     dependsOn(tasks.asciidoctor)
+    copy{
+        from("build/docs/asciidoc")
+        into("src/main/resources/static/docs")
+    }
     from("build/docs/asciidoc"){
         into("static/docs")
     }
+}
+
+tasks.build{
+    dependsOn(tasks.bootJar)
 }
