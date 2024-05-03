@@ -118,7 +118,7 @@ tasks.register<Copy>("copyDocument") {
     }
     from(fromDir)
     into(docsDir)
-
+    finalizedBy(tasks.bootJar)
 }
 
 tasks.bootJar {
