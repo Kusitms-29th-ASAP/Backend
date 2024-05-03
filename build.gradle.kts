@@ -108,19 +108,9 @@ tasks.asciidoctor {
     baseDirFollowsSourceFile()
 }
 
-tasks.register<Copy>("copyDocument") {
+tasks.bootJar{
     dependsOn(tasks.asciidoctor)
-    val docsDir = file("src/main/resources/static/docs")
-    val fromDir = file("build/docs/asciidoc")
-    doFirst {
-        if (docsDir.exists())
-            delete(docsDir)
+    from("build/docs/asciidoc"){
+        into("static/docs")
     }
-    from(fromDir)
-    into(docsDir)
-    finalizedBy(tasks.bootJar)
-}
-
-tasks.bootJar {
-    dependsOn(tasks.getByName("copyDocument"))
 }
