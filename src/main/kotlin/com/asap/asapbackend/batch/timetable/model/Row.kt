@@ -1,4 +1,4 @@
-package com.asap.asapbackend.domain.timetable.domain.model
+package com.asap.asapbackend.batch.timetable.model
 
 data class Row(
         val ATPT_OFCDC_SC_CODE: String?,

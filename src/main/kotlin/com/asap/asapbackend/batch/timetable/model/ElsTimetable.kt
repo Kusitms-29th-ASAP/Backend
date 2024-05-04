@@ -1,4 +1,4 @@
-package com.asap.asapbackend.domain.timetable.domain.model
+package com.asap.asapbackend.batch.timetable.model
 
 data class ElsTimetable(
         var elsTimetable: List<Row>

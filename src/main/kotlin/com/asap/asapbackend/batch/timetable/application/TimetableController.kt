@@ -1,4 +1,4 @@
-package com.asap.asapbackend.domain.timetable.application
+package com.asap.asapbackend.batch.timetable.application
 
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.GetMapping
