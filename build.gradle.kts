@@ -125,6 +125,7 @@ tasks.bootJar{
     }
 }
 
+
 tasks.build{
     dependsOn(tasks.bootJar)
 }
