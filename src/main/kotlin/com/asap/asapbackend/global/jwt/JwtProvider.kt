@@ -61,9 +61,8 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     ): Claims.UserClaims = extractClaimsFromToken(token, tokenType, JwtConst.USER_CLAIMS)
 
     fun extractRegistrationClaimsFromToken(
-        token: String,
-        tokenType: TokenType
-    ): Claims.RegistrationClaims = extractClaimsFromToken(token, tokenType, JwtConst.REGISTRATION_CLAIMS)
+        token: String
+    ): Claims.RegistrationClaims = extractClaimsFromToken(token, TokenType.REGISTRATION_TOKEN, JwtConst.REGISTRATION_CLAIMS)
 
     private inline fun <reified T> extractClaimsFromToken(
         token: String,

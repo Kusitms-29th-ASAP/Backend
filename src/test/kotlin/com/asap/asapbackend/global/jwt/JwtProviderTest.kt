@@ -130,7 +130,7 @@ class JwtProviderTest : BehaviorSpec({
                 jwtKeyFactory.generateKey(),
                 PrivateClaims.retrieveClaimsClassType()
             )
-            val result : Claims.RegistrationClaims = jwtProvider.extractRegistrationClaimsFromToken(registrationToken, TokenType.REGISTRATION_TOKEN)
+            val result : Claims.RegistrationClaims = jwtProvider.extractRegistrationClaimsFromToken(registrationToken)
             then("토큰에서 추출한 registrationClaims가 반환되어야 한다."){
                 result.shouldBeEqualUsingFields(registrationClaims)
             }

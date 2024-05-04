@@ -6,5 +6,6 @@ import com.asap.asapbackend.domain.school.domain.model.School
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ClassroomRepository: JpaRepository<Classroom, Long> {
+    fun findByGradeAndClassNumberAndSchoolId(grade: Grade, classNumber: String, schoolId: Long): Classroom?
     fun findBySchoolAndGradeAndClassNumber(school: School, grade: Grade, classNumber: String): Classroom?
 }

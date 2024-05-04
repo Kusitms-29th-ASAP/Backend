@@ -7,3 +7,5 @@
 :sectlinks:
 
 include::Auth.adoc[]
+
+include::User.adoc[]
