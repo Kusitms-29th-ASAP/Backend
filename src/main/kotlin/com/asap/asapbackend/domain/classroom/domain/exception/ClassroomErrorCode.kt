@@ -10,4 +10,5 @@ enum class ClassroomErrorCode(
     override val httpStatusCode: HttpStatusCode
 ): ErrorCode {
     GRADE_FORMAT_ERROR("2000", "학년 형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+    CLASS_NOT_FOUND("2001", "해당 반을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 }
