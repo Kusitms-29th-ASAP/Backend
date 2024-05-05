@@ -5,12 +5,20 @@ import jakarta.persistence.Entity
 
 @Entity
 class User(
-    val socialInfo: SocialInfo,
-    val phoneNumber: PhoneNumber,
-    val agreement: Agreement
+    socialInfo: SocialInfo,
+    phoneNumber: PhoneNumber,
+    agreement: Agreement
 ) : BaseDateEntity(){
     init {
         phoneNumber.validate()
         agreement.validate()
     }
+
+    val socialInfo: SocialInfo = socialInfo
+
+    var phoneNumber: PhoneNumber = phoneNumber
+        protected set
+
+    var agreement: Agreement = agreement
+        protected set
 }
