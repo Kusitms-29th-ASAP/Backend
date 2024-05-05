@@ -64,6 +64,25 @@ sealed interface Claims {
             }
         }
     }
+
+    data class TeacherClaims(
+        @param:JsonProperty("teacher_id")
+        @get:JsonProperty("teacher_id")
+        val teacherId: Long
+    ) : Claims {
+        override fun createPrivateClaims(tokenType: TokenType) = PrivateClaims(this, tokenType)
+        override fun convertToClaims(): Map<String, Any> = mapOf(
+            JwtConst.TEACHER_CLAIMS to this
+        )
+
+        companion object : ClaimsType {
+            override fun retrieveClaimsClassType(): Map<String, Class<*>> {
+                return mapOf(
+                    JwtConst.TEACHER_CLAIMS to TeacherClaims::class.java
+                )
+            }
+        }
+    }
 }
 
 interface ClaimsType {

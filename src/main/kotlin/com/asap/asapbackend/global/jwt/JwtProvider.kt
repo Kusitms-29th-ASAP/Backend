@@ -32,10 +32,17 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
         return refreshToken
     }
 
+
     fun generateRegistrationToken(registrationClaims: Claims.RegistrationClaims): String {
         return generateBasicToken(
             registrationClaims.createPrivateClaims(TokenType.REGISTRATION_TOKEN),
             jwtProperties.registrationTokenExpirationTime // TODO : registration token expire time
+        )
+    }
+    fun generateTeacherAccessToken(teacher: Claims.TeacherClaims): String {
+        return generateBasicToken(
+            teacher.createPrivateClaims(TokenType.ACCESS_TOKEN),
+            jwtProperties.accessTokenExpirationTime
         )
     }
 
@@ -63,6 +70,11 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     fun extractRegistrationClaimsFromToken(
         token: String
     ): Claims.RegistrationClaims = extractClaimsFromToken(token, TokenType.REGISTRATION_TOKEN, JwtConst.REGISTRATION_CLAIMS)
+
+    fun extractTeacherClaimsFromToken(
+        token: String,
+        tokenType: TokenType
+    ): Claims.TeacherClaims = extractClaimsFromToken(token, tokenType, JwtConst.TEACHER_CLAIMS)
 
     private inline fun <reified T> extractClaimsFromToken(
         token: String,
