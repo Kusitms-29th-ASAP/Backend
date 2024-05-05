@@ -1,7 +1,7 @@
-package com.asap.asapbackend.batch.classroom.service
+package com.asap.asapbackend.batch.classroom
 
-import com.asap.asapbackend.batch.classroom.model.ClassInfo
-import com.asap.asapbackend.batch.classroom.model.ClassroomResponse
+import com.asap.asapbackend.batch.classroom.dto.ClassInfo
+import com.asap.asapbackend.batch.classroom.dto.ClassroomResponse
 import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
 import com.google.gson.Gson
@@ -13,8 +13,9 @@ import org.springframework.web.util.UriBuilder
 
 @Service
 class ClassroomOpenApiClient(
-        private val schoolRepository: SchoolRepository
+    private val schoolRepository: SchoolRepository
 ) {
+
     fun getClassroom(): List<ClassroomResponse> {
         val schools = schoolRepository.findAll()
         val resultList: MutableList<ClassroomResponse> = mutableListOf()
@@ -22,17 +23,17 @@ class ClassroomOpenApiClient(
             val apiUrl = "https://open.neis.go.kr/hub/classInfo"
             val client = WebClient.create(apiUrl)
             val result = client.get()
-                    .uri { uriBuilder: UriBuilder ->
-                        uriBuilder
-                                .queryParam("KEY", "32e897d4054342b19fd68dfb1b9ba621")
-                                .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfiiceCode)
-                                .queryParam("SD_SCHUL_CODE", school.schoolCode)
-                                .queryParam("AY", "2024")
-                                .build()
-                    }
-                    .retrieve()
-                    .bodyToMono(String::class.java)
-                    .block()
+                .uri { uriBuilder: UriBuilder ->
+                    uriBuilder
+                        .queryParam("KEY", "32e897d4054342b19fd68dfb1b9ba621")
+                        .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfiiceCode)
+                        .queryParam("SD_SCHUL_CODE", school.schoolCode)
+                        .queryParam("AY", "2024")
+                        .build()
+                }
+                .retrieve()
+                .bodyToMono(String::class.java)
+                .block()
             val jsonObject = XML.toJSONObject(result)
             if (jsonObject.has("classInfo")) {
                 val classInfo = jsonObject.getJSONObject("classInfo").getJSONArray("row")
@@ -50,9 +51,9 @@ class ClassroomOpenApiClient(
 
         for (row in classInfo.classInfo) {
             resultList += ClassroomResponse(
-                    row.GRADE,
-                    row.CLASS_NM,
-                    school
+                row.GRADE,
+                row.CLASS_NM,
+                school
             )
         }
         return resultList

@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.classroom.domain.service
 
-import com.asap.asapbackend.batch.classroom.model.ClassroomResponse
+import com.asap.asapbackend.batch.classroom.dto.ClassroomResponse
 import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.classroom.domain.model.ChildClassroom
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom

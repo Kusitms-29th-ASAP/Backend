@@ -1,13 +1,12 @@
-package com.asap.asapbackend.batch.school.application
+package com.asap.asapbackend.batch.school
 
 import com.asap.asapbackend.domain.school.domain.service.SchoolAppender
-import com.asap.asapbackend.batch.school.service.SchoolOepnApiClient
 import org.springframework.stereotype.Service
 
 @Service
 class SchoolService(
-        private val schoolReader: SchoolOepnApiClient,
-        private val schoolAppender: SchoolAppender
+    private val schoolReader: SchoolOepnApiClient,
+    private val schoolAppender: SchoolAppender
 ){
     fun addSchool() {
         val school1 = schoolReader.getSchool1()

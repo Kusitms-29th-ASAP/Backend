@@ -1,4 +1,4 @@
-package com.asap.asapbackend.batch.school.model
+package com.asap.asapbackend.batch.school.dto
 
 data class SchoolResponse(
         val eduOfficeCode: String, //ATPT_OFCDC_SC_CODE

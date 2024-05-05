@@ -1,4 +1,4 @@
-package com.asap.asapbackend.batch.classroom.model
+package com.asap.asapbackend.batch.classroom.dto
 
 data class ClassRoomInfo (
         val ATPT_OFCDC_SC_CODE: String?,

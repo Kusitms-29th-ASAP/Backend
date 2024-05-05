@@ -1,7 +1,7 @@
-package com.asap.asapbackend.batch.school.service
+package com.asap.asapbackend.batch.school
 
-import com.asap.asapbackend.batch.school.model.NeisSchoolInfoJS
-import com.asap.asapbackend.batch.school.model.SchoolResponse
+import com.asap.asapbackend.batch.school.dto.NeisSchoolInfoJS
+import com.asap.asapbackend.batch.school.dto.SchoolResponse
 import com.google.gson.Gson
 import com.spot.refactoring.global.NotFoundSchoolException
 import org.json.JSONObject
