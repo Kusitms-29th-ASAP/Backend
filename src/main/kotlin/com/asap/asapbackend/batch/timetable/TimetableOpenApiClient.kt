@@ -1,17 +1,17 @@
-package com.asap.asapbackend.batch.timetable.service
+package com.asap.asapbackend.batch.timetable
 
-import com.asap.asapbackend.batch.timetable.model.ElsTimetable
-import com.asap.asapbackend.batch.timetable.model.TimetableResponse
+import com.asap.asapbackend.batch.timetable.dto.ElsTimetable
+import com.asap.asapbackend.batch.timetable.dto.TimetableResponse
 import com.google.gson.Gson
 import com.spot.refactoring.global.NotFoundTimetableException
 import org.json.JSONObject
+import org.json.XML
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriBuilder
-import org.json.XML
 
 @Service
-class TimetableReader {
+class TimetableOpenApiClient {
     fun getTimetable(): List<TimetableResponse> {
         val apiUrl = "https://open.neis.go.kr/hub/elsTimetable"
         val client = WebClient.create(apiUrl)

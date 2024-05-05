@@ -1,11 +1,11 @@
-package com.asap.asapbackend.batch.timetable.application
+package com.asap.asapbackend.batch.timetable
 
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class TimetableController (
+class TimetableScheduler (
         private val timetableService: TimetableService
 ){
     @Scheduled(cron = "0 0 * * * *", zone = "Asia/Seoul") //1시간마다
