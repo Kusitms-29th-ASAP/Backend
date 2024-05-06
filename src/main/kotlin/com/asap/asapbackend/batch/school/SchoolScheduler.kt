@@ -19,18 +19,14 @@ class SchoolScheduler(
         val batchSize = 100
         var startIndex = 1
         logger.info { "start scheduler" }
-        while (true) {
-
+        do {
             val schoolDataContainer = schoolInfoProvider.retrieveSchoolInfo(batchSize, startIndex)
-            logger.info { "School data container: $schoolDataContainer" }
-            if(schoolDataContainer.hasNext.not()){
-                break
-            }
+
             startIndex += batchSize
 
             TransactionUtils.writable {
                 schoolAppender.appendUniqueSchool(schoolDataContainer.schoolInfo.toSchools())
             }
-        }
+        }while (schoolDataContainer.hasNext)
     }
 }
