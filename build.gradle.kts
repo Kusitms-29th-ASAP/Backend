@@ -52,7 +52,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     // mongodb
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -85,6 +85,7 @@ dependencies {
 
     // webclient
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+
     //JSON
     implementation("org.json:json:20231013")
 
