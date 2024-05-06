@@ -1,4 +1,16 @@
-package com.asap.asapbackend.batch.school.dto
+package com.asap.asapbackend.client.openapi.school.dto
+
+import com.asap.asapbackend.batch.school.SchoolInfoProvider
+
+
+data class SchoolOpenApiResponse(
+        val neisSchoolInfoJS: NeisSchoolInfoJS
+)
+
+data class NeisSchoolInfoJS(
+        val list_total_count: Int,
+        val row: List<SchoolInfo>?
+)
 
 data class SchoolInfo(
         val ATPT_OFCDC_SC_CODE: String,
@@ -26,4 +38,13 @@ data class SchoolInfo(
         val FOND_YMD: String,
         val FOAS_MEMRD: String,
         val LOAD_DTM: String
-)
+){
+        fun toSchoolInfo(): SchoolInfoProvider.SchoolInfo{
+                return SchoolInfoProvider.SchoolInfo(
+                        ATPT_OFCDC_SC_CODE,
+                        SD_SCHUL_CODE,
+                        SCHUL_NM,
+                        ORG_RDNMA
+                )
+        }
+}

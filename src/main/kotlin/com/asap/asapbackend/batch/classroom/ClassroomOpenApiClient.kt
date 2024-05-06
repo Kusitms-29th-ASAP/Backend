@@ -26,7 +26,7 @@ class ClassroomOpenApiClient(
                 .uri { uriBuilder: UriBuilder ->
                     uriBuilder
                         .queryParam("KEY", "32e897d4054342b19fd68dfb1b9ba621")
-                        .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfiiceCode)
+                        .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfficeCode)
                         .queryParam("SD_SCHUL_CODE", school.schoolCode)
                         .queryParam("AY", "2024")
                         .build()
