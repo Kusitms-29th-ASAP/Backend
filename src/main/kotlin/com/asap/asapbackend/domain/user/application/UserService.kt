@@ -29,9 +29,9 @@ class UserService(
             jwtProvider.extractRegistrationClaimsFromToken(registrationToken)
         }.apply { userAppender.appendUser(this) }
 
-        request.children.map {
-            val classroom = it.extractClassroom { grade, classNumber, schoolId ->
-                classroomReader.findByGradeAndClassNumberAndSchoolId(grade, classNumber, schoolId)
+        request.children.forEach {
+            val classroom = it.extractClassroom { grade, className, classCode, schoolId ->
+                    classroomReader.findByClassInfoAndSchoolId(grade, className, classCode,schoolId)
             }
             val child = it.extractChild(user).apply { childAppender.appendChild(this) }
             classroomAppender.addChild(classroom, child)

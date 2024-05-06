@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.school.domain.service
 
-import com.asap.asapbackend.batch.school.model.SchoolResponse
+import com.asap.asapbackend.batch.school.dto.SchoolResponse
 import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
 import org.springframework.stereotype.Service

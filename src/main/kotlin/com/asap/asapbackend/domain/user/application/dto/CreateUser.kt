@@ -34,9 +34,10 @@ class CreateUser {
         val gender: Gender,
         val birth: LocalDate,
         val elementSchoolId: Long,
-        val elementSchoolGrade: Grade,
-        val elementSchoolClassNumber: String,
-        val allergies: List<Allergy>
+        val elementSchoolGrade: Grade?,
+        val elementSchoolClassNumber: String?,
+        val elementSchoolClassCode: String?,
+        val allergies: Set<Allergy>
     ){
         fun extractChild(user: User): Child {
             return Child(
@@ -48,8 +49,8 @@ class CreateUser {
             )
         }
 
-        fun extractClassroom(classroomQuery:(Grade, String, Long) -> Classroom): Classroom {
-            return classroomQuery(elementSchoolGrade, elementSchoolClassNumber, elementSchoolId)
+        fun extractClassroom(classroomQuery:(Grade?, String?, String? ,Long) -> Classroom): Classroom {
+            return classroomQuery(elementSchoolGrade, elementSchoolClassNumber, elementSchoolClassCode,elementSchoolId)
         }
     }
 
