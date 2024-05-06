@@ -4,7 +4,8 @@ import com.asap.asapbackend.batch.classroom.ClassroomInfoProvider
 import com.asap.asapbackend.domain.school.domain.model.School
 
 data class ClassroomOpenApiResponse(
-    val classInfo: List<ClassInfo>
+    val classInfo: List<ClassInfo>?,
+    val RESULT: Result?
 )
 
 data class ClassInfo(
@@ -13,7 +14,13 @@ data class ClassInfo(
 )
 
 data class Head(
-    val list_total_count: Int?
+    val list_total_count: Int?,
+    val RESULT: Result?
+)
+
+data class Result(
+    val CODE: String,
+    val MESSAGE: String
 )
 
 data class Row(

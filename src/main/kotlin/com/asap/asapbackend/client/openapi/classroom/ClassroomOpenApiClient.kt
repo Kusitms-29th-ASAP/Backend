@@ -14,9 +14,13 @@ class ClassroomOpenApiClient(
     private val schoolRepository: SchoolRepository
 ) : ClassroomInfoProvider {
     override fun retrieveClassroomInfo(batchSize: Int, startIndex: Int): ClassroomInfoProvider.ClassroomDataContainer {
-        val endIndex = startIndex + batchSize
+        var endIndex = startIndex + batchSize
+        val hasNext = schoolRepository.count() > endIndex
+        if (!hasNext) {
+            endIndex = schoolRepository.count().toInt()
+        }
         val schools = schoolRepository.findAll().subList(startIndex, endIndex)
-        val classroomInfoList = mutableListOf<ClassroomInfoProvider.ClassroomInfo>()
+        val classroomInfoList: MutableList<ClassroomInfoProvider.ClassroomInfo> = mutableListOf()
         schools.forEach { school ->
             val apiUrl = "https://open.neis.go.kr/hub/classInfo"
             val classroomInfoResult = WebClient.create(apiUrl).get()
@@ -35,13 +39,12 @@ class ClassroomOpenApiClient(
                     jacksonObjectMapper().readValue(it, ClassroomOpenApiResponse::class.java)
                 }
                 .block()
-            val classroomInfo = classroomInfoResult?.classInfo?.firstOrNull()
-            classroomInfo?.row?.forEach { row ->
-                classroomInfoList.add(row.toClassroomInfo(school))
+            classroomInfoResult?.classInfo?.forEach { classInfo ->
+                classInfo.row?.let { rows ->
+                    classroomInfoList.addAll(rows.map { it.toClassroomInfo(school) })
+                }
             }
         }
-        val hasNext = schoolRepository.count() > endIndex
-
         return ClassroomInfoProvider.ClassroomDataContainer(
             classroomInfo = classroomInfoList,
             hasNext = hasNext
