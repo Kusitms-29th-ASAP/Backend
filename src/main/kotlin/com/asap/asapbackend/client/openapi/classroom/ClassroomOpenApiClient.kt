@@ -3,7 +3,8 @@ package com.asap.asapbackend.client.openapi.classroom
 import com.asap.asapbackend.batch.classroom.ClassroomInfoProvider
 import com.asap.asapbackend.client.openapi.classroom.dto.ClassroomOpenApiResponse
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriBuilder
@@ -11,15 +12,13 @@ import java.time.Year
 
 @Component
 class ClassroomOpenApiClient(
-    private val schoolRepository: SchoolRepository
+    private val schoolRepository: SchoolRepository,
+    private val objectMapper: ObjectMapper
 ) : ClassroomInfoProvider {
-    override fun retrieveClassroomInfo(batchSize: Int, startIndex: Int): ClassroomInfoProvider.ClassroomDataContainer {
-        var endIndex = startIndex + batchSize
-        val hasNext = schoolRepository.count() > endIndex
-        if (!hasNext) {
-            endIndex = schoolRepository.count().toInt()
-        }
-        val schools = schoolRepository.findAll().subList(startIndex, endIndex)
+    override fun retrieveClassroomInfo(batchSize: Int, pageNumber: Int): ClassroomInfoProvider.ClassroomDataContainer {
+        val pageable = PageRequest.of(pageNumber, batchSize)
+        val schools = schoolRepository.findAll(pageable)
+        val hasNext = schools.hasNext()
         val classroomInfoList: MutableList<ClassroomInfoProvider.ClassroomInfo> = mutableListOf()
         schools.forEach { school ->
             val apiUrl = "https://open.neis.go.kr/hub/classInfo"
@@ -36,7 +35,7 @@ class ClassroomOpenApiClient(
                 .retrieve()
                 .bodyToMono(String::class.java)
                 .map {
-                    jacksonObjectMapper().readValue(it, ClassroomOpenApiResponse::class.java)
+                    objectMapper.readValue(it, ClassroomOpenApiResponse::class.java)
                 }
                 .block()
             classroomInfoResult?.classInfo?.forEach { classInfo ->

@@ -13,11 +13,11 @@ class ClassroomScheduler(
     @Scheduled(cron = "0 5 4 1 3 ?") // 매년 3월 1일 04:05:00에 실행
     fun addClassroom() {
         val batchSize = 100
-        var startIndex = 0
+        var pageNumber = 0
         do {
-            val classroomDataContainer = classroomInfoProvider.retrieveClassroomInfo(batchSize, startIndex)
+            val classroomDataContainer = classroomInfoProvider.retrieveClassroomInfo(batchSize, pageNumber)
 
-            startIndex += batchSize
+            pageNumber++
 
             TransactionUtils.writable {
                 classroomAppender.addClassroom(classroomDataContainer.classroomInfo.toClassrooms())

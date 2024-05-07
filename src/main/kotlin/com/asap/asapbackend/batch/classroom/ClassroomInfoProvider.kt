@@ -4,7 +4,7 @@ import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.school.domain.model.School
 
 interface ClassroomInfoProvider {
-    fun retrieveClassroomInfo(batchSize: Int, startIndex: Int): ClassroomDataContainer
+    fun retrieveClassroomInfo(batchSize: Int, pageNumber: Int): ClassroomDataContainer
 
     data class ClassroomDataContainer(
         val classroomInfo: List<ClassroomInfo>,

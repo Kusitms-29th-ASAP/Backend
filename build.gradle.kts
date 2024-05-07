@@ -41,18 +41,15 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
-
     // spring test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 
     // jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("com.mysql:mysql-connector-j")
 
-    // mongodb
-//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    //mysql
+    runtimeOnly("com.mysql:mysql-connector-j")
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -77,7 +74,6 @@ dependencies {
     // caffeine
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
-
     // RestDocs
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
@@ -88,9 +84,6 @@ dependencies {
 
     //JSON
     implementation("org.json:json:20231013")
-
-    //Gson
-    implementation("com.google.code.gson:gson:2.8.9")
 
     // logger
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
