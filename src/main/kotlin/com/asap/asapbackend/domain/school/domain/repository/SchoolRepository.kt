@@ -4,9 +4,7 @@ import com.asap.asapbackend.domain.school.domain.model.School
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface SchoolRepository: JpaRepository<School, Long> {
-    fun findBySchoolCode(schoolCode: String): School?
-
+interface SchoolRepository : JpaRepository<School, Long> {
     @Query("SELECT s.schoolCode FROM School s WHERE s.schoolCode IN :schoolCodes")
     fun findSchoolCodeBySchoolCodeIn(schoolCodes: List<String>): List<String>
 }

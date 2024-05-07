@@ -1,6 +1,5 @@
 package com.asap.asapbackend.batch.school
 
-import com.asap.asapbackend.client.openapi.school.dto.SchoolInfo
 import com.asap.asapbackend.domain.school.domain.model.School
 
 interface SchoolInfoProvider {
@@ -16,8 +15,8 @@ interface SchoolInfoProvider {
         val eduOfficeCode: String, //ATPT_OFCDC_SC_CODE
         val schoolCode: String, //SD_SCHUL_CODE
         val school: String, //SCHUL_NM
-        val address:String //ORG_RDNMA
-    ){
+        val address: String //ORG_RDNMA
+    ) {
         fun toSchool(): School {
             return School(
                 eduOfficeCode = eduOfficeCode,

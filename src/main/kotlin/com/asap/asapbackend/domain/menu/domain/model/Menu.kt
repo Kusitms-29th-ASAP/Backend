@@ -1,16 +1,17 @@
 package com.asap.asapbackend.domain.menu.domain.model
 
-import jakarta.persistence.Id
-import org.springframework.data.mongodb.core.mapping.Document
+import com.asap.asapbackend.domain.school.domain.model.School
+import com.asap.asapbackend.global.domain.BaseDateEntity
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.ManyToOne
 import java.time.LocalDate
 
-@Document("menu")
+@Entity
 class Menu(
-    @Id
-    val id: String? = null,
-    val schoolId: Long,
-    val day: LocalDate,
-    val food: List<Food>
-) {
-
+    school: School,
+    day: LocalDate
+) : BaseDateEntity() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    val school: School = school
 }
