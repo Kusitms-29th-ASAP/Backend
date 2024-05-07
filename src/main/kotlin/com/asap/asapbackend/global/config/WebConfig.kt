@@ -11,7 +11,7 @@ class WebConfig {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
-            this.allowedOrigins = listOf("https://dev-school-point.vercel.app")
+            this.allowedOrigins = listOf("http://localhost:3000")
             this.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
         }
         val source = UrlBasedCorsConfigurationSource()
