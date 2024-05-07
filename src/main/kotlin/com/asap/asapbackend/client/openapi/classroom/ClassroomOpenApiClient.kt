@@ -19,8 +19,7 @@ class ClassroomOpenApiClient(
         val pageable = PageRequest.of(pageNumber, batchSize)
         val schools = schoolRepository.findAll(pageable)
         val hasNext = schools.hasNext()
-        val classroomInfoList: MutableList<ClassroomInfoProvider.ClassroomInfo> = mutableListOf()
-        schools.forEach { school ->
+        val classroomInfoList = schools.map { school ->
             val apiUrl = "https://open.neis.go.kr/hub/classInfo"
             val classroomInfoResult = WebClient.create(apiUrl).get()
                 .uri { uriBuilder: UriBuilder ->
@@ -38,12 +37,10 @@ class ClassroomOpenApiClient(
                     objectMapper.readValue(it, ClassroomOpenApiResponse::class.java)
                 }
                 .block()
-            classroomInfoResult?.classInfo?.forEach { classInfo ->
-                classInfo.row?.let { rows ->
-                    classroomInfoList.addAll(rows.map { it.toClassroomInfo(school) })
-                }
-            }
-        }
+            classroomInfoResult?.classInfo?.flatMap { classInfo ->
+                classInfo.row?.map { it.toClassroomInfo(school) } ?: emptyList()
+            } ?: emptyList()
+        }.flatten()
         return ClassroomInfoProvider.ClassroomDataContainer(
             classroomInfo = classroomInfoList,
             hasNext = hasNext
