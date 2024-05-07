@@ -17,19 +17,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
-    @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration().apply {
-            this.allowedOrigins = listOf("http://localhost:8080", "http://localhost:3000")
-            this.allowedMethods = listOf("*")
-            this.allowCredentials = true
-            this.allowedHeaders = listOf("*")
-            this.exposedHeaders = listOf("*")
-        }
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
-        return source
-    }
 
     @Bean
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
@@ -41,15 +28,28 @@ class SecurityConfig {
             httpBasic { disable() }
             logout { disable() }
             sessionManagement { sessionCreationPolicy = SessionCreationPolicy.STATELESS }
+            cors { }
+            csrf { disable() }
         }
-
         return httpSecurity.build()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration().apply {
+            this.allowedOrigins = listOf("http://localhost:8080", "http://localhost:3000")
+            this.allowedHeaders = listOf("*")
+            this.allowedMethods = listOf("*")
+            this.allowCredentials = true
+            this.exposedHeaders = listOf("*")
+        }
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 
     @Bean
     fun userDetailsService(): UserDetailsService {
         return InMemoryUserDetailsManager()
     }
-
-
 }
