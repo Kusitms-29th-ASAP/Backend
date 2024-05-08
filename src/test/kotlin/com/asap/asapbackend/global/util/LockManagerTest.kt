@@ -1,8 +1,6 @@
 package com.asap.asapbackend.global.util
 
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 
@@ -32,7 +30,6 @@ class LockManagerTest {
         val time = 1L
         val body = {
             Thread.sleep(2000)
-            println("thread sleep")
             "body"
         }
 
