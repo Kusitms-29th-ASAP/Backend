@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.jwt
+package com.asap.asapbackend.global.jwt.vo
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

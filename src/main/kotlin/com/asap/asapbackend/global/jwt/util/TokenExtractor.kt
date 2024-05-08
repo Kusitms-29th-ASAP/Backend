@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.jwt
+package com.asap.asapbackend.global.jwt.util
 
 import com.asap.asapbackend.global.jwt.exception.InvalidTokenException
 import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
