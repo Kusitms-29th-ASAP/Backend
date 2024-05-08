@@ -1,6 +1,5 @@
 package com.asap.asapbackend.domain.teacher.application.dto
 
-import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.model.Grade
 import com.asap.asapbackend.domain.teacher.domain.model.Teacher
 
@@ -22,8 +21,8 @@ class CreateTeacher{
             )
         }
 
-        fun extractClassroom(classroomQuery: (String, Grade, String) -> Classroom): Classroom {
-            return classroomQuery(schoolName, grade, className)
+        fun extractClassroom(classroomQuery: (String, Grade, String) -> Unit) {
+            classroomQuery(schoolName, grade, className)
         }
     }
 }
