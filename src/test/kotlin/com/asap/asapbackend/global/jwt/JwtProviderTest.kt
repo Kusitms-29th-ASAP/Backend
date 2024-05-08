@@ -4,6 +4,11 @@ import com.asap.asapbackend.fixture.generateFixture
 import com.asap.asapbackend.generateBasicParser
 import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
 import com.asap.asapbackend.global.jwt.exception.TokenNotFoundException
+import com.asap.asapbackend.global.jwt.util.JwtKeyFactory
+import com.asap.asapbackend.global.jwt.util.JwtProvider
+import com.asap.asapbackend.global.jwt.util.JwtRegistry
+import com.asap.asapbackend.global.jwt.util.JwtValidator
+import com.asap.asapbackend.global.jwt.vo.*
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -38,7 +43,7 @@ class JwtProviderTest : BehaviorSpec({
             then("accessToken이 생성되어야 한다.") {
                 val payload = parser.parseSignedClaims(result).payload
                 payload.issuer shouldBe JwtConst.TOKEN_ISSUER
-                payload.get(JwtConst.USER_CLAIMS, Claims.UserClaims::class.java)
+                payload.get(ClaimsType.USER.claimsKey, Claims.UserClaims::class.java)
                     .shouldBeEqualUsingFields(user)
                 payload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.ACCESS_TOKEN
             }
@@ -49,7 +54,7 @@ class JwtProviderTest : BehaviorSpec({
             then("refreshToken이 생성되어야 한다.") {
                 val payload = parser.parseSignedClaims(result).payload
                 payload.issuer shouldBe JwtConst.TOKEN_ISSUER
-                payload.get(JwtConst.USER_CLAIMS, Claims.UserClaims::class.java)
+                payload.get(ClaimsType.USER.claimsKey, Claims.UserClaims::class.java)
                     .shouldBeEqualUsingFields(user)
                 payload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.REFRESH_TOKEN
             }
@@ -61,7 +66,7 @@ class JwtProviderTest : BehaviorSpec({
             then("registrationToken이 생성되어야 한다.") {
                 val payload = parser.parseSignedClaims(result).payload
                 payload.issuer shouldBe JwtConst.TOKEN_ISSUER
-                payload.get(JwtConst.REGISTRATION_CLAIMS, Claims.RegistrationClaims::class.java)
+                payload.get(ClaimsType.REGISTRATION.claimsKey, Claims.RegistrationClaims::class.java)
                     .shouldBeEqualUsingFields(registrationClaims)
                 payload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.REGISTRATION_TOKEN
             }
@@ -78,21 +83,19 @@ class JwtProviderTest : BehaviorSpec({
         )
         `when`("reissueToken을 호출하면 refreshToken이 유효한 경우") {
             every { jwtRegistry.isExists(refreshToken) } returns true
-            val result = jwtProvider.reissueToken(refreshToken)
-            val generatedAccessToken = result.accessToken
-            val generatedRefreshToken = result.refreshToken
+            val (generatedAccessToken, generatedRefreshToken) = jwtProvider.reissueToken(refreshToken)
             val accessTokenPayload = parser.parseSignedClaims(generatedAccessToken).payload
             val refreshTokenPayload = parser.parseSignedClaims(generatedRefreshToken).payload
 
             then("accessToken과 refreshToken이 생성되어야 한다.") {
                 // accessToken
                 accessTokenPayload.issuer shouldBe JwtConst.TOKEN_ISSUER
-                accessTokenPayload.get(JwtConst.USER_CLAIMS, Claims.UserClaims::class.java)
+                accessTokenPayload.get(ClaimsType.USER.claimsKey, Claims.UserClaims::class.java)
                     .shouldBeEqualUsingFields(user)
                 accessTokenPayload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.ACCESS_TOKEN
                 // refreshToken
                 refreshTokenPayload.issuer shouldBe JwtConst.TOKEN_ISSUER
-                refreshTokenPayload.get(JwtConst.USER_CLAIMS, Claims.UserClaims::class.java)
+                refreshTokenPayload.get(ClaimsType.USER.claimsKey, Claims.UserClaims::class.java)
                     .shouldBeEqualUsingFields(user)
                 refreshTokenPayload.get(JwtConst.TOKEN_TYPE, TokenType::class.java) shouldBe TokenType.REFRESH_TOKEN
             }
