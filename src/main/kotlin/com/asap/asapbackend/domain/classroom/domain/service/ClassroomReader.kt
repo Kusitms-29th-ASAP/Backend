@@ -12,25 +12,26 @@ import org.springframework.stereotype.Service
 class ClassroomReader(
     private val classroomRepository: ClassroomRepository
 ) {
-    // TODO : 예외 정의하기
-    fun findByClassInfoAndSchoolId(grade: Grade?, classNumber: String?, classCode: String?,schoolId: Long): Classroom {
-        if((grade == null || classNumber == null) && classCode == null) throw ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND)
 
+    fun findByClassInfoAndSchoolId(grade: Grade?, classNumber: String?, classCode: String?, schoolId: Long): Classroom {
         return findClassroom {
-            classCode?.let {
+            if (grade != null && classNumber != null) {
+                classroomRepository.findByGradeAndClassNameAndSchoolId(grade, classNumber, schoolId)
+            } else if (classCode != null) {
                 classroomRepository.findByClassCode(classCode)
-            } ?: classroomRepository.findByGradeAndClassNameAndSchoolId(grade!!, classNumber!!, schoolId)
+            } else {
+                throw ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND)
+            }
         }
     }
 
-    fun findByClassInfoAndSchoolName(grade: Grade, className: String,schoolName: String): Classroom {
+    fun findByClassInfoAndSchoolName(grade: Grade, className: String, schoolName: String): Classroom {
         return findClassroom {
             classroomRepository.findByGradeAndClassNameAndSchoolName(grade, className, schoolName)
         }
     }
 
-    // TODO : 예외 정의하기
-    private fun findClassroom(function : () -> Classroom?):Classroom{
-        return function()?:throw ClassroomNotFoundException(ClassroomErrorCode.CLASS_NOT_FOUND)
+    private fun findClassroom(function: () -> Classroom?): Classroom {
+        return function() ?: throw ClassroomNotFoundException(ClassroomErrorCode.CLASS_NOT_FOUND)
     }
 }
