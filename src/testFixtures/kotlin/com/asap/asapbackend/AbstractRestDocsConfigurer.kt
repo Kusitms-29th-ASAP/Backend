@@ -18,7 +18,7 @@ import org.springframework.web.filter.CharacterEncodingFilter
 import java.nio.charset.StandardCharsets
 
 @AutoConfigureRestDocs
-@Import(RestDocsConfig::class)
+@Import(RestDocsConfig::class, FilterConfig::class)
 @ExtendWith(RestDocumentationExtension::class)
 abstract class AbstractRestDocsConfigurer(){
 
