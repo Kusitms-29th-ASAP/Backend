@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 private val logger = KotlinLogging.logger {}
 
 @RestControllerAdvice
-class ExceptionHandler { //아주 간단하게만 만든거라 추후 논의 후 변경 예정
+class ExceptionHandler {
     @ExceptionHandler(BusinessException::class)
     fun handleException(exception: BusinessException): ResponseEntity<ErrorResponse> {
         val errorCode = exception.errorCode
