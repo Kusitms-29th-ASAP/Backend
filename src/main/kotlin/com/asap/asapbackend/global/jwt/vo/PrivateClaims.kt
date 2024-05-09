@@ -1,4 +1,4 @@
-package com.asap.asapbackend.global.jwt
+package com.asap.asapbackend.global.jwt.vo
 
 import com.asap.asapbackend.domain.user.domain.model.Provider
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -6,17 +6,25 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 class PrivateClaims(
     val claims: Claims,
-    val tokenType: TokenType
+    private val tokenType: TokenType,
+    private val claimsType: ClaimsType = when(claims){
+        is Claims.UserClaims -> ClaimsType.USER
+        is Claims.TeacherClaims -> ClaimsType.TEACHER
+        is Claims.RegistrationClaims -> ClaimsType.REGISTRATION
+    }
 ) {
 
-    companion object : ClaimsType {
+    companion object : ClaimsClassTypeProvider {
         override fun retrieveClaimsClassType(): Map<String, Class<*>> = mapOf(
-            JwtConst.TOKEN_TYPE to TokenType::class.java
-        ).plus(Claims.UserClaims.retrieveClaimsClassType()).plus(Claims.RegistrationClaims.retrieveClaimsClassType())
+            JwtConst.TOKEN_TYPE to TokenType::class.java,
+            JwtConst.CLAIMS_TYPE to ClaimsType::class.java
+        ).plus(Claims.UserClaims.retrieveClaimsClassType())
+            .plus(Claims.RegistrationClaims.retrieveClaimsClassType())
     }
 
     fun convertToClaims(): Map<String, Any> = mapOf(
         JwtConst.TOKEN_TYPE to tokenType,
+        JwtConst.CLAIMS_TYPE to claimsType
     ).plus(this.claims.convertToClaims())
 
 }
@@ -34,13 +42,13 @@ sealed interface Claims {
     ) : Claims {
         override fun createPrivateClaims(tokenType: TokenType) = PrivateClaims(this, tokenType)
         override fun convertToClaims(): Map<String, Any> = mapOf(
-            JwtConst.REGISTRATION_CLAIMS to this,
+            ClaimsType.REGISTRATION.claimsKey to this,
         )
 
-        companion object : ClaimsType {
+        companion object : ClaimsClassTypeProvider {
             override fun retrieveClaimsClassType(): Map<String, Class<*>> {
                 return mapOf(
-                    JwtConst.REGISTRATION_CLAIMS to RegistrationClaims::class.java,
+                    ClaimsType.REGISTRATION.claimsKey to RegistrationClaims::class.java,
                 )
             }
         }
@@ -53,13 +61,13 @@ sealed interface Claims {
     ) : Claims {
         override fun createPrivateClaims(tokenType: TokenType) = PrivateClaims(this, tokenType)
         override fun convertToClaims(): Map<String, Any> = mapOf(
-            JwtConst.USER_CLAIMS to this
+            ClaimsType.USER.claimsKey to this
         )
 
-        companion object : ClaimsType {
+        companion object : ClaimsClassTypeProvider {
             override fun retrieveClaimsClassType(): Map<String, Class<*>> {
                 return mapOf(
-                    JwtConst.USER_CLAIMS to UserClaims::class.java
+                    ClaimsType.USER.claimsKey to UserClaims::class.java
                 )
             }
         }
@@ -72,19 +80,19 @@ sealed interface Claims {
     ) : Claims {
         override fun createPrivateClaims(tokenType: TokenType) = PrivateClaims(this, tokenType)
         override fun convertToClaims(): Map<String, Any> = mapOf(
-            JwtConst.TEACHER_CLAIMS to this
+            ClaimsType.TEACHER.claimsKey to this
         )
 
-        companion object : ClaimsType {
+        companion object : ClaimsClassTypeProvider {
             override fun retrieveClaimsClassType(): Map<String, Class<*>> {
                 return mapOf(
-                    JwtConst.TEACHER_CLAIMS to TeacherClaims::class.java
+                    ClaimsType.TEACHER.claimsKey to TeacherClaims::class.java
                 )
             }
         }
     }
 }
 
-interface ClaimsType {
+sealed interface ClaimsClassTypeProvider {
     fun retrieveClaimsClassType(): Map<String, Class<*>>
 }

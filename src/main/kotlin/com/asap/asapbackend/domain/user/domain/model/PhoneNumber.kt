@@ -10,10 +10,6 @@ data class PhoneNumber(
         validate()
     }
 
-    fun update(number: String): PhoneNumber {
-        return PhoneNumber(number)
-    }
-
     fun validate(){
         validateNumber(this.number)
     }

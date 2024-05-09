@@ -1,7 +1,8 @@
-package com.asap.asapbackend.global.jwt
+package com.asap.asapbackend.global.jwt.util
 
 import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
 import com.asap.asapbackend.global.jwt.exception.TokenNotFoundException
+import com.asap.asapbackend.global.jwt.vo.*
 import com.asap.asapbackend.global.util.CacheManager
 import com.asap.asapbackend.global.util.LockManager
 import io.jsonwebtoken.Jwts
@@ -24,7 +25,7 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     }
 
     fun generateRefreshToken(user: Claims.UserClaims): String {
-        val refreshToken =  generateBasicToken(
+        val refreshToken = generateBasicToken(
             user.createPrivateClaims(TokenType.REFRESH_TOKEN),
             jwtProperties.refreshTokenExpirationTime
         )
@@ -39,6 +40,7 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
             jwtProperties.registrationTokenExpirationTime // TODO : registration token expire time
         )
     }
+
     fun generateTeacherAccessToken(teacher: Claims.TeacherClaims): String {
         return generateBasicToken(
             teacher.createPrivateClaims(TokenType.ACCESS_TOKEN),
@@ -46,9 +48,9 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
         )
     }
 
-    fun reissueToken(refreshToken: String): Token = LockManager.lockByKey(refreshToken) {
+    fun reissueToken(refreshToken: String): Pair<String, String> = LockManager.lockByKey(refreshToken) {
         CacheManager.cacheByKey(refreshToken) {
-            if(jwtRegistry.isExists(refreshToken).not()) {
+            if (jwtRegistry.isExists(refreshToken).not()) {
                 throw TokenNotFoundException(TokenErrorCode.TOKEN_NOT_FOUND)
             }
             jwtValidator.validateToken(refreshToken, TokenType.REFRESH_TOKEN)
@@ -58,23 +60,31 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
 
             jwtRegistry.upsert(userClaims.userId to newRefreshToken)
 
-            return@cacheByKey Token(accessToken, newRefreshToken)
+            return@cacheByKey Pair(accessToken, newRefreshToken)
         }
     }
 
     fun extractUserClaimsFromToken(
         token: String,
         tokenType: TokenType
-    ): Claims.UserClaims = extractClaimsFromToken(token, tokenType, JwtConst.USER_CLAIMS)
+    ): Claims.UserClaims = extractClaimsFromToken(token, tokenType, ClaimsType.USER.claimsKey)
 
     fun extractRegistrationClaimsFromToken(
         token: String
-    ): Claims.RegistrationClaims = extractClaimsFromToken(token, TokenType.REGISTRATION_TOKEN, JwtConst.REGISTRATION_CLAIMS)
+    ): Claims.RegistrationClaims =
+        extractClaimsFromToken(token, TokenType.REGISTRATION_TOKEN, ClaimsType.REGISTRATION.claimsKey)
 
     fun extractTeacherClaimsFromToken(
         token: String,
         tokenType: TokenType
-    ): Claims.TeacherClaims = extractClaimsFromToken(token, tokenType, JwtConst.TEACHER_CLAIMS)
+    ): Claims.TeacherClaims = extractClaimsFromToken(token, tokenType, ClaimsType.TEACHER.claimsKey)
+
+    fun extractClaimsTypeFromToken(token: String, tokenType: TokenType): ClaimsType {
+        return jwtValidator.initializeJwtParser(tokenType)
+            .parseSignedClaims(token)
+            .payload
+            .get(JwtConst.CLAIMS_TYPE, ClaimsType::class.java)
+    }
 
     private inline fun <reified T> extractClaimsFromToken(
         token: String,

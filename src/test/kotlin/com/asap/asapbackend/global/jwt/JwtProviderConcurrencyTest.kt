@@ -1,6 +1,13 @@
 package com.asap.asapbackend.global.jwt
 
 import com.asap.asapbackend.fixture.generateFixture
+import com.asap.asapbackend.global.jwt.util.JwtKeyFactory
+import com.asap.asapbackend.global.jwt.util.JwtProvider
+import com.asap.asapbackend.global.jwt.util.JwtRegistry
+import com.asap.asapbackend.global.jwt.util.JwtValidator
+import com.asap.asapbackend.global.jwt.vo.Claims
+import com.asap.asapbackend.global.jwt.vo.JwtProperties
+import com.asap.asapbackend.global.jwt.vo.TokenType
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.mockk.every
@@ -23,7 +30,7 @@ class JwtProviderConcurrencyTest : FunSpec({
 
     test("동시에 refresh token을 재발급 받을 때, 동일한 토큰이 발급되어야 한다.") {
         // given
-        val reissueTokenList = mutableListOf<Token>()
+        val reissueTokenList = mutableListOf<Pair<String,String>>()
         val countDownLatch = CountDownLatch(10)
         val refreshToken : String= generateFixture()
         val user: Claims.UserClaims = generateFixture()

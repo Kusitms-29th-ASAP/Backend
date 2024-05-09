@@ -2,14 +2,13 @@ package com.asap.asapbackend.domain.user.application.dto
 
 import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.child.domain.model.Gender
-import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.model.Grade
 import com.asap.asapbackend.domain.menu.domain.model.Allergy
 import com.asap.asapbackend.domain.user.domain.model.Agreement
 import com.asap.asapbackend.domain.user.domain.model.PhoneNumber
 import com.asap.asapbackend.domain.user.domain.model.SocialInfo
 import com.asap.asapbackend.domain.user.domain.model.User
-import com.asap.asapbackend.global.jwt.Claims
+import com.asap.asapbackend.global.jwt.vo.Claims
 import java.time.LocalDate
 
 class CreateUser {
@@ -27,6 +26,13 @@ class CreateUser {
                 agreement
             )
         }
+
+        fun performActionOnChildren(action: (ChildDetail) -> Unit){
+            children.forEach {
+                action(it)
+            }
+        }
+
     }
 
     data class ChildDetail(
@@ -49,8 +55,8 @@ class CreateUser {
             )
         }
 
-        fun extractClassroom(classroomQuery:(Grade?, String?, String? ,Long) -> Classroom): Classroom {
-            return classroomQuery(elementSchoolGrade, elementSchoolClassNumber, elementSchoolClassCode,elementSchoolId)
+        fun performActionOnClassroom(action:(Grade?, String?, String?, Long) -> Unit) {
+            action(elementSchoolGrade, elementSchoolClassNumber, elementSchoolClassCode,elementSchoolId)
         }
     }
 
