@@ -11,7 +11,7 @@ class SchoolService(
     fun getSchools(keyword: String): List<GetSchools.Response>{
         val schools = schoolReader.findBySchoolName(keyword)
         return schools.map {
-            GetSchools.Response(it.name, it.address)
+            GetSchools.Response(it.id, it.name, it.address)
         }
     }
 }

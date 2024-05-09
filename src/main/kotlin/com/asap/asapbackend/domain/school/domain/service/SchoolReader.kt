@@ -8,7 +8,23 @@ import org.springframework.stereotype.Service
 class SchoolReader(
     private val schoolRepository: SchoolRepository
 ) {
-    fun findBySchoolName(keyword: String): List<School>{
-        return schoolRepository.findByNameContaining(keyword)
+    private val schoolCache: MutableMap<Long, School> = mutableMapOf()
+
+    fun findBySchoolName(keyword: String): List<School> {
+        if (schoolCache.isNotEmpty()) {
+            val schools = schoolCache.values
+            return schools.filter {
+                it.isContainingName(keyword)
+            }.toList()
+        } else {
+            val allSchools = schoolRepository.findAll().associateBy {
+                it.id
+            }
+            schoolCache.putAll(allSchools)
+            val schools = schoolCache.values
+            return schools.filter {
+                it.isContainingName(keyword)
+            }.toList()
+        }
     }
 }

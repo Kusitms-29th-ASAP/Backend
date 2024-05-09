@@ -8,6 +8,4 @@ import org.springframework.data.repository.query.Param
 interface SchoolRepository : JpaRepository<School, Long> {
     @Query("SELECT s.schoolCode FROM School s WHERE s.schoolCode IN :schoolCodes")
     fun findSchoolCodeBySchoolCodeIn(schoolCodes: List<String>): List<String>
-
-    fun findByNameContaining(keyword: String): List<School>
 }

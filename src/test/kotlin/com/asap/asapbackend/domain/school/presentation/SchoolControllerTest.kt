@@ -41,6 +41,7 @@ class SchoolControllerTest : AbstractRestDocsConfigurer() {
                         parameterWithName("keyword").description("학교를 검색할 키워드")
                     ),
                     responseFields(
+                        fieldWithPath("[].id").description("학교 아이디"),
                         fieldWithPath("[].name").description("학교 이름"),
                         fieldWithPath("[].address").description("학교 주소")
                     )
