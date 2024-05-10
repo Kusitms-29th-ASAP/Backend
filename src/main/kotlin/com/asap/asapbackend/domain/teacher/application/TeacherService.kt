@@ -1,5 +1,6 @@
 package com.asap.asapbackend.domain.teacher.application
 
+import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
 import com.asap.asapbackend.domain.teacher.application.dto.CreateTeacher
 import com.asap.asapbackend.domain.teacher.application.dto.LoginTeacher
@@ -20,6 +21,7 @@ class TeacherService(
     private val teacherValidator: TeacherValidator,
     private val teacherReader: TeacherReader,
     private val classroomReader: ClassroomReader,
+    private val classModifier: ClassModifier,
     private val jwtProvider: JwtProvider
 ) {
 
@@ -32,12 +34,13 @@ class TeacherService(
         request.extractClassroom { schoolName, grade, className ->
             val classroom = classroomReader.findByClassInfoAndSchoolName(grade, className, schoolName)
             classroom.addTeacher(teacher)
+            classModifier.update(classroom)
         }
     }
 
     fun loginTeacher(request: LoginTeacher.Request): LoginTeacher.Response{
-        val (username, password) = request.convertLoginInfo(passwordEncoder::encode)
-        val teacher = teacherReader.findByUsernameAndPassword(username, password)
+        val (username, password) = request.convertLoginInfo()
+        val teacher = teacherReader.findByUsernameAndPassword(username, password, passwordEncoder::matches)
         return LoginTeacher.Response(
             accessToken = jwtProvider.generateTeacherAccessToken(Claims.TeacherClaims(teacher.id)),
         )
