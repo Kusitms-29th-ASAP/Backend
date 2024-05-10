@@ -1,4 +1,4 @@
-package com.asap.asapbackend.domain.classroom.domain.model
+package com.asap.asapbackend.domain.classroom.domain.vo
 
 import jakarta.persistence.Embeddable
 import java.time.Year
