@@ -1,7 +1,6 @@
 package com.asap.asapbackend.global.jwt.util
 
-import com.asap.asapbackend.global.jwt.exception.InvalidTokenException
-import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
+import com.asap.asapbackend.global.jwt.exception.TokenException
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,6 +14,6 @@ class TokenExtractor {
         if(token.startsWith(Constants.PREFIX)) {
             return token.substring(Constants.PREFIX.length)
         }
-        throw InvalidTokenException(TokenErrorCode.INVALID_TOKEN)
+        throw TokenException.UnsupportedTokenException()
     }
 }
