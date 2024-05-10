@@ -20,6 +20,7 @@ class PrivateClaims(
             JwtConst.CLAIMS_TYPE to ClaimsType::class.java
         ).plus(Claims.UserClaims.retrieveClaimsClassType())
             .plus(Claims.RegistrationClaims.retrieveClaimsClassType())
+            .plus(Claims.TeacherClaims.retrieveClaimsClassType())
     }
 
     fun convertToClaims(): Map<String, Any> = mapOf(

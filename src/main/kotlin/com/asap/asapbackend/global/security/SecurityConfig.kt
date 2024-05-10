@@ -1,6 +1,7 @@
 package com.asap.asapbackend.global.security
 
 import com.asap.asapbackend.global.jwt.filter.JwtAuthenticationFilter
+import com.asap.asapbackend.global.jwt.filter.JwtEntryPointFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -16,7 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val jwtEntryPointFilter: JwtEntryPointFilter
 ) {
 
     @Bean
@@ -31,6 +33,7 @@ class SecurityConfig(
             sessionManagement { sessionCreationPolicy = SessionCreationPolicy.STATELESS }
             csrf { disable() }
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtAuthenticationFilter)
+            addFilterBefore<JwtAuthenticationFilter>(jwtEntryPointFilter)
         }
         return httpSecurity.build()
     }
