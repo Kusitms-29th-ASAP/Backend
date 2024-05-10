@@ -1,16 +1,14 @@
 package com.asap.asapbackend.domain.classroom.domain.service
 
-import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomErrorCode
 import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomException
-import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomNotFoundException
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
-import com.asap.asapbackend.domain.classroom.domain.model.Grade
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
+import com.asap.asapbackend.domain.classroom.domain.vo.Grade
 import org.springframework.stereotype.Service
 
 @Service
 class ClassroomReader(
-    private val classroomRepository: ClassroomRepository
+    private val classroomRepository: ClassroomRepository,
 ) {
 
     fun findByClassInfoAndSchoolId(grade: Grade?, classNumber: String?, classCode: String?, schoolId: Long): Classroom {
@@ -20,7 +18,7 @@ class ClassroomReader(
             } else if (classCode != null) {
                 classroomRepository.findByClassCode(classCode)
             } else {
-                throw ClassroomException(ClassroomErrorCode.CLASS_NOT_FOUND)
+                throw ClassroomException.ClassroomNotFoundException()
             }
         }
     }
@@ -31,7 +29,13 @@ class ClassroomReader(
         }
     }
 
+    fun findByTeacher(teacherId: Long): Classroom {
+        return findClassroom {
+            classroomRepository.findByTeacherId(teacherId)
+        }
+    }
+
     private fun findClassroom(function: () -> Classroom?): Classroom {
-        return function() ?: throw ClassroomNotFoundException(ClassroomErrorCode.CLASS_NOT_FOUND)
+        return function() ?: throw ClassroomException.ClassroomNotFoundException()
     }
 }

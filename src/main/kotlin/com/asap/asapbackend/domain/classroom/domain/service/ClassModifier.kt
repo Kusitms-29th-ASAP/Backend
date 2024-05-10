@@ -5,13 +5,12 @@ import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomReposito
 import org.springframework.stereotype.Service
 
 @Service
-class ClassroomAppender(
+class ClassModifier(
     private val classroomRepository: ClassroomRepository,
 ) {
 
-    fun addClassroom(classrooms: List<Classroom>) { // TODO: appendAll
-        classrooms.forEach {
-            classroomRepository.save(it)
-        }
+    fun update(classroom: Classroom){
+        classroom.validatePersisted()
+        classroomRepository.save(classroom)
     }
 }
