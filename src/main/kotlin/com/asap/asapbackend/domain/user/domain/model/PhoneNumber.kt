@@ -1,5 +1,6 @@
 package com.asap.asapbackend.domain.user.domain.model
 
+import com.asap.asapbackend.global.exception.validateProperty
 import jakarta.persistence.Embeddable
 
 @Embeddable
@@ -16,6 +17,6 @@ data class PhoneNumber(
 
     private fun validateNumber(number: String){
         val regex = Regex("^[0-9]{11}$")
-        require(regex.matches(number)) { "형식에 맞지 않는 전화번호입니다." }
+        validateProperty(regex.matches(number))
     }
 }
