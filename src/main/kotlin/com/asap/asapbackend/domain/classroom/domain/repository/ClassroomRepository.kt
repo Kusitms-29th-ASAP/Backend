@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.Query
 
 interface ClassroomRepository : JpaRepository<Classroom, Long> {
     fun findByGradeAndClassNameAndSchoolId(grade: Grade, classNumber: String, schoolId: Long): Classroom?
-    fun findBySchoolAndGradeAndClassName(school: School, grade: Grade, classNumber: String): Classroom?
+
+    fun findBySchoolIn(school: List<School>): List<Classroom>
 
     fun findByClassCode(classCode: String): Classroom?
 

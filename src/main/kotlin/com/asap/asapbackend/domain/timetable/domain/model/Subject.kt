@@ -9,11 +9,11 @@ import jakarta.persistence.ManyToOne
 @Entity
 class Subject(
     classroom: Classroom,
-    name: String?,
+    name: String,
     semester: String
 ) : BaseDateEntity() {
 
-    val name : String? = name
+    val name : String = name
 
     val semester : String = semester
 

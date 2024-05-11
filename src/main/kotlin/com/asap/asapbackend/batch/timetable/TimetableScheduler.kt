@@ -12,7 +12,7 @@ class TimetableScheduler(
 ) {
     @Scheduled(cron = "0 0 5 * * MON") //매주 월요일 05:00:00에 실행
     fun addTimetable() {
-        val batchSize = 10
+        val batchSize = 100
         var pageNumber = 0
         do {
             val timetableDataContainer = timetableInfoProvider.retrieveTimetableInfo(batchSize, pageNumber)

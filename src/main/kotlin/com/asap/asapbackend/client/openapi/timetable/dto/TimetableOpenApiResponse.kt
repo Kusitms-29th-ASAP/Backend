@@ -1,7 +1,7 @@
 package com.asap.asapbackend.client.openapi.timetable.dto
 
 import com.asap.asapbackend.batch.timetable.TimetableInfoProvider
-import com.asap.asapbackend.domain.classroom.domain.model.Classroom
+import com.asap.asapbackend.domain.school.domain.model.School
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -28,13 +28,17 @@ data class Result(
 data class Row(
     val ITRT_CNTNT: String?,
     val ALL_TI_YMD: String,
+    val GRADE : Int,
+    val CLASS_NM : String,
     val SEM: String,
     val PERIO: Int
 ) {
 
-    fun toTimetableInfo(classroom: Classroom): TimetableInfoProvider.TimetableRequest {
+    fun toTimetableInfo(school: School): TimetableInfoProvider.TimetableRequest {
         return TimetableInfoProvider.TimetableRequest(
-            classroom = classroom,
+            school = school,
+            grade = GRADE,
+            className = CLASS_NM,
             name = ITRT_CNTNT,
             semester = SEM,
             day = LocalDate.parse(ALL_TI_YMD,DateTimeFormatter.BASIC_ISO_DATE),

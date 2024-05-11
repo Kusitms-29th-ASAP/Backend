@@ -1,6 +1,6 @@
 package com.asap.asapbackend.batch.timetable
 
-import com.asap.asapbackend.domain.classroom.domain.model.Classroom
+import com.asap.asapbackend.domain.school.domain.model.School
 import java.time.LocalDate
 
 interface TimetableInfoProvider {
@@ -12,7 +12,9 @@ interface TimetableInfoProvider {
     )
 
     data class TimetableRequest(
-        val classroom: Classroom,
+        val school: School,
+        val grade: Int,
+        val className: String,
         val name: String?,
         val semester: String,
         val day: LocalDate,
