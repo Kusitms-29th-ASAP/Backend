@@ -2,14 +2,12 @@ package com.asap.asapbackend.global.jwt.filter
 
 import com.asap.asapbackend.global.jwt.authentication.TeacherAuthentication
 import com.asap.asapbackend.global.jwt.authentication.UserAuthentication
-import com.asap.asapbackend.global.jwt.exception.InvalidTokenException
-import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
+import com.asap.asapbackend.global.jwt.exception.TokenException
 import com.asap.asapbackend.global.jwt.util.JwtProvider
 import com.asap.asapbackend.global.jwt.util.TokenExtractor
 import com.asap.asapbackend.global.jwt.vo.Claims
 import com.asap.asapbackend.global.jwt.vo.ClaimsType
 import com.asap.asapbackend.global.jwt.vo.TokenType
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -36,13 +34,13 @@ class JwtAuthenticationFilter(
             val claims = when(claimsType){
                 ClaimsType.USER -> jwtProvider.extractUserClaimsFromToken(tokenValue, TokenType.ACCESS_TOKEN)
                 ClaimsType.TEACHER -> jwtProvider.extractTeacherClaimsFromToken(tokenValue, TokenType.ACCESS_TOKEN)
-                else -> throw InvalidTokenException(TokenErrorCode.INVALID_TOKEN)
+                else -> throw TokenException.InvalidTokenException()
             }
 
             SecurityContextHolder.getContext().authentication =when(claims){
                 is Claims.UserClaims -> UserAuthentication(claims)
                 is Claims.TeacherClaims -> TeacherAuthentication(claims)
-                else -> throw InvalidTokenException(TokenErrorCode.INVALID_TOKEN)
+                else -> throw TokenException.InvalidTokenException()
             }
         }
         filterChain.doFilter(request, response)

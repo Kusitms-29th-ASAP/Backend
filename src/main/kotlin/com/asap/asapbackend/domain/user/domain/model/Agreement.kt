@@ -1,5 +1,6 @@
 package com.asap.asapbackend.domain.user.domain.model
 
+import com.asap.asapbackend.global.exception.validateProperty
 import jakarta.persistence.Embeddable
 
 @Embeddable
@@ -13,7 +14,7 @@ data class Agreement(
     }
 
     fun validate(){
-        require(termsOfService) { "서비스 이용약관에 동의해주세요." }
-        require(privacyPolicy) { "개인정보 처리방침에 동의해주세요." }
+        validateProperty(termsOfService) { "서비스 이용약관에 동의해주세요." }
+        validateProperty(privacyPolicy) { "개인정보 처리방침에 동의해주세요." }
     }
 }

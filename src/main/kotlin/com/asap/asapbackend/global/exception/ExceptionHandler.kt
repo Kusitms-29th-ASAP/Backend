@@ -12,12 +12,17 @@ private val logger = KotlinLogging.logger {}
 class ExceptionHandler {
     @ExceptionHandler(BusinessException::class)
     fun handleException(exception: BusinessException): ResponseEntity<ErrorResponse> {
-        val errorCode = exception.errorCode
-        return ResponseEntity(ErrorResponse(errorCode.code), exception.errorCode.httpStatusCode)
+        return ResponseEntity(ErrorResponse(exception.code, exception.message), exception.httpStatusCode)
     }
 
-    @ExceptionHandler(Exception::class)
+    @ExceptionHandler(Exception::class) //
     fun handleException(exception: Exception): ResponseEntity<ErrorResponse> {
-        return ResponseEntity(ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR)
+        val internalServerException = DefaultException.InternalServerException(
+            exception.message ?: DefaultException.InternalServerException.DEFAULT_MESSAGE
+        )
+        return ResponseEntity(
+            ErrorResponse(internalServerException.code, internalServerException.message),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 }

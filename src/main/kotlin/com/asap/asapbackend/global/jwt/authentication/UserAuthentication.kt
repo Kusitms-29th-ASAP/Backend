@@ -9,6 +9,9 @@ data class UserAuthentication(
     private val user: Claims.UserClaims
 ) : AbstractAuthenticationToken(listOf(GrantedAuthority { ClaimsType.USER.name })) {
 
+    init {
+        this.isAuthenticated = true
+    }
 
     override fun getCredentials(): Any {
         return user.userId

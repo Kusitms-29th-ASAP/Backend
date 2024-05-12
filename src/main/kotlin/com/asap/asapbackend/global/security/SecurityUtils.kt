@@ -1,9 +1,7 @@
 package com.asap.asapbackend.global.security
 
 import com.asap.asapbackend.global.jwt.vo.ClaimsType
-import com.asap.asapbackend.global.security.exception.AuthenticationNotFouncException
-import com.asap.asapbackend.global.security.exception.SecurityErrorCode
-import org.springframework.security.core.GrantedAuthority
+import com.asap.asapbackend.global.security.exception.SecurityException
 import org.springframework.security.core.context.SecurityContextHolder
 
 
@@ -18,10 +16,11 @@ fun getTeacherId(): Long {
 private fun getCurrentAuthenticationPrincipal(claimsType: ClaimsType): Long {
     val authentication = SecurityContextHolder.getContext().authentication
 
-    return authentication?.let {
-        if (it.authorities.contains(GrantedAuthority { claimsType.name })) {
-            return@let it.principal as Long
+    return authentication?.let { authentication ->
+        authentication.authorities.firstOrNull{
+            it.authority == claimsType.name
+        }?.let {
+            authentication.principal as Long
         }
-        return@let null
-    } ?: throw AuthenticationNotFouncException(SecurityErrorCode.AUTHENTICATION_NOT_FOUND)
+    } ?: throw SecurityException.AuthenticationNotFoundException()
 }

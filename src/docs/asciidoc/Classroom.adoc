@@ -1,0 +1,7 @@
+[[Classroom-API]]
+== 학급 API
+
+[[Add-Announcement]]
+=== 알림장 추가
+
+operation::ClassroomControllerTest/addAnnouncement[snippets='http-request,request-fields,http-response']

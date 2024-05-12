@@ -6,8 +6,8 @@ class LoginTeacher {
         val username: String,
         val password: String
     ){
-        fun convertLoginInfo(encode: (String) -> String): Pair<String, String> =
-            Pair(username, encode(password))
+        fun convertLoginInfo(): Pair<String, String> =
+            Pair(username, password)
     }
 
 

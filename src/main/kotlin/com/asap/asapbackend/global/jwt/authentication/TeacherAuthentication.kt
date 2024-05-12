@@ -8,6 +8,10 @@ import org.springframework.security.core.GrantedAuthority
 data class TeacherAuthentication(
     private val teacher: Claims.TeacherClaims
 ) : AbstractAuthenticationToken(listOf(GrantedAuthority { ClaimsType.TEACHER.name })){
+    init {
+        this.isAuthenticated = true
+    }
+
     override fun getCredentials(): Long {
         return teacher.teacherId
     }

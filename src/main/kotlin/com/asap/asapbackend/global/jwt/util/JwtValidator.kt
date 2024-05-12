@@ -1,12 +1,9 @@
 package com.asap.asapbackend.global.jwt.util
 
-import com.asap.asapbackend.global.jwt.vo.ClaimsType
+import com.asap.asapbackend.global.jwt.exception.TokenException
 import com.asap.asapbackend.global.jwt.vo.JwtConst
-import com.asap.asapbackend.global.jwt.vo.TokenType
-import com.asap.asapbackend.global.jwt.exception.ExpiredTokenException
-import com.asap.asapbackend.global.jwt.exception.InvalidTokenException
-import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
 import com.asap.asapbackend.global.jwt.vo.PrivateClaims
+import com.asap.asapbackend.global.jwt.vo.TokenType
 import io.jsonwebtoken.*
 import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.security.SignatureException
@@ -26,9 +23,9 @@ class JwtValidator(
                 is MalformedJwtException,
                 is SignatureException,
                 is IncorrectClaimException,
-                is IllegalArgumentException -> throw InvalidTokenException(TokenErrorCode.INVALID_TOKEN)
+                is IllegalArgumentException -> throw TokenException.InvalidTokenException()
 
-                is ExpiredJwtException -> throw ExpiredTokenException(TokenErrorCode.EXPIRED_TOKEN)
+                is ExpiredJwtException -> throw TokenException.ExpiredTokenException()
                 else -> throw ex
             }
         }
