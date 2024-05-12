@@ -11,20 +11,15 @@ class SchoolReader(
     private val schoolCache: MutableMap<Long, School> = mutableMapOf()
 
     fun findBySchoolName(keyword: String): List<School> {
-        if (schoolCache.isNotEmpty()) {
-            val schools = schoolCache.values
-            return schools.filter {
-                it.isContainingName(keyword)
-            }.toList()
-        } else {
+        if (schoolCache.isEmpty()) {
             val allSchools = schoolRepository.findAll().associateBy {
                 it.id
             }
             schoolCache.putAll(allSchools)
-            val schools = schoolCache.values
-            return schools.filter {
-                it.isContainingName(keyword)
-            }.toList()
         }
+        val schools = schoolCache.values
+        return schools.filter {
+            it.isContainingName(keyword)
+        }.toList()
     }
 }
