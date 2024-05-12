@@ -1,0 +1,6 @@
+[[Teacher-API]]
+== School API
+
+[[Create-Teacher]]
+=== 키워드로 학교 조회
+operation::SchoolControllerTest/getSchool[]
