@@ -7,11 +7,11 @@ interface TimetableInfoProvider {
     fun retrieveTimetableInfo(batchSize: Int, pageNumber: Int): TimetableDataContainer
 
     data class TimetableDataContainer(
-        val timetableInfo: List<TimetableRequest>,
+        val timetableInfo: List<TimetableResponse>,
         val hasNext: Boolean
     )
 
-    data class TimetableRequest(
+    data class TimetableResponse(
         val school: School,
         val grade: Int,
         val className: String,

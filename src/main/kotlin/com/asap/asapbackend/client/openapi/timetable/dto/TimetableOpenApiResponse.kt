@@ -34,8 +34,8 @@ data class Row(
     val PERIO: Int
 ) {
 
-    fun toTimetableInfo(school: School): TimetableInfoProvider.TimetableRequest {
-        return TimetableInfoProvider.TimetableRequest(
+    fun toTimetableInfo(school: School): TimetableInfoProvider.TimetableResponse {
+        return TimetableInfoProvider.TimetableResponse(
             school = school,
             grade = GRADE,
             className = CLASS_NM,

@@ -2,8 +2,11 @@ package com.asap.asapbackend.batch.timetable
 
 import com.asap.asapbackend.domain.timetable.domain.service.TimetableAppender
 import com.asap.asapbackend.global.util.TransactionUtils
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+
+private val logger = KotlinLogging.logger {}
 
 @Component
 class TimetableScheduler(
@@ -14,7 +17,9 @@ class TimetableScheduler(
     fun addTimetable() {
         val batchSize = 100
         var pageNumber = 0
+        val startTime = System.currentTimeMillis()
         do {
+
             val timetableDataContainer = timetableInfoProvider.retrieveTimetableInfo(batchSize, pageNumber)
 
             pageNumber++
@@ -23,5 +28,7 @@ class TimetableScheduler(
                 timetableAppender.addSubjectAndTimetable(timetableDataContainer.timetableInfo)
             }
         } while (timetableDataContainer.hasNext)
+        val endTime = System.currentTimeMillis()
+        logger.info { "addTimetable end, elapsed time: ${endTime - startTime}"}
     }
 }

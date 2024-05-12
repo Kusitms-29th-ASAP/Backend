@@ -1,64 +1,54 @@
 package com.asap.asapbackend.domain.timetable.domain.service
 
 import com.asap.asapbackend.batch.timetable.TimetableInfoProvider
-import com.asap.asapbackend.domain.classroom.domain.model.Grade
+import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
 import com.asap.asapbackend.domain.timetable.domain.model.Subject
 import com.asap.asapbackend.domain.timetable.domain.model.Timetable
 import com.asap.asapbackend.domain.timetable.domain.repository.SubjectRepository
+import com.asap.asapbackend.domain.timetable.domain.repository.TimetableJdbcRepository
 import com.asap.asapbackend.domain.timetable.domain.repository.TimetableRepository
 import org.springframework.stereotype.Service
+
 
 @Service
 class TimetableAppender(
     private val classroomRepository: ClassroomRepository,
     private val subjectRepository: SubjectRepository,
-    private val timetableRepository: TimetableRepository
+    private val timetableRepository: TimetableRepository,
+    private val timetableJdbcRepository: TimetableJdbcRepository
 ) {
 
-    fun addSubjectAndTimetable(timetables: List<TimetableInfoProvider.TimetableRequest>) {
-        val existClassroom = classroomRepository.findBySchoolIn(timetables.map { it.school })
-
-        val subjectList = mutableListOf<Subject>()
-        val timetableList = mutableListOf<Timetable>()
-
-        val existingSubject = subjectRepository.findByClassroomIn(existClassroom)
-        subjectList.addAll(existingSubject)
+    fun addSubjectAndTimetable(timetables: List<TimetableInfoProvider.TimetableResponse>) {
+        val existClassroomMap = classroomRepository.findBySchoolIn(timetables.map { it.school })
+            .groupBy { it.school }
+        val timetableList = mutableSetOf<Timetable>()
+        val subjectList = subjectRepository.findByClassroomIn(existClassroomMap.values.flatten())
+            .groupByTo(mutableMapOf()) { it.classroom }
 
         timetables.forEach {
-            val classroom = existClassroom.find { room ->
-                room.school.id == it.school.id && room.grade == Grade.convert(it.grade) && room.className == it.className
+            if (it.name == null) return@forEach
+
+            val classroom = existClassroomMap[it.school]?.find { classroom ->
+                classroom.isSameClassroom(Classroom(it.grade, it.className, it.school))
+            } ?: return@forEach
+
+
+            val existSubject = subjectList[classroom]?.find { subject ->
+                subject.isSameSubject(Subject(classroom, it.name, it.semester))
+            } ?: Subject(classroom, it.name, it.semester).also {
+                subjectList.getOrPut(classroom) { mutableListOf() }.add(it)
             }
 
-            val existSubject = subjectList.find { subject ->
-                subject.classroom.id == classroom?.id && subject.name == it.name && subject.semester == it.semester
-            }
-
-            if (existSubject == null && it.name != null && classroom !=null) {
-                val subject = Subject(
-                    classroom = classroom,
-                    name = it.name,
-                    semester = it.semester
-                )
-                subjectList.add(subject)
-
-                val timetable = Timetable(
-                    subject = subject,
-                    day = it.day,
-                    time = it.time
-                )
-                timetableList.add(timetable)
-            } else if (it.name != null) {
-
-                val timetable = Timetable(
-                    subject = existSubject,
-                    day = it.day,
-                    time = it.time
-                )
-                timetableList.add(timetable)
-            }
+            val timetable = Timetable(
+                subject = existSubject,
+                day = it.day,
+                time = it.time
+            )
+            timetableList.add(timetable)
         }
-        subjectRepository.saveAll(subjectList)
-        timetableRepository.saveAll(timetableList)
+
+        subjectRepository.saveAll(subjectList.values.flatten())
+        timetableJdbcRepository.insertBatch(timetableList)
     }
 }
