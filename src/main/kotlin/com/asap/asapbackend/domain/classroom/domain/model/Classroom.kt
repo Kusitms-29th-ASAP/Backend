@@ -44,4 +44,10 @@ class Classroom(
     fun addTeacher(teacher: Teacher) {
         teacherClassroomSet.add(TeacherClassroom(teacher, this))
     }
+
+
+    fun isSameClassroom(classroom: Classroom): Boolean {
+        return this.grade == classroom.grade && this.className == classroom.className && this.school.id == classroom.school.id
+    }
+
 }

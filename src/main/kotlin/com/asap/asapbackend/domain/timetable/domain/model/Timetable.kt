@@ -8,16 +8,15 @@ import java.time.LocalDate
 
 @Entity
 class Timetable(
-    subject: Subject?,
+    subject: Subject,
     day: LocalDate,
     time: Int
 ) : BaseDateEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val subject: Subject? = subject
+    val subject: Subject = subject
 
     val day: LocalDate = day
 
     val time: Int = time
-
 }

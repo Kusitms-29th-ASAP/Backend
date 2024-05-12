@@ -21,4 +21,27 @@ class School(
     val schoolCode: String = schoolCode
     val name: String = name
     val address: String = address
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as School
+
+        if (eduOfficeCode != other.eduOfficeCode) return false
+        if (schoolCode != other.schoolCode) return false
+        if (name != other.name) return false
+        if (address != other.address) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = eduOfficeCode.hashCode()
+        result = 31 * result + schoolCode.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + address.hashCode()
+        return result
+    }
+
+
 }

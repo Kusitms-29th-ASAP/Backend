@@ -20,4 +20,7 @@ class Subject(
     @ManyToOne(fetch = FetchType.LAZY)
     val classroom: Classroom = classroom
 
+    fun isSameSubject(subject: Subject): Boolean {
+        return this.name == subject.name && this.semester == subject.semester && this.classroom.id == subject.classroom.id
+    }
 }
