@@ -1,10 +1,15 @@
 package com.asap.asapbackend.domain.classroom.domain.model
 
 import com.asap.asapbackend.domain.child.domain.model.Child
+import com.asap.asapbackend.domain.classroom.domain.vo.AnnouncementDescription
+import com.asap.asapbackend.domain.classroom.domain.vo.Grade
+import com.asap.asapbackend.domain.classroom.domain.vo.Year
 import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.teacher.domain.model.Teacher
 import com.asap.asapbackend.global.domain.BaseDateEntity
 import jakarta.persistence.*
+import org.hibernate.annotations.BatchSize
+import java.time.LocalDate
 import java.util.*
 
 @Entity
