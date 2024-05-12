@@ -7,7 +7,6 @@ import com.asap.asapbackend.domain.timetable.domain.model.Subject
 import com.asap.asapbackend.domain.timetable.domain.model.Timetable
 import com.asap.asapbackend.domain.timetable.domain.repository.SubjectRepository
 import com.asap.asapbackend.domain.timetable.domain.repository.TimetableJdbcRepository
-import com.asap.asapbackend.domain.timetable.domain.repository.TimetableRepository
 import org.springframework.stereotype.Service
 
 
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service
 class TimetableAppender(
     private val classroomRepository: ClassroomRepository,
     private val subjectRepository: SubjectRepository,
-    private val timetableRepository: TimetableRepository,
     private val timetableJdbcRepository: TimetableJdbcRepository
 ) {
 

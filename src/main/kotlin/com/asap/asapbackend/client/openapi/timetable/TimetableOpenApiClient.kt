@@ -10,19 +10,23 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.util.UriBuilder
 import reactor.core.publisher.Flux
+import java.time.LocalDate
 import java.time.Year
+import java.time.format.DateTimeFormatter
 
 @Component
 class TimetableOpenApiClient(
     private val schoolRepository: SchoolRepository,
     private val objectMapper: ObjectMapper
 ) : TimetableInfoProvider {
-    override fun retrieveTimetableInfo(batchSize: Int, pageNumber: Int): TimetableInfoProvider.TimetableDataContainer {
+    override fun retrieveTimetableInfo(
+        batchSize: Int, pageNumber: Int, day: LocalDate
+    ): TimetableInfoProvider.TimetableDataContainer {
         val pageable = PageRequest.of(pageNumber, batchSize)
         val schools = schoolRepository.findAll(pageable)
         val hasNext = schools.hasNext()
         val timetableFluxes = schools.content.map { school ->
-            getTimetableResponse(school)
+            getTimetableResponse(school, day)
         }
         val timetableInfoList = mutableListOf<TimetableInfoProvider.TimetableResponse>()
         Flux.merge(timetableFluxes)
@@ -39,7 +43,9 @@ class TimetableOpenApiClient(
         )
     }
 
-    private fun getTimetableResponse(school: School): Flux<TimetableInfoProvider.TimetableResponse> {
+    private fun getTimetableResponse(school: School, day: LocalDate): Flux<TimetableInfoProvider.TimetableResponse> {
+        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val today = day.format(formatter)
         val apiUrl = "https://open.neis.go.kr/hub/elsTimetable"
         return WebClient.create(apiUrl).get()
             .uri { uriBuilder: UriBuilder ->
@@ -48,8 +54,7 @@ class TimetableOpenApiClient(
                     .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfficeCode)
                     .queryParam("SD_SCHUL_CODE", school.schoolCode)
                     .queryParam("AY", Year.now())
-                    .queryParam("TI_FROM_YMD", 20240507)
-                    .queryParam("TI_TO_YMD", 20240507)
+                    .queryParam("ALL_TI_YMD", today)
                     .queryParam("pSize", 1000)
                     .queryParam("Type", "json")
                     .build()
