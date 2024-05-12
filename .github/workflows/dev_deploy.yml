@@ -31,7 +31,10 @@ jobs:
       - name: gradle setting
         run: |
           chmod +x gradlew
-          ./gradlew build
+          ./gradlew build \
+          --build-cache \
+          --project-cache-dir=$HOME/.gradle/caches/project \
+          --gradle-user-home=$HOME/.gradle/caches/global
 
       - name: upload artifact
         uses: actions/upload-artifact@v2
@@ -116,7 +119,7 @@ jobs:
 
   run_application:
     runs-on: ubuntu-latest
-    needs: [push_to_docker_hub, config_environment]
+    needs: [ push_to_docker_hub, config_environment ]
     steps:
       - name: Run Docker container
         uses: appleboy/ssh-action@master

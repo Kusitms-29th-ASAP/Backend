@@ -21,6 +21,7 @@ class School(
     val schoolCode: String = schoolCode
     val name: String = name
     val address: String = address
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -44,4 +45,8 @@ class School(
     }
 
 
+
+    fun isContainingName(keyword: String): Boolean {
+        return name.contains(keyword)
+    }
 }

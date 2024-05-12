@@ -60,7 +60,9 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:$kotestVersion") // Assertions Library
     testImplementation("io.kotest:kotest-property:$kotestVersion") // Property Testing
 
-    testImplementation("io.mockk:mockk:${mockkVersion}") // mockk
+    // mockk
+    testImplementation("io.mockk:mockk:${mockkVersion}")
+    testFixturesImplementation("io.mockk:mockk:${mockkVersion}")
 
     // fixture monkey
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.0.16")
@@ -82,11 +84,12 @@ dependencies {
     // webclient
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    //JSON
-    implementation("org.json:json:20231013")
-
     // logger
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+
+    // kotlin coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
 
 }
 

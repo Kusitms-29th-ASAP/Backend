@@ -2,8 +2,7 @@ package com.asap.asapbackend.global.jwt
 
 import com.asap.asapbackend.fixture.generateFixture
 import com.asap.asapbackend.generateBasicParser
-import com.asap.asapbackend.global.jwt.exception.TokenErrorCode
-import com.asap.asapbackend.global.jwt.exception.TokenNotFoundException
+import com.asap.asapbackend.global.jwt.exception.TokenException
 import com.asap.asapbackend.global.jwt.util.JwtKeyFactory
 import com.asap.asapbackend.global.jwt.util.JwtProvider
 import com.asap.asapbackend.global.jwt.util.JwtRegistry
@@ -104,10 +103,9 @@ class JwtProviderTest : BehaviorSpec({
         `when`("reissueToken을 호출하면 refreshToken이 유효하지 않은 경우") {
             every { jwtRegistry.isExists(refreshToken) } returns false
             then("TokenNotFoundException이 발생해야 한다.") {
-                val exception = shouldThrow<TokenNotFoundException> {
+                shouldThrow<TokenException.TokenNotFoundException> {
                     jwtProvider.reissueToken(refreshToken)
                 }
-                exception.errorCode shouldBe TokenErrorCode.TOKEN_NOT_FOUND
             }
         }
     }

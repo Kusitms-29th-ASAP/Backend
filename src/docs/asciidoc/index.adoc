@@ -11,3 +11,8 @@ include::Auth.adoc[]
 include::User.adoc[]
 
 include::Teacher.adoc[]
+
+include::Classroom.adoc[]
+
+include::School.adoc[]
+

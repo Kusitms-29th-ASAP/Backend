@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.teacher.application.dto
 
-import com.asap.asapbackend.domain.classroom.domain.model.Grade
+import com.asap.asapbackend.domain.classroom.domain.vo.Grade
 import com.asap.asapbackend.domain.teacher.domain.model.Teacher
 
 class CreateTeacher{

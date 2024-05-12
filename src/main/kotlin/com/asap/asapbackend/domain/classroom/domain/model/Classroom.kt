@@ -34,8 +34,11 @@ class Classroom(
     @OneToMany(mappedBy = "classroom")
     val childClassroomSet: MutableSet<ChildClassroom> = mutableSetOf()
 
-    @OneToMany(mappedBy = "classroom")
+    @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
     val teacherClassroomSet: MutableSet<TeacherClassroom> = mutableSetOf()
+
+    @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
+    val announcementList: MutableList<Announcement> = mutableListOf()
 
     fun addChild(child: Child) {
         childClassroomSet.add(ChildClassroom(child, this))
@@ -50,4 +53,13 @@ class Classroom(
         return this.grade == classroom.grade && this.className == classroom.className && this.school.id == classroom.school.id
     }
 
+
+    fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>, writeDate: LocalDate) {
+        announcementList.add(Announcement(descriptions, writeDate, this, teacher))
+    }
+
+    @BatchSize(size = 100)
+    fun getStudentIds(): Set<Long>{
+        return childClassroomSet.map { it.student.id }.toSet()
+    }
 }
