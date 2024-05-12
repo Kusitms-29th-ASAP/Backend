@@ -21,4 +21,8 @@ class School(
     val schoolCode: String = schoolCode
     val name: String = name
     val address: String = address
+
+    fun isContainingName(keyword: String): Boolean {
+        return name.contains(keyword)
+    }
 }
