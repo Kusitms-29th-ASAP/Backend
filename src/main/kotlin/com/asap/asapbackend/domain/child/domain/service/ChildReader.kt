@@ -13,4 +13,8 @@ class ChildReader(
     fun findAllByIds(childIds: Set<Long>): Set<Child> {
         return childRepository.findAllById(childIds).toSet()
     }
+
+    fun findByParentId(parentId: Long): Child {
+        return childRepository.findByParentId(parentId)
+    }
 }

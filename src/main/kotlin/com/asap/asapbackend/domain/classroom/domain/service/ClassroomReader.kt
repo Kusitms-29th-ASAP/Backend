@@ -35,6 +35,12 @@ class ClassroomReader(
         }
     }
 
+    fun findByStudent(studentId: Long): Classroom{
+        return findClassroom {
+            classroomRepository.findByStudentId(studentId)
+        }
+    }
+
     private fun findClassroom(function: () -> Classroom?): Classroom {
         return function() ?: throw ClassroomException.ClassroomNotFoundException()
     }
