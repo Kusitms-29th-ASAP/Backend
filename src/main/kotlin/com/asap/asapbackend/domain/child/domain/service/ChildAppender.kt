@@ -13,7 +13,8 @@ class ChildAppender(
 ) {
     fun appendChild(child: Child) {
         if(primaryChildRepository.existsByUserId(child.parent.id).not()){
-            primaryChildRepository.save(PrimaryChild(child.parent.id, child.id))
+            childRepository.save(child)
+            primaryChildRepository.save(PrimaryChild(child.parent, child))
         }
         childRepository.save(child)
     }
