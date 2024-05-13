@@ -1,10 +1,7 @@
 package com.asap.asapbackend.domain.child.domain.model
 
 import com.asap.asapbackend.global.domain.BaseDateEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Index
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(
