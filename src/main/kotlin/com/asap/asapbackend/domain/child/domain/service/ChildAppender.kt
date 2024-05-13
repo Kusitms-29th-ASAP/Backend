@@ -12,9 +12,9 @@ class ChildAppender(
     private val primaryChildRepository: PrimaryChildRepository
 ) {
     fun appendChild(child: Child) {
+        childRepository.save(child)
         if(primaryChildRepository.existsByUserId(child.parent.id).not()){
-            childRepository.save(child)
-            primaryChildRepository.save(PrimaryChild(child.parent, child))
+            primaryChildRepository.save(PrimaryChild(child.parent.id, child.id))
         }
     }
 }
