@@ -16,6 +16,5 @@ class ChildAppender(
             childRepository.save(child)
             primaryChildRepository.save(PrimaryChild(child.parent, child))
         }
-        childRepository.save(child)
     }
 }
