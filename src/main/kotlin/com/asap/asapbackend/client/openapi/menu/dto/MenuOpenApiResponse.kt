@@ -1,8 +1,8 @@
 package com.asap.asapbackend.client.openapi.menu.dto
 
-import com.asap.asapbackend.batch.menu.MenuInfoProvider
 import com.asap.asapbackend.domain.menu.domain.model.Allergy
 import com.asap.asapbackend.domain.menu.domain.model.Food
+import com.asap.asapbackend.domain.menu.domain.model.Menu
 import com.asap.asapbackend.domain.school.domain.model.School
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -32,15 +32,15 @@ data class Row(
     val MLSV_YMD: String,
     val DDISH_NM: String
 ) {
-    fun toMenuInfo(school: School): MenuInfoProvider.MenuResponse {
-        return MenuInfoProvider.MenuResponse(
+    fun toMenu(school: School): Menu {
+        return Menu(
             school = school,
-            menu = convertMenu(DDISH_NM),
+            foods = convertToFoods(DDISH_NM),
             day = LocalDate.parse(MLSV_YMD, DateTimeFormatter.BASIC_ISO_DATE)
         )
     }
 
-    private fun convertMenu(menus: String): List<Food> {
+    private fun convertToFoods(menus: String): List<Food> {
         val foodList = mutableListOf<Food>()
 
         val menuItems = menus.split("<br/>")

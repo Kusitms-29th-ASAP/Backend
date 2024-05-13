@@ -3,6 +3,7 @@ package com.asap.asapbackend.client.openapi.menu
 import com.asap.asapbackend.batch.menu.MenuInfoProvider
 import com.asap.asapbackend.client.openapi.menu.dto.MenuOpenApiResponse
 import com.asap.asapbackend.client.openapi.vo.NeisOpenApiKey
+import com.asap.asapbackend.domain.menu.domain.model.Menu
 import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,20 +28,17 @@ class MenuOpenApiClient (
         val menuFluxex = schools.content.map { school ->
             getMenuResponse(school)
         }
-        val menuInfoList = mutableListOf<MenuInfoProvider.MenuResponse>()
+        val menuInfoList = mutableListOf<Menu>()
         Flux.merge(menuFluxex)
             .buffer(1000)
-            .flatMap {
-                Flux.fromIterable(it)
-                    .doOnNext(menuInfoList::add)
-                    .then()
-            }.blockLast()
+            .doOnNext(menuInfoList::addAll)
+            .blockLast()
         return MenuInfoProvider.MenuDataContainer(
             menuInfo = menuInfoList,
             hasNext = hasNext
         )
     }
-    private fun getMenuResponse(school: School): Flux<MenuInfoProvider.MenuResponse> {
+    private fun getMenuResponse(school: School): Flux<Menu> {
         val formatter = DateTimeFormatter.ofPattern("yyyyMM")
         val date = LocalDate.now().format(formatter)
         val apiUrl = "https://open.neis.go.kr/hub/mealServiceDietInfo"
@@ -59,13 +57,11 @@ class MenuOpenApiClient (
             .bodyToMono(String::class.java)
             .map {
                 val menuOpenApiResponse = objectMapper.readValue(it, MenuOpenApiResponse::class.java)
-                menuOpenApiResponse?.mealServiceDietInfo?.flatMap { timetableInfo ->
-                    timetableInfo.row?.map {
-                        it.toMenuInfo(school)
+                menuOpenApiResponse?.mealServiceDietInfo?.flatMap { menlInfo ->
+                    menlInfo.row?.map {
+                        it.toMenu(school)
                     } ?: emptyList()
                 } ?: emptyList()
-            }
-            .flatMapMany { Flux.fromIterable(it) }
+            }.flatMapMany { Flux.fromIterable(it) }
     }
-
 }

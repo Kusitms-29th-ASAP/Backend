@@ -11,14 +11,7 @@ import org.springframework.stereotype.Service
 class MenuAppender(
     private val menuRepository: MenuRepository
 ) {
-    fun addMenu(menus: List<MenuInfoProvider.MenuResponse>) {
-        val menuList = mutableListOf<Menu>()
-        menus.forEach {
-            val menu = Menu(
-                it.school, it.day, it.menu
-            )
-            menuList.add(menu)
-        }
-        menuRepository.saveAll(menuList)
+    fun addMenu(menus: List<Menu>) {
+        menuRepository.saveAll(menus)
     }
 }
