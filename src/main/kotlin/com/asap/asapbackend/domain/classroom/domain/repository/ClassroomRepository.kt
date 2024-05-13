@@ -32,7 +32,7 @@ interface ClassroomRepository : JpaRepository<Classroom, Long> {
     @Query("""
         SELECT c
         FROM Classroom c
-        join ChildClassroom cc on cc.classroom = c and cc.student.id = :studentId
+        join ChildClassroom cc on cc.classroom.id = c.id and cc.student.id = :studentId
     """)
     fun findByStudentId(studentId: Long): Classroom?
 }
