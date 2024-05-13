@@ -2,6 +2,7 @@ package com.asap.asapbackend.client.openapi.classroom
 
 import com.asap.asapbackend.batch.classroom.ClassroomInfoProvider
 import com.asap.asapbackend.client.openapi.classroom.dto.ClassroomOpenApiResponse
+import com.asap.asapbackend.client.openapi.vo.NeisOpenApiKey
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.data.domain.PageRequest
@@ -12,6 +13,7 @@ import java.time.Year
 
 @Component
 class ClassroomOpenApiClient(
+    private val neisOpenApiKey: NeisOpenApiKey,
     private val schoolRepository: SchoolRepository,
     private val objectMapper: ObjectMapper
 ) : ClassroomInfoProvider {
@@ -24,7 +26,7 @@ class ClassroomOpenApiClient(
             val classroomInfoResult = WebClient.create(apiUrl).get()
                 .uri { uriBuilder: UriBuilder ->
                     uriBuilder
-                        .queryParam("KEY", "32e897d4054342b19fd68dfb1b9ba621")
+                        .queryParam("KEY", neisOpenApiKey.key)
                         .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfficeCode)
                         .queryParam("SD_SCHUL_CODE", school.schoolCode)
                         .queryParam("AY", Year.now())

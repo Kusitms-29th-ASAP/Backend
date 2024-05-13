@@ -2,6 +2,7 @@ package com.asap.asapbackend.client.openapi.menu
 
 import com.asap.asapbackend.batch.menu.MenuInfoProvider
 import com.asap.asapbackend.client.openapi.menu.dto.MenuOpenApiResponse
+import com.asap.asapbackend.client.openapi.vo.NeisOpenApiKey
 import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class MenuOpenApiClient (
+    private val neisOpenApiKey: NeisOpenApiKey,
     private val schoolRepository: SchoolRepository,
     private val objectMapper: ObjectMapper
 ) : MenuInfoProvider{
@@ -45,7 +47,7 @@ class MenuOpenApiClient (
         return WebClient.create(apiUrl).get()
             .uri { uriBuilder: UriBuilder ->
                 uriBuilder
-                    .queryParam("KEY", "32e897d4054342b19fd68dfb1b9ba621")
+                    .queryParam("KEY", neisOpenApiKey.key)
                     .queryParam("ATPT_OFCDC_SC_CODE", school.eduOfficeCode)
                     .queryParam("SD_SCHUL_CODE", school.schoolCode)
                     .queryParam("MLSV_YMD", date)

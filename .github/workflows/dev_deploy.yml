@@ -116,6 +116,8 @@ jobs:
             echo "JWT_SECRET=${{secrets.JWT_SECRET}}" >> .env
             echo "DOCKER_REGISTRY=${{secrets.DOCKER_REGISTRY}}" >> .env
             echo "IMAGE_NAME=${{secrets.IMAGE_NAME}}" >> .env
+            echo "SEOUL_OPEN_API_KEY=${{secrets.SEOUL_OPEN_API_KEY}}" >> .env
+            echo "NEIS_OPEN_API_KEY"=${{secrets.NEIS_OPEN_API_KEY}}" >> .env
 
   run_application:
     runs-on: ubuntu-latest

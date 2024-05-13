@@ -30,6 +30,6 @@ class MenuScheduler (
             }
         }while (menuDataContainer.hasNext)
         val endTime = System.currentTimeMillis()
-        logger.info { "addTimetable end, elapsed time: ${endTime - startTime}" }
+        logger.info { "addMenu end, elapsed time: ${endTime - startTime}" }
     }
 }
