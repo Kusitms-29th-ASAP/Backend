@@ -53,6 +53,12 @@ class Classroom(
         teacherClassroomSet.add(TeacherClassroom(teacher, this))
     }
 
+
+    fun isSameClassroom(classroom: Classroom): Boolean {
+        return this.grade == classroom.grade && this.className == classroom.className && this.school.id == classroom.school.id
+    }
+
+
     fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>, writeDate: LocalDate) {
         announcementList.add(Announcement(descriptions, writeDate, this, teacher))
     }
