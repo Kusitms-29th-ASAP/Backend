@@ -21,6 +21,11 @@ jwt:
   refresh-token-expiration-time: 86400000 # 1 day = 1000 * 60 * 60 * 24
   registration-token-expiration-time: 86400000 # 1 day = 1000 * 60 * 60 * 24
 
+seoul-open-api:
+  key: ${SEOUL_OPEN_API_KEY}
+
+neis-open-api:
+  key: ${NEIS_OPEN_API_KEY}
 ---
 
 spring:
