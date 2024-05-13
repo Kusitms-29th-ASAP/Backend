@@ -1,5 +1,6 @@
 package com.asap.asapbackend.batch.menu
 
+import com.asap.asapbackend.domain.menu.domain.model.Food
 import com.asap.asapbackend.domain.school.domain.model.School
 import java.time.LocalDate
 
@@ -13,7 +14,7 @@ interface MenuInfoProvider {
 
     data class MenuResponse(
         val school: School,
-        val menu: String,
+        val menu: List<Food>,
         val day: LocalDate
     )
 }

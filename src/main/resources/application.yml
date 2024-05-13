@@ -53,3 +53,9 @@ jwt:
   access-token-expiration-time: 86400000
   refresh-token-expiration-time: 86400000
   registration-token-expiration-time: 86400000
+
+seoul-open-api:
+  key: "key"
+
+neis-open-api:
+  key: "key"
