@@ -1,7 +1,6 @@
 package com.asap.asapbackend.domain.timetable.domain.service
 
 import com.asap.asapbackend.domain.timetable.application.dto.ReadThisWeekTimetable
-import com.asap.asapbackend.domain.timetable.application.dto.toPeriod
 import com.asap.asapbackend.domain.timetable.domain.model.Timetable
 import com.asap.asapbackend.domain.timetable.domain.repository.TimetableRepository
 import org.springframework.stereotype.Service
@@ -19,25 +18,25 @@ class TimetableReader(
     fun findThisWeekTimetableByClassroomId(classroomId: Long): ReadThisWeekTimetable.Response {
         val monday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
             classroomId, LocalDate.now().with(DayOfWeek.MONDAY)
-        ).toPeriod()
+        )
         val tuesday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
             classroomId, LocalDate.now().with(DayOfWeek.TUESDAY)
-        ).toPeriod()
+        )
         val wednesday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
             classroomId, LocalDate.now().with(DayOfWeek.WEDNESDAY)
-        ).toPeriod()
+        )
         val thursday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
             classroomId, LocalDate.now().with(DayOfWeek.THURSDAY)
-        ).toPeriod()
+        )
         val friday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
             classroomId, LocalDate.now().with(DayOfWeek.FRIDAY)
-        ).toPeriod()
+        )
         return ReadThisWeekTimetable.Response(
-            monday = monday,
-            tuesday = tuesday,
-            wednesday = wednesday,
-            thursday = thursday,
-            friday = friday
+            monday = ReadThisWeekTimetable().toPeriod(monday),
+            tuesday = ReadThisWeekTimetable().toPeriod(tuesday),
+            wednesday = ReadThisWeekTimetable().toPeriod(wednesday),
+            thursday = ReadThisWeekTimetable().toPeriod(thursday),
+            friday = ReadThisWeekTimetable().toPeriod(friday)
         )
     }
 }

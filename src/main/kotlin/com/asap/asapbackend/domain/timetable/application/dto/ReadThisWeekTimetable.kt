@@ -14,15 +14,12 @@ class ReadThisWeekTimetable {
         val time: Int?,
         val subject: String?
     )
-    companion object {
-        fun fromTimetable(timetable: Timetable?): Period {
-            return Period(
-                time = timetable?.time,
-                subject = timetable?.subject?.name
+    fun toPeriod(timetables: List<Timetable?>): List<Period> {
+        return timetables.map {
+            Period(
+                time = it?.time,
+                subject = it?.subject?.name
             )
         }
     }
-}
-fun List<Timetable?>.toPeriod(): List<ReadThisWeekTimetable.Period> {
-    return this.map { ReadThisWeekTimetable.fromTimetable(it) }
 }
