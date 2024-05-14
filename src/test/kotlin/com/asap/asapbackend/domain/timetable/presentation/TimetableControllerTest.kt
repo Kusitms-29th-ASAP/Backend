@@ -77,7 +77,7 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
                 ReadThisWeekTimetable.Period(5, "국어")
             ),
             wednesday = listOf(
-                ReadThisWeekTimetable.Period(1, "자율학습") // 여기에 원하는 요일의 항목을 추가할 수 있습니다.
+                ReadThisWeekTimetable.Period(1, "자율학습")
             ),
             thursday = listOf(
                 ReadThisWeekTimetable.Period(1, "수학"),
