@@ -18,7 +18,7 @@ class ChildReader(
 
     fun findPrimaryChild(userId: Long): Child? {
         return findChild {
-            primaryChildRepository.findByUserId(userId)?.let {
+            primaryChildRepository.findByUserId(userId).let {
                 childRepository.findByIdOrNull(it.childId)
             }
         }
