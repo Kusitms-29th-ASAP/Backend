@@ -28,7 +28,7 @@ class MenuService(
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
         val schoolId = classroomReader.findByStudent(childId).school.id
-        val menus = menuReader.findThisMonthMenuBySchoolIdOrNull(schoolId)
+        val menus = menuReader.findThisMonthMenuBySchoolId(schoolId)
         val childAllergies = childReader.findPrimaryChild(userId).allergies.toList()
         val monthMenu = GetThisMonthMenu().toMeal(menus,childAllergies)
         return GetThisMonthMenu.Response(monthMenu)

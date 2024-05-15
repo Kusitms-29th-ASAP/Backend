@@ -13,7 +13,7 @@ class MenuReader(
         return menuRepository.findBySchoolIdAndDay(schoolId, LocalDate.now())
     }
 
-    fun findThisMonthMenuBySchoolIdOrNull(schoolId: Long): List<Menu> {
+    fun findThisMonthMenuBySchoolId(schoolId: Long): List<Menu> {
         val firstDayOfMonth = LocalDate.now().withDayOfMonth(1)
         val lastDayOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
         val daysOfMonth = firstDayOfMonth.datesUntil(lastDayOfMonth.plusDays(1)).toList()
