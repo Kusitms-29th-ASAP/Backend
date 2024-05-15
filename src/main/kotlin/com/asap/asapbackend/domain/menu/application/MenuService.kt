@@ -16,23 +16,22 @@ class MenuService(
 ) {
     fun getTodayMenu(): GetTodayMenu.Response {
         val userId = getCurrentUserId()
-        val childId = childReader.findPrimaryChild(userId)!!.id
+        val childId = childReader.findPrimaryChild(userId).id
         val schoolId = classroomReader.findByStudent(childId).school.id
         val foods = menuReader.findTodayMenuBySchoolId(schoolId)?.foods
-        val childAllergies = childReader.findPrimaryChild(userId)!!.allergies.toList()
-        val todayMenu = GetTodayMenu().toFood(foods, childAllergies)
+        val childAllergies = childReader.findPrimaryChild(userId).allergies.toList()
+        val todayMenu = GetTodayMenu().toMeal(foods, childAllergies)
         return GetTodayMenu.Response(todayMenu)
     }
 
     fun getThisMonthMenu(): GetThisMonthMenu.Response {
         val userId = getCurrentUserId()
-        val childId = childReader.findPrimaryChild(userId)!!.id
+        val childId = childReader.findPrimaryChild(userId).id
         val schoolId = classroomReader.findByStudent(childId).school.id
+        println("schoolId"+schoolId)
         val menus = menuReader.findThisMonthMenuBySchoolId(schoolId)
-        val childAllergies = childReader.findPrimaryChild(userId)!!.allergies.toList()
-        val monthMenuList = menus.map {
-            GetThisMonthMenu().toFood(menus, childAllergies)
-        }
-        return GetThisMonthMenu.Response(monthMenuList)
+        val childAllergies = childReader.findPrimaryChild(userId).allergies.toList()
+        val monthMenu = GetThisMonthMenu().toMeal(menus,childAllergies)
+        return GetThisMonthMenu.Response(monthMenu)
     }
 }

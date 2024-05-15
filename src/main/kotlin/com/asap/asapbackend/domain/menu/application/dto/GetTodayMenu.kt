@@ -5,20 +5,20 @@ import com.asap.asapbackend.domain.menu.domain.model.Food
 
 class GetTodayMenu {
     data class Response(
-        val menus: List<Menu>
+        val menus: List<Meal>
     )
 
-    data class Menu(
+    data class Meal(
         val food: String,
         val warning: Boolean
     )
 
-    fun toFood(foods: List<Food>?, allergies: List<Allergy?>): List<Menu> {
+    fun toMeal(foods: List<Food>?, allergies: List<Allergy?>): List<Meal> {
         return foods?.map {
             val warning = it.allergies.any { allergy ->
                 allergies.contains(allergy)
             }
-            Menu(
+            Meal(
                 food = it.name,
                 warning = warning
             )

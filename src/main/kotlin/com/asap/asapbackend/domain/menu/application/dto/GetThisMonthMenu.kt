@@ -6,22 +6,21 @@ import java.time.LocalDate
 
 class GetThisMonthMenu {
     data class Response(
-        val menus: List<Food>
+        val menus: Map<LocalDate, List<Meal>>
     )
 
-    data class Food(
+    data class Meal(
         val food: String,
         val warning: Boolean,
-        val date: LocalDate
     )
 
-    fun toFood(menus: List<Menu?>, allergies: List<Allergy>): List<Food> {
-        return menus.flatMap {
+    fun toMeal(menus: Map<LocalDate, Menu?>, allergies: List<Allergy>): Map<LocalDate, List<Meal>> {
+        return menus.mapValues { (_,it) ->
             it?.foods?.map { food ->
                 val warning = food.allergies.any { allergy ->
                     allergies.contains(allergy)
                 }
-                Food(food.name, warning, it.day)
+                Meal(food.name,warning)
             } ?: emptyList()
         }
     }
