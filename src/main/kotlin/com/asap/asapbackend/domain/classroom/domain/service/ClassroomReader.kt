@@ -4,6 +4,7 @@ import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomException
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
 import com.asap.asapbackend.domain.classroom.domain.vo.Grade
+import com.asap.asapbackend.domain.school.domain.model.School
 import org.springframework.stereotype.Service
 
 @Service

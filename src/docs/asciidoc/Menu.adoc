@@ -1,0 +1,9 @@
+[[Menu-API]]
+== Menu API
+
+[[Get-Menu]]
+=== 오늘 급식 조회
+operation::MenuControllerTest/getTodayMenu[]
+
+=== 이번달 급식 조회
+operation::MenuControllerTest/getThisMonthMenu[]
