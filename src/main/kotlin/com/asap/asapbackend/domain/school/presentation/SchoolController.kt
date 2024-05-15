@@ -11,7 +11,7 @@ class SchoolController(
     private val schoolService: SchoolService
 ) {
     @GetMapping(SchoolApi.V1.BASE_URL)
-    fun getSchool(@RequestParam keyword:String):List<GetSchools.Response>{
+    fun getSchool(@RequestParam keyword:String): GetSchools.Response{
         return schoolService.getSchools(keyword)
     }
 }
