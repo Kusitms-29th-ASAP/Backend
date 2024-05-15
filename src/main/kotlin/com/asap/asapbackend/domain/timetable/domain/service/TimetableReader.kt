@@ -1,10 +1,8 @@
 package com.asap.asapbackend.domain.timetable.domain.service
 
-import com.asap.asapbackend.domain.timetable.application.dto.GetThisWeekTimetable
 import com.asap.asapbackend.domain.timetable.domain.model.Timetable
 import com.asap.asapbackend.domain.timetable.domain.repository.TimetableRepository
 import org.springframework.stereotype.Service
-import java.sql.Time
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -16,7 +14,7 @@ class TimetableReader(
         return timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now())
     }
 
-    fun findThisWeekTimetableByClassroomId(classroomId: Long): List<List<Timetable?>> {
+    fun findThisWeekTimetableByClassroomId(classroomId: Long): Map<DayOfWeek, List<Timetable?>> {
         val daysOfWeek = listOf(
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,
@@ -24,7 +22,7 @@ class TimetableReader(
             DayOfWeek.THURSDAY,
             DayOfWeek.FRIDAY
         )
-        return daysOfWeek.map { day ->
+        return daysOfWeek.associateWith { day ->
             timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now().with(day))
         }
     }

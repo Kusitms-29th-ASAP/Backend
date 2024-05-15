@@ -4,6 +4,7 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.domain.timetable.application.TimetableService
 import com.asap.asapbackend.domain.timetable.application.dto.GetThisWeekTimetable
 import com.asap.asapbackend.domain.timetable.application.dto.GetTodayTimetable
+import com.asap.asapbackend.fixture.generateFixture
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -16,6 +17,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import java.time.DayOfWeek
 
 @WebMvcTest(TimetableController::class)
 class TimetableControllerTest :AbstractRestDocsConfigurer() {
@@ -62,37 +64,39 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
     @DisplayName("일주일 시간표 조회")
     fun getThisWeekTimetable() {
         //given
-        val getThisWeekTimetable = GetThisWeekTimetable.Response(
-            monday = listOf(
-                GetThisWeekTimetable.Period(1, "자율·자치활동"),
-                GetThisWeekTimetable.Period(2, "바른생활"),
-                GetThisWeekTimetable.Period(3, "슬기로운생활"),
-                GetThisWeekTimetable.Period(4, "국어")
-            ),
-            tuesday = listOf(
-                GetThisWeekTimetable.Period(1, "국어"),
-                GetThisWeekTimetable.Period(2, "즐거운생활"),
-                GetThisWeekTimetable.Period(3, "자율·자치활동"),
-                GetThisWeekTimetable.Period(4, "수학"),
-                GetThisWeekTimetable.Period(5, "국어")
-            ),
-            wednesday = listOf(
-                GetThisWeekTimetable.Period(1, "자율학습")
-            ),
-            thursday = listOf(
-                GetThisWeekTimetable.Period(1, "수학"),
-                GetThisWeekTimetable.Period(2, "국어"),
-                GetThisWeekTimetable.Period(3, "바른생활"),
-                GetThisWeekTimetable.Period(4, "국어"),
-                GetThisWeekTimetable.Period(5, "국어")
-            ),
-            friday = listOf(
-                GetThisWeekTimetable.Period(1, "동아리활동"),
-                GetThisWeekTimetable.Period(2, "즐거운생활"),
-                GetThisWeekTimetable.Period(3, "수학"),
-                GetThisWeekTimetable.Period(4, "국어"),
-                GetThisWeekTimetable.Period(5, "즐거운생활"),
-                GetThisWeekTimetable.Period(6, "국어")
+        val getThisWeekTimetable= GetThisWeekTimetable.Response(
+            timetables = mapOf(
+                DayOfWeek.MONDAY to listOf(
+                    GetThisWeekTimetable.Timetable(1, "자율·자치활동"),
+                    GetThisWeekTimetable.Timetable(2, "바른생활"),
+                    GetThisWeekTimetable.Timetable(3, "슬기로운생활"),
+                    GetThisWeekTimetable.Timetable(4, "국어")
+                ),
+                DayOfWeek.TUESDAY to listOf(
+                    GetThisWeekTimetable.Timetable(1, "국어"),
+                    GetThisWeekTimetable.Timetable(2, "즐거운생활"),
+                    GetThisWeekTimetable.Timetable(3, "자율·자치활동"),
+                    GetThisWeekTimetable.Timetable(4, "수학"),
+                    GetThisWeekTimetable.Timetable(5, "국어")
+                ),
+                DayOfWeek.WEDNESDAY to listOf(
+                    GetThisWeekTimetable.Timetable(1, "자율·자치활동")
+                ),
+                DayOfWeek.THURSDAY to listOf(
+                    GetThisWeekTimetable.Timetable(1, "수학"),
+                    GetThisWeekTimetable.Timetable(2, "국어"),
+                    GetThisWeekTimetable.Timetable(3, "바른생활"),
+                    GetThisWeekTimetable.Timetable(4, "국어"),
+                    GetThisWeekTimetable.Timetable(5, "국어")
+                ),
+                DayOfWeek.FRIDAY to listOf(
+                    GetThisWeekTimetable.Timetable(1, "동아리활동"),
+                    GetThisWeekTimetable.Timetable(2, "즐거운생활"),
+                    GetThisWeekTimetable.Timetable(3, "수학"),
+                    GetThisWeekTimetable.Timetable(4, "국어"),
+                    GetThisWeekTimetable.Timetable(5, "즐거운생활"),
+                    GetThisWeekTimetable.Timetable(6, "국어")
+                )
             )
         )
         given(timetableService.getThisWeekTimetable()).willReturn(getThisWeekTimetable)
@@ -109,16 +113,16 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
                         headerWithName("Authorization").description("Access Token")
                     ),
                     responseFields(
-                        fieldWithPath("monday[].time").description("월요일 교시").optional(),
-                        fieldWithPath("monday[].subject").description("월요일 과목").optional(),
-                        fieldWithPath("tuesday[].time").description("화요일 교시").optional(),
-                        fieldWithPath("tuesday[].subject").description("화요일 과목").optional(),
-                        fieldWithPath("wednesday[].time").description("수요일 교시").optional(),
-                        fieldWithPath("wednesday[].subject").description("수요일 과목").optional(),
-                        fieldWithPath("thursday[].time").description("목요일 교시").optional(),
-                        fieldWithPath("thursday[].subject").description("목요일 과목").optional(),
-                        fieldWithPath("friday[].time").description("금요일 교시").optional(),
-                        fieldWithPath("friday[].subject").description("금요일 과목").optional()
+                        fieldWithPath("timetables.MONDAY[].time").description("월요일 교시").optional(),
+                        fieldWithPath("timetables.MONDAY[].subject").description("월요일 과목").optional(),
+                        fieldWithPath("timetables.TUESDAY[].time").description("화요일 교시").optional(),
+                        fieldWithPath("timetables.TUESDAY[].subject").description("화요일 과목").optional(),
+                        fieldWithPath("timetables.WEDNESDAY[].time").description("수요일 교시").optional(),
+                        fieldWithPath("timetables.WEDNESDAY[].subject").description("수요일 과목").optional(),
+                        fieldWithPath("timetables.THURSDAY[].time").description("목요일 교시").optional(),
+                        fieldWithPath("timetables.THURSDAY[].subject").description("목요일 과목").optional(),
+                        fieldWithPath("timetables.FRIDAY[].time").description("금요일 교시").optional(),
+                        fieldWithPath("timetables.FRIDAY[].subject").description("금요일 과목").optional()
                     )
                 )
             )

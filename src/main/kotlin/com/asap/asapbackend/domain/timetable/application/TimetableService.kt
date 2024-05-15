@@ -20,7 +20,7 @@ class TimetableService(
         val classroomId = classroomReader.findByStudent(studentId).id
         val todayTimetables = timetableReader.findTodayTimetableByClassroomId(classroomId)
         val timetables = todayTimetables.map {
-            GetTodayTimetable.Timetable(it?.time,it?.subject?.name)
+            GetTodayTimetable.Timetable(it?.time, it?.subject?.name)
         }
         return GetTodayTimetable.Response(timetables)
     }
@@ -30,15 +30,11 @@ class TimetableService(
         val studentId = childReader.findPrimaryChild(userId)!!.id
         val classroomId = classroomReader.findByStudent(studentId).id
         val weekTimetables = timetableReader.findThisWeekTimetableByClassroomId(classroomId)
-        val weekDataList = weekTimetables.map {
-            GetThisWeekTimetable().toPeriod(it)
+        val weekDataList = weekTimetables.mapValues { (_, timetables) ->
+            timetables.map { timetable ->
+                GetThisWeekTimetable.Timetable(timetable?.time, timetable?.subject?.name)
+            }
         }
-        return GetThisWeekTimetable.Response(
-            monday = weekDataList[0],
-            tuesday = weekDataList[1],
-            wednesday = weekDataList[2],
-            thursday = weekDataList[3],
-            friday = weekDataList[4]
-        )
+        return GetThisWeekTimetable.Response(weekDataList)
     }
 }
