@@ -2,8 +2,8 @@ package com.asap.asapbackend.domain.timetable.application
 
 import com.asap.asapbackend.domain.child.domain.service.ChildReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
-import com.asap.asapbackend.domain.timetable.application.dto.ReadThisWeekTimetable
-import com.asap.asapbackend.domain.timetable.application.dto.ReadTodayTimetable
+import com.asap.asapbackend.domain.timetable.application.dto.GetThisWeekTimetable
+import com.asap.asapbackend.domain.timetable.application.dto.GetTodayTimetable
 import com.asap.asapbackend.domain.timetable.domain.service.TimetableReader
 import com.asap.asapbackend.global.security.getCurrentUserId
 import org.springframework.stereotype.Service
@@ -14,21 +14,31 @@ class TimetableService(
     private val childReader: ChildReader,
     private val timetableReader: TimetableReader
 ) {
-    fun getTodayTimetable(): ReadTodayTimetable.Response {
+    fun getTodayTimetable(): GetTodayTimetable.Response {
         val userId = getCurrentUserId()
-        val studentId = childReader.findPrimaryChildByParentId(userId).childId
+        val studentId = childReader.findPrimaryChild(userId)!!.id
         val classroomId = classroomReader.findByStudent(studentId).id
         val todayTimetables = timetableReader.findTodayTimetableByClassroomId(classroomId)
         val timetables = todayTimetables.map {
-            ReadTodayTimetable.Timetable(it?.time,it?.subject?.name)
+            GetTodayTimetable.Timetable(it?.time,it?.subject?.name)
         }
-        return ReadTodayTimetable.Response(timetables)
+        return GetTodayTimetable.Response(timetables)
     }
 
-    fun getThisWeekTimetable(): ReadThisWeekTimetable.Response {
+    fun getThisWeekTimetable(): GetThisWeekTimetable.Response {
         val userId = getCurrentUserId()
-        val studentId = childReader.findPrimaryChildByParentId(userId).childId
+        val studentId = childReader.findPrimaryChild(userId)!!.id
         val classroomId = classroomReader.findByStudent(studentId).id
-        return timetableReader.findThisWeekTimetableByClassroomId(classroomId)
+        val weekTimetables = timetableReader.findThisWeekTimetableByClassroomId(classroomId)
+        val weekDataList = weekTimetables.map {
+            GetThisWeekTimetable().toPeriod(it)
+        }
+        return GetThisWeekTimetable.Response(
+            monday = weekDataList[0],
+            tuesday = weekDataList[1],
+            wednesday = weekDataList[2],
+            thursday = weekDataList[3],
+            friday = weekDataList[4]
+        )
     }
 }

@@ -1,9 +1,10 @@
 package com.asap.asapbackend.domain.timetable.domain.service
 
-import com.asap.asapbackend.domain.timetable.application.dto.ReadThisWeekTimetable
+import com.asap.asapbackend.domain.timetable.application.dto.GetThisWeekTimetable
 import com.asap.asapbackend.domain.timetable.domain.model.Timetable
 import com.asap.asapbackend.domain.timetable.domain.repository.TimetableRepository
 import org.springframework.stereotype.Service
+import java.sql.Time
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -15,28 +16,16 @@ class TimetableReader(
         return timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now())
     }
 
-    fun findThisWeekTimetableByClassroomId(classroomId: Long): ReadThisWeekTimetable.Response {
-        val monday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
-            classroomId, LocalDate.now().with(DayOfWeek.MONDAY)
+    fun findThisWeekTimetableByClassroomId(classroomId: Long): List<List<Timetable?>> {
+        val daysOfWeek = listOf(
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+            DayOfWeek.FRIDAY
         )
-        val tuesday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
-            classroomId, LocalDate.now().with(DayOfWeek.TUESDAY)
-        )
-        val wednesday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
-            classroomId, LocalDate.now().with(DayOfWeek.WEDNESDAY)
-        )
-        val thursday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
-            classroomId, LocalDate.now().with(DayOfWeek.THURSDAY)
-        )
-        val friday = timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(
-            classroomId, LocalDate.now().with(DayOfWeek.FRIDAY)
-        )
-        return ReadThisWeekTimetable.Response(
-            monday = ReadThisWeekTimetable().toPeriod(monday),
-            tuesday = ReadThisWeekTimetable().toPeriod(tuesday),
-            wednesday = ReadThisWeekTimetable().toPeriod(wednesday),
-            thursday = ReadThisWeekTimetable().toPeriod(thursday),
-            friday = ReadThisWeekTimetable().toPeriod(friday)
-        )
+        return daysOfWeek.map { day ->
+            timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now().with(day))
+        }
     }
 }

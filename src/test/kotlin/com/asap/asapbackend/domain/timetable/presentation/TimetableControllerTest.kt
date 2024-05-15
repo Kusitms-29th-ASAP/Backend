@@ -2,8 +2,8 @@ package com.asap.asapbackend.domain.timetable.presentation
 
 import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.domain.timetable.application.TimetableService
-import com.asap.asapbackend.domain.timetable.application.dto.ReadThisWeekTimetable
-import com.asap.asapbackend.domain.timetable.application.dto.ReadTodayTimetable
+import com.asap.asapbackend.domain.timetable.application.dto.GetThisWeekTimetable
+import com.asap.asapbackend.domain.timetable.application.dto.GetTodayTimetable
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -27,14 +27,14 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
     @DisplayName("오늘의 시간표 조회")
     fun getTodayTimetable() {
         //given
-        val getTodayTimetable : ReadTodayTimetable.Response =
-            ReadTodayTimetable.Response(
+        val getTodayTimetable : GetTodayTimetable.Response =
+            GetTodayTimetable.Response(
                 listOf(
-                    ReadTodayTimetable.Timetable(1, "국어"),
-                    ReadTodayTimetable.Timetable(2, "즐거운생활"),
-                    ReadTodayTimetable.Timetable(3, "자율·자치활동"),
-                    ReadTodayTimetable.Timetable(4, "수학"),
-                    ReadTodayTimetable.Timetable(5, "국어")
+                    GetTodayTimetable.Timetable(1, "국어"),
+                    GetTodayTimetable.Timetable(2, "즐거운생활"),
+                    GetTodayTimetable.Timetable(3, "자율·자치활동"),
+                    GetTodayTimetable.Timetable(4, "수학"),
+                    GetTodayTimetable.Timetable(5, "국어")
                 )
             )
         given(timetableService.getTodayTimetable()).willReturn(getTodayTimetable)
@@ -62,37 +62,37 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
     @DisplayName("일주일 시간표 조회")
     fun getThisWeekTimetable() {
         //given
-        val getThisWeekTimetable = ReadThisWeekTimetable.Response(
+        val getThisWeekTimetable = GetThisWeekTimetable.Response(
             monday = listOf(
-                ReadThisWeekTimetable.Period(1, "자율·자치활동"),
-                ReadThisWeekTimetable.Period(2, "바른생활"),
-                ReadThisWeekTimetable.Period(3, "슬기로운생활"),
-                ReadThisWeekTimetable.Period(4, "국어")
+                GetThisWeekTimetable.Period(1, "자율·자치활동"),
+                GetThisWeekTimetable.Period(2, "바른생활"),
+                GetThisWeekTimetable.Period(3, "슬기로운생활"),
+                GetThisWeekTimetable.Period(4, "국어")
             ),
             tuesday = listOf(
-                ReadThisWeekTimetable.Period(1, "국어"),
-                ReadThisWeekTimetable.Period(2, "즐거운생활"),
-                ReadThisWeekTimetable.Period(3, "자율·자치활동"),
-                ReadThisWeekTimetable.Period(4, "수학"),
-                ReadThisWeekTimetable.Period(5, "국어")
+                GetThisWeekTimetable.Period(1, "국어"),
+                GetThisWeekTimetable.Period(2, "즐거운생활"),
+                GetThisWeekTimetable.Period(3, "자율·자치활동"),
+                GetThisWeekTimetable.Period(4, "수학"),
+                GetThisWeekTimetable.Period(5, "국어")
             ),
             wednesday = listOf(
-                ReadThisWeekTimetable.Period(1, "자율학습")
+                GetThisWeekTimetable.Period(1, "자율학습")
             ),
             thursday = listOf(
-                ReadThisWeekTimetable.Period(1, "수학"),
-                ReadThisWeekTimetable.Period(2, "국어"),
-                ReadThisWeekTimetable.Period(3, "바른생활"),
-                ReadThisWeekTimetable.Period(4, "국어"),
-                ReadThisWeekTimetable.Period(5, "국어")
+                GetThisWeekTimetable.Period(1, "수학"),
+                GetThisWeekTimetable.Period(2, "국어"),
+                GetThisWeekTimetable.Period(3, "바른생활"),
+                GetThisWeekTimetable.Period(4, "국어"),
+                GetThisWeekTimetable.Period(5, "국어")
             ),
             friday = listOf(
-                ReadThisWeekTimetable.Period(1, "동아리활동"),
-                ReadThisWeekTimetable.Period(2, "즐거운생활"),
-                ReadThisWeekTimetable.Period(3, "수학"),
-                ReadThisWeekTimetable.Period(4, "국어"),
-                ReadThisWeekTimetable.Period(5, "즐거운생활"),
-                ReadThisWeekTimetable.Period(6, "국어")
+                GetThisWeekTimetable.Period(1, "동아리활동"),
+                GetThisWeekTimetable.Period(2, "즐거운생활"),
+                GetThisWeekTimetable.Period(3, "수학"),
+                GetThisWeekTimetable.Period(4, "국어"),
+                GetThisWeekTimetable.Period(5, "즐거운생활"),
+                GetThisWeekTimetable.Period(6, "국어")
             )
         )
         given(timetableService.getThisWeekTimetable()).willReturn(getThisWeekTimetable)

@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.timetable.application.dto
 
-class ReadTodayTimetable {
+class GetTodayTimetable {
     data class Response(
         val timetables: List<Timetable>
     )
