@@ -16,7 +16,7 @@ class TimetableService(
 ) {
     fun getTodayTimetable(): GetTodayTimetable.Response {
         val userId = getCurrentUserId()
-        val studentId = childReader.findPrimaryChild(userId)!!.id
+        val studentId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(studentId).id
         val todayTimetables = timetableReader.findTodayTimetableByClassroomId(classroomId)
         val timetables = todayTimetables.map {
@@ -27,7 +27,7 @@ class TimetableService(
 
     fun getThisWeekTimetable(): GetThisWeekTimetable.Response {
         val userId = getCurrentUserId()
-        val studentId = childReader.findPrimaryChild(userId)!!.id
+        val studentId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(studentId).id
         val weekTimetables = timetableReader.findThisWeekTimetableByClassroomId(classroomId)
         val weekDataList = weekTimetables.mapValues { (_, timetables) ->
