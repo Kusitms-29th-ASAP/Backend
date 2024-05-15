@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 class GetThisMonthMenu {
     data class Response(
-        val menu: List<MealDetail>
+        val menus: List<MealDetail>
     )
 
     data class MealDetail(

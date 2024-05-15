@@ -5,7 +5,7 @@ import com.asap.asapbackend.domain.menu.domain.model.Food
 
 class GetTodayMenu {
     data class Response(
-        val menus: List<Meal>
+        val foods: List<Meal>
     )
 
     data class Meal(

@@ -4,7 +4,6 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.domain.timetable.application.TimetableService
 import com.asap.asapbackend.domain.timetable.application.dto.GetThisWeekTimetable
 import com.asap.asapbackend.domain.timetable.application.dto.GetTodayTimetable
-import com.asap.asapbackend.fixture.generateFixture
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
@@ -20,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.DayOfWeek
 
 @WebMvcTest(TimetableController::class)
-class TimetableControllerTest :AbstractRestDocsConfigurer() {
+class TimetableControllerTest : AbstractRestDocsConfigurer() {
 
     @MockBean
     private lateinit var timetableService: TimetableService
@@ -29,7 +28,7 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
     @DisplayName("오늘의 시간표 조회")
     fun getTodayTimetable() {
         //given
-        val getTodayTimetable : GetTodayTimetable.Response =
+        val getTodayTimetable =
             GetTodayTimetable.Response(
                 listOf(
                     GetTodayTimetable.Timetable(1, "국어"),
@@ -42,7 +41,7 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
         given(timetableService.getTodayTimetable()).willReturn(getTodayTimetable)
         val request = RestDocumentationRequestBuilders.get(TimetableApi.V1.TODAY)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization","Bearer accesstoken")
+            .header("Authorization", "Bearer accesstoken")
         //when
         val result = mockMvc.perform(request)
         //then
@@ -61,10 +60,10 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
     }
 
     @Test
-    @DisplayName("일주일 시간표 조회")
+    @DisplayName("이번주 시간표 조회")
     fun getThisWeekTimetable() {
         //given
-        val getThisWeekTimetable= GetThisWeekTimetable.Response(
+        val getThisWeekTimetable = GetThisWeekTimetable.Response(
             timetables = mapOf(
                 DayOfWeek.MONDAY to listOf(
                     GetThisWeekTimetable.Timetable(1, "자율·자치활동"),
@@ -102,7 +101,7 @@ class TimetableControllerTest :AbstractRestDocsConfigurer() {
         given(timetableService.getThisWeekTimetable()).willReturn(getThisWeekTimetable)
         val request = RestDocumentationRequestBuilders.get(TimetableApi.V1.WEEK)
             .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization","Bearer accesstoken")
+            .header("Authorization", "Bearer accesstoken")
         //when
         val result = mockMvc.perform(request)
         //then
