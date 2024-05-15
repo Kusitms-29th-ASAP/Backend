@@ -13,8 +13,8 @@ class GetTodayMenu {
         val warning: Boolean
     )
 
-    fun toMeal(foods: List<Food>?, allergies: List<Allergy?>): List<Meal> {
-        return foods?.map {
+    fun toMeal(foods: List<Food>, allergies: List<Allergy>): List<Meal> {
+        return foods.map {
             val warning = it.allergies.any { allergy ->
                 allergies.contains(allergy)
             }
@@ -22,6 +22,6 @@ class GetTodayMenu {
                 food = it.name,
                 warning = warning
             )
-        } ?: emptyList()
+        }
     }
 }
