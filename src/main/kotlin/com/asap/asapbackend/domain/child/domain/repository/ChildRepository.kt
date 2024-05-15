@@ -4,4 +4,5 @@ import com.asap.asapbackend.domain.child.domain.model.Child
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface ChildRepository: JpaRepository<Child, Long> {
+    fun findByParentId(parentId: Long) : Child
 }

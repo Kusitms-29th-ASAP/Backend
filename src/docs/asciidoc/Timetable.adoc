@@ -1,0 +1,9 @@
+[[Timetable-API]]
+== Timetable API
+
+[[Get-Timetable]]
+=== 오늘 시간표 조회
+operation::TimetableControllerTest/getTodayTimetable[]
+
+=== 이번주 시간표 조회
+operation::TimetableControllerTest/getThisWeekTimetable[]
