@@ -34,7 +34,8 @@ jobs:
           ./gradlew build \
           --build-cache \
           --project-cache-dir=$HOME/.gradle/caches/project \
-          --gradle-user-home=$HOME/.gradle/caches/global
+          --gradle-user-home=$HOME/.gradle/caches/global \
+          --project-dir="./"
 
       - name: upload artifact
         uses: actions/upload-artifact@v2

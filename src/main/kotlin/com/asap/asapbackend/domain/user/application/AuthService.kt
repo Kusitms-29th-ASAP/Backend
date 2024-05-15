@@ -16,15 +16,14 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class AuthService(
-    private val authHandlerMap: Map<Provider, SocialLoginHandler>,
+    private val authHandler: SocialLoginHandler,
     private val userReader: UserReader,
     private val jwtProvider: JwtProvider,
     private val jwtRegistry: JwtRegistry
 ) {
 
     fun executeSocialLogin(socialLoginRequest: SocialLogin.Request, provider: Provider): SocialLogin.Response {
-        val socialLoginHandler = authHandlerMap[provider] ?: throw IllegalArgumentException("지원하지 않는 소셜 로그인입니다.") // TODO : 예외 처리
-        val response = socialLoginHandler.handle(SocialLoginHandler.Request(socialLoginRequest.accessToken))
+        val response = authHandler.handle(SocialLoginHandler.Request(provider,socialLoginRequest.accessToken))
         return TransactionUtils.writable {
             return@writable userReader.findBySocialIdOrNull(response.socialId)?.let {
                 val accessToken = jwtProvider.generateAccessToken(Claims.UserClaims(it.id))
