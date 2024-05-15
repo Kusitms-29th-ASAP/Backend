@@ -11,11 +11,15 @@ class TodoAppender(
     private val todoJdbcRepository: TodoJdbcRepository
 ) {
 
-    fun appendAll(todos: Set<Todo>){
+    fun appendAll(todos: Set<Todo>) {
         todoRepository.saveAll(todos)
     }
 
-    fun appendAllBatch(todos: Set<Todo>){
+    fun appendAllBatch(todos: Set<Todo>) {
         todoJdbcRepository.insertBatch(todos)
+    }
+
+    fun appendTodo(todo: Todo): Todo {
+        return todoRepository.save(todo)
     }
 }
