@@ -58,13 +58,11 @@ class ClassroomService(
         return GetTodayAnnouncement.Response(descriptions)
     }
 
-    fun getAnnouncements() : GetAnnouncements.Response {
+    fun getAnnouncements(): GetAnnouncements.Response {
         val teacherId = getTeacherId()
         val teacher = teacherReader.findById(teacherId).name
         val announcementDataList = announcementReader.getAllByTeacherId(teacherId)
-        val announcements = announcementDataList.map {
-            GetAnnouncements.Announcement(it.descriptions,it.writeDate)
-        }
+        val announcements = GetAnnouncements().toAnnouncementInfo(announcementDataList)
         return GetAnnouncements.Response(teacher, announcements)
     }
 }

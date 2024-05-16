@@ -12,11 +12,10 @@ include::User.adoc[]
 
 include::Teacher.adoc[]
 
-include::Classroom.adoc[]
-
 include::School.adoc[]
+
+include::Classroom.adoc[]
 
 include::Timetable.adoc[]
 
 include::Menu.adoc[]
-
