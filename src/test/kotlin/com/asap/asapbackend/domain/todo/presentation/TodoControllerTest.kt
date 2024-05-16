@@ -6,6 +6,7 @@ import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.todo.application.TodoService
 import com.asap.asapbackend.domain.todo.application.dto.CreateTodo
 import com.asap.asapbackend.domain.todo.application.dto.GetTodo
+import com.asap.asapbackend.domain.todo.domain.vo.Status
 import com.asap.asapbackend.domain.todo.domain.vo.TodoType
 import com.asap.asapbackend.fixture.generateFixture
 import com.navercorp.fixturemonkey.kotlin.setExp
@@ -68,28 +69,15 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
         //given
         val deadline = LocalDate.parse("2024-05-23")
         val getTodo: GetTodo.Response = generateFixture {
-            it.setExp(
-                GetTodo.Response::todoList, listOf(
-                    generateFixture {
-                        it.setExp(GetTodo.Todo::todoId, 1)
-                        it.setExp(GetTodo.Todo::description, "체육복 챙기기")
-                        it.setExp(GetTodo.Todo::todoType, TodoType.SUPPLY)
-                        it.setExp(GetTodo.Todo::deadline, LocalDate.parse("2024-05-28"))
-                    })
-            )
             it.setExp(GetTodo.Response::todoList, listOf(
-                generateFixture {
-                    it.setExp(GetTodo.Todo::todoId, 2)
-                    it.setExp(GetTodo.Todo::description, "수학 학원 숙제")
-                    it.setExp(GetTodo.Todo::todoType, TodoType.HOMEWORK)
-                    it.setExp(GetTodo.Todo::deadline, LocalDate.parse("2024-05-31"))
-                }
+                GetTodo.Todo(1,"체육복 챙기기",TodoType.SUPPLY,LocalDate.parse("2024-05-28"),Status.COMPLETE),
+                GetTodo.Todo(2,"수학학원 숙제",TodoType.HOMEWORK,LocalDate.parse("2024-05-31"),Status.INCOMPLETE)
             ))
         }
 
         given(todoService.getTodoUntilDeadLine(deadline)).willReturn(getTodo)
         val request = RestDocumentationRequestBuilders.get(TodoApi.V1.BASE_URL)
-            .param("deadline", "2024-05-23")
+            .queryParam("deadline", "2024-05-23")
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
 
@@ -111,6 +99,29 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("todoList[].todoType").description("유형"),
                         fieldWithPath("todoList[].deadline").description("마감일"),
                         fieldWithPath("todoList[].status").description("상태")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("상태 변경(체크표시)")
+    fun changeStatus() {
+        //given
+        val request = RestDocumentationRequestBuilders.put(TodoApi.V1.BASE_URL)
+            .queryParam("todoId", "1")
+            .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("Access Token")
+                    ),
+                    queryParameters(
+                        parameterWithName("todoId").description("todo Id")
                     )
                 )
             )
