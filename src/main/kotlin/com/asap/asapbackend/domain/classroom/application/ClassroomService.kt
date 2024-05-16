@@ -2,6 +2,9 @@ package com.asap.asapbackend.domain.classroom.application
 
 import com.asap.asapbackend.domain.child.domain.service.ChildReader
 import com.asap.asapbackend.domain.classroom.application.dto.CreateAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.GetAnnouncements
+import com.asap.asapbackend.domain.classroom.application.dto.GetTodayAnnouncement
+import com.asap.asapbackend.domain.classroom.domain.service.AnnouncementReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
 import com.asap.asapbackend.domain.teacher.domain.service.TeacherReader
@@ -18,7 +21,8 @@ class ClassroomService(
     private val classModifier: ClassModifier,
     private val teacherReader: TeacherReader,
     private val childReader: ChildReader,
-    private val todoAppender: TodoAppender
+    private val todoAppender: TodoAppender,
+    private val announcementReader: AnnouncementReader
 ) {
 
     @Transactional
@@ -45,5 +49,20 @@ class ClassroomService(
             }
         }.toSet()
         todoAppender.appendAllBatch(todos)
+    }
+
+    fun getTodayAnnouncement(): GetTodayAnnouncement.Response {
+        val teacherId = getTeacherId()
+        val descriptions =
+            announcementReader.getRecentAnnouncementByTeacherIdOrNull(teacherId)?.descriptions ?: emptyList()
+        return GetTodayAnnouncement.Response(descriptions)
+    }
+
+    fun getAnnouncements(): GetAnnouncements.Response {
+        val teacherId = getTeacherId()
+        val teacher = teacherReader.findById(teacherId).name
+        val announcementDataList = announcementReader.getAllByTeacherId(teacherId)
+        val announcements = GetAnnouncements().toAnnouncementInfo(announcementDataList)
+        return GetAnnouncements.Response(teacher, announcements)
     }
 }
