@@ -34,11 +34,7 @@ class TodoService(
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
         val todoDataList = todoReader.findByChildIdUntilDeadline(childId, deadline)
-        val todoList = todoDataList.map {
-            GetTodo.Todo(
-                it.id, it.description, it.type, it.deadline, it.status
-            )
-        }
+        val todoList = GetTodo().toTodoInfo(todoDataList)
         return GetTodo.Response(todoList)
     }
 

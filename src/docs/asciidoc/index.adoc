@@ -14,10 +14,10 @@ include::Teacher.adoc[]
 
 include::School.adoc[]
 
-include::Timetable.adoc[]
-
-include::Menu.adoc[]
+include::Classroom.adoc[]
 
 include::Todo.adoc[]
 
-include::Classroom.adoc[]
+include::Timetable.adoc[]
+
+include::Menu.adoc[]
