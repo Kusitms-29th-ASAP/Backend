@@ -10,6 +10,7 @@ import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
 import com.asap.asapbackend.domain.teacher.domain.service.TeacherReader
 import com.asap.asapbackend.domain.todo.domain.model.Todo
 import com.asap.asapbackend.domain.todo.domain.service.TodoAppender
+import com.asap.asapbackend.global.security.getCurrentUserId
 import com.asap.asapbackend.global.security.getTeacherId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -52,16 +53,20 @@ class ClassroomService(
     }
 
     fun getTodayAnnouncement(): GetTodayAnnouncement.Response {
-        val teacherId = getTeacherId()
+        val userId = getCurrentUserId()
+        val childId = childReader.findPrimaryChild(userId).id
+        val classroomId = classroomReader.findByStudent(childId).id
         val descriptions =
-            announcementReader.getRecentAnnouncementByTeacherIdOrNull(teacherId)?.descriptions ?: emptyList()
+            announcementReader.getRecentAnnouncementByClassroomIdOrNull(classroomId)?.descriptions ?: emptyList()
         return GetTodayAnnouncement.Response(descriptions)
     }
 
     fun getAnnouncements(): GetAnnouncements.Response {
-        val teacherId = getTeacherId()
-        val teacher = teacherReader.findById(teacherId).name
-        val announcementDataList = announcementReader.getAllByTeacherId(teacherId)
+        val userId = getCurrentUserId()
+        val childId = childReader.findPrimaryChild(userId).id
+        val classroomId = classroomReader.findByStudent(childId).id
+        val teacher = teacherReader.findByClassroomId(classroomId).name
+        val announcementDataList = announcementReader.getAllByClassroomId(classroomId)
         val announcements = GetAnnouncements().toAnnouncementInfo(announcementDataList)
         return GetAnnouncements.Response(teacher, announcements)
     }

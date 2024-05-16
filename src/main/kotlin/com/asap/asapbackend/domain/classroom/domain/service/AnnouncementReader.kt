@@ -5,14 +5,14 @@ import com.asap.asapbackend.domain.classroom.domain.repository.AnnouncementRepos
 import org.springframework.stereotype.Service
 
 @Service
-class AnnouncementReader (
+class AnnouncementReader(
     private val announcementRepository: AnnouncementRepository
-){
-    fun getRecentAnnouncementByTeacherIdOrNull(teacherId: Long) : Announcement?{
-        return announcementRepository.findTopByTeacherIdOrderByCreatedAtDesc(teacherId)
+) {
+    fun getRecentAnnouncementByClassroomIdOrNull(classroomId: Long): Announcement? {
+        return announcementRepository.findTopByClassroomIdOrderByCreatedAtDesc(classroomId)
     }
 
-    fun getAllByTeacherId(teacherId: Long) : List<Announcement> {
-        return announcementRepository.findAllByTeacherIdOrderByCreatedAtDesc(teacherId)
+    fun getAllByClassroomId(classroomId: Long): List<Announcement> {
+        return announcementRepository.findAllByClassroomId(classroomId)
     }
 }
