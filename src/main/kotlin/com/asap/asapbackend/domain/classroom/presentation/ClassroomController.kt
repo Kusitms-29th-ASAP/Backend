@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController
 class ClassroomController(
     private val classroomService: ClassroomService
 ) {
-
-
     @PostMapping(ClassroomApi.V1.ANNOUNCEMENT)
     fun addAnnouncement(
         @RequestBody request: CreateAnnouncement.Request

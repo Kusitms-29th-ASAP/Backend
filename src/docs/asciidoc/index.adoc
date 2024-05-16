@@ -16,6 +16,8 @@ include::School.adoc[]
 
 include::Classroom.adoc[]
 
+include::Todo.adoc[]
+
 include::Timetable.adoc[]
 
 include::Menu.adoc[]

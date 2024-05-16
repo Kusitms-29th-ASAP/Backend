@@ -1,0 +1,12 @@
+[[TODO-API]]
+== TODO API
+
+[[Create-TODO]]
+=== 할일 추가
+operation::TodoControllerTest/createTodo[]
+
+=== 전체 할일 조회
+operation::TodoControllerTest/getTodo[]
+
+=== todo 상태 변경
+operation::TodoControllerTest/changeStatus[]
