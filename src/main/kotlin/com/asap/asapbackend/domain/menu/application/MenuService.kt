@@ -7,8 +7,10 @@ import com.asap.asapbackend.domain.menu.application.dto.GetTodayMenu
 import com.asap.asapbackend.domain.menu.domain.service.MenuReader
 import com.asap.asapbackend.global.security.getCurrentUserId
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class MenuService(
     private val childReader: ChildReader,
     private val classroomReader: ClassroomReader,
