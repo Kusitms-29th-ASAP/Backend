@@ -7,3 +7,35 @@ operation::MenuControllerTest/getTodayMenu[]
 
 === 이번달 급식 조회
 operation::MenuControllerTest/getThisMonthMenu[]
+
+
+[[Allgergy-List]]
+
+=== 알레르기 식품
+
+숫자가 아닌 문자열로 서버에 넘겨주셔야 합니다.
+
+[cols="1,1,1", options="header"]
+|===
+| Number | Allergy | Description
+
+| 1 | EGG | 난류
+| 2 | MILK | 우유
+| 3 | BUCKWHEAT | 메밀
+| 4 | PEANUT | 땅콩
+| 5 | SOYBEAN | 대두
+| 6 | WHEAT | 밀
+| 7 | MACKEREL | 고등어
+| 8 | CRAB | 게
+| 9 | SHRIMP | 새우
+| 10 | PORK | 돼지고기
+| 11 | PEACH | 복숭아
+| 12 | TOMATO | 토마토
+| 13 | SULFITES | 아황산류
+| 14 | WALNUT | 호두
+| 15 | CHICKEN | 닭고기
+| 16 | BEEF | 쇠고기
+| 17 | SQUID | 오징어
+| 18 | SHELLFISH | 조개류(굴, 전복, 홍합 포함)
+| 19 | PINE_NUT | 잣
+|===
