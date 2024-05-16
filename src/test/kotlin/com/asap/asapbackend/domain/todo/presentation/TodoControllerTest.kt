@@ -70,8 +70,8 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
         val deadline = LocalDate.parse("2024-05-23")
         val getTodo: GetTodo.Response = generateFixture {
             it.setExp(GetTodo.Response::todoList, listOf(
-                GetTodo.Todo(1,"체육복 챙기기",TodoType.SUPPLY,LocalDate.parse("2024-05-28"),Status.COMPLETE),
-                GetTodo.Todo(2,"수학학원 숙제",TodoType.HOMEWORK,LocalDate.parse("2024-05-31"),Status.INCOMPLETE)
+                GetTodo.TodoInfo(1,"체육복 챙기기",TodoType.SUPPLY,LocalDate.parse("2024-05-28"),Status.COMPLETE),
+                GetTodo.TodoInfo(2,"수학학원 숙제",TodoType.HOMEWORK,LocalDate.parse("2024-05-31"),Status.INCOMPLETE)
             ))
         }
 
