@@ -26,6 +26,13 @@ seoul-open-api:
 
 neis-open-api:
   key: ${NEIS_OPEN_API_KEY}
+
+key:
+  openai:
+    api-key: ${OPENAI_API_KEY}
+  ncp:
+    ocr-key: ${NCP_OCR_API_KEY}
+
 ---
 
 spring:
@@ -59,3 +66,10 @@ seoul-open-api:
 
 neis-open-api:
   key: "key"
+
+
+key:
+  openai:
+    api-key: "key"
+  ncp:
+    ocr-key: "key"
