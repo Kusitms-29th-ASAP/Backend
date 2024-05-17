@@ -7,8 +7,10 @@ import com.asap.asapbackend.domain.timetable.application.dto.GetTodayTimetable
 import com.asap.asapbackend.domain.timetable.domain.service.TimetableReader
 import com.asap.asapbackend.global.security.getCurrentUserId
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(readOnly = true)
 class TimetableService(
     private val classroomReader: ClassroomReader,
     private val childReader: ChildReader,
