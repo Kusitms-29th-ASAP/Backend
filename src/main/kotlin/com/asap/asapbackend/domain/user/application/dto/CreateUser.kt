@@ -18,16 +18,18 @@ class CreateUser {
         val agreement: Agreement,
         val phoneNumber: PhoneNumber, // 객체로 생성해서 관리해야함
         val children: List<ChildDetail>
-    ){
+    ) {
         fun extractUser(registrationExtractor: (String) -> Claims.RegistrationClaims): User {
             return User(
+                "name",
+                "email@email.com",
                 registrationExtractor(registrationToken).let { SocialInfo(it.socialId, it.provider) },
                 phoneNumber,
                 agreement
             )
         }
 
-        fun performActionOnChildren(action: (ChildDetail) -> Unit){
+        fun performActionOnChildren(action: (ChildDetail) -> Unit) {
             children.forEach {
                 action(it)
             }
@@ -44,7 +46,7 @@ class CreateUser {
         val elementSchoolClassNumber: String?,
         val elementSchoolClassCode: String?,
         val allergies: Set<Allergy>
-    ){
+    ) {
         fun extractChild(user: User): Child {
             return Child(
                 name,
@@ -55,8 +57,8 @@ class CreateUser {
             )
         }
 
-        fun performActionOnClassroom(action:(Grade?, String?, String?, Long) -> Unit) {
-            action(elementSchoolGrade, elementSchoolClassNumber, elementSchoolClassCode,elementSchoolId)
+        fun performActionOnClassroom(action: (Grade?, String?, String?, Long) -> Unit) {
+            action(elementSchoolGrade, elementSchoolClassNumber, elementSchoolClassCode, elementSchoolId)
         }
     }
 

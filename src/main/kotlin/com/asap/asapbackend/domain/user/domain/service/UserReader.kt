@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service
 class UserReader(
     private val userRepository: UserRepository
 ) {
-
-    fun findBySocialIdOrNull(socialId: String): User?{
+    fun findBySocialIdOrNull(socialId: String): User? {
         return userRepository.findBySocialInfo_SocialId(socialId)
     }
 
+    fun findById(id: Long): User {
+        return userRepository.findById(id).get()
+    }
 }
