@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.ManyToOne
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import kotlin.math.min
 
 @Entity
 class Announcement(
@@ -32,4 +33,8 @@ class Announcement(
     val teacher: Teacher = teacher
 
     fun getWriteDate() = this.createdAt.toLocalDate()
+
+    fun getSubListFromDescription(fromIndex: Int, toIndex: Int) : List<AnnouncementDescription>{
+        return this.descriptions.subList(fromIndex, min(toIndex, this.descriptions.size))
+    }
 }

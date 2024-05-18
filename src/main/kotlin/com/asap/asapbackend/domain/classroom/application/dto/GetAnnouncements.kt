@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 class GetAnnouncements {
     data class Response(
-        val teacher: String,
+        val teacherName: String,
         val announcements : List<AnnouncementInfo>
     )
 
