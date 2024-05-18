@@ -4,7 +4,7 @@ import com.asap.asapbackend.global.exception.BusinessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 
-open class ClassroomAnnouncementException (
+sealed class ClassroomAnnouncementException (
     message: String,
     errorCode: Int,
     httpStatusCode: HttpStatusCode,
