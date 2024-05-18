@@ -1,14 +1,14 @@
 package com.asap.asapbackend.domain.classroom.application
 
 import com.asap.asapbackend.domain.child.domain.service.ChildReader
-import com.asap.asapbackend.domain.classroom.application.dto.CreateAnnouncement
-import com.asap.asapbackend.domain.classroom.application.dto.GetAnnouncements
-import com.asap.asapbackend.domain.classroom.application.dto.GetTodayAnnouncement
-import com.asap.asapbackend.domain.classroom.domain.service.ClassAnnouncementReader
+import com.asap.asapbackend.domain.classroom.application.dto.CreateClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncementDetail
+import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncements
+import com.asap.asapbackend.domain.classroom.application.dto.GetTodayClassroomAnnouncement
 import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
+import com.asap.asapbackend.domain.classroom.domain.service.ClassroomAnnouncementReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
 import com.asap.asapbackend.domain.teacher.domain.service.TeacherReader
-import com.asap.asapbackend.domain.todo.domain.model.Todo
 import com.asap.asapbackend.domain.todo.domain.service.TodoAppender
 import com.asap.asapbackend.global.security.getCurrentUserId
 import com.asap.asapbackend.global.security.getTeacherId
@@ -23,11 +23,11 @@ class ClassroomService(
     private val teacherReader: TeacherReader,
     private val childReader: ChildReader,
     private val todoAppender: TodoAppender,
-    private val classAnnouncementReader: ClassAnnouncementReader
+    private val classroomAnnouncementReader: ClassroomAnnouncementReader
 ) {
 
     @Transactional
-    fun createAnnouncement(request: CreateAnnouncement.Request) {
+    fun createClassroomAnnouncement(request: CreateClassroomAnnouncement.Request) {
         val teacherId = getTeacherId()
         val classroom = classroomReader.findByTeacher(teacherId)
         val teacher = teacherReader.findById(teacherId)
@@ -37,38 +37,35 @@ class ClassroomService(
 
         val studentIds = classroom.getStudentIds()
         val students = childReader.findAllByIds(studentIds)
-        val todos = request.announcementDetails.filter {
-            it.isLinkedWithTodo
-        }.flatMap {  // 30*4 = 120
-            students.map { student ->
-                Todo(
-                    child = student,
-                    description = it.description,
-                    type = it.todoType,
-                    deadline = it.deadline,
-                    isAssigned = true
-                )
-            }
-        }.toSet()
+        val todos = request.toTodo(students)
         todoAppender.appendAllBatch(todos)
     }
 
-    fun getTodayAnnouncement(): GetTodayAnnouncement.Response {
+    fun getTodayClassroomAnnouncement(): GetTodayClassroomAnnouncement.Response {
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(childId).id
-        val descriptions =
-            classAnnouncementReader.getRecentAnnouncementByClassroomIdOrNull(classroomId)?.descriptions ?: emptyList()
-        return GetTodayAnnouncement.Response(descriptions)
+        return GetTodayClassroomAnnouncement.convertClassAnnouncementToResponse{
+            classroomAnnouncementReader.findRecentClassroomAnnouncementByClassroomIdOrNull(classroomId)
+        }
     }
 
-    fun getAnnouncements(): GetAnnouncements.Response {
+    fun getClassroomAnnouncements(): GetClassroomAnnouncements.Response {
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(childId).id
         val teacher = teacherReader.findByClassroomId(classroomId).name
-        val announcementDataList = classAnnouncementReader.getAllByClassroomId(classroomId)
-        val announcements = GetAnnouncements().toAnnouncementInfo(announcementDataList)
-        return GetAnnouncements.Response(teacher, announcements)
+        val announcementDataList = classroomAnnouncementReader.findAllByClassroomId(classroomId)
+        val announcements = GetClassroomAnnouncements().toAnnouncementInfo(announcementDataList)
+        return GetClassroomAnnouncements.Response(teacher, announcements)
+    }
+
+    fun getClassroomAnnouncementDetail(classroomAnnouncementId: Long): GetClassroomAnnouncementDetail.Response {
+        val userId = getCurrentUserId()
+        val childId = childReader.findPrimaryChild(userId).id
+        val classroomId = classroomReader.findByStudent(childId).id
+        val teacherName = teacherReader.findByClassroomId(classroomId).name
+        val announcement = classroomAnnouncementReader.findById(classroomAnnouncementId)
+        return GetClassroomAnnouncementDetail.Response(teacherName, announcement.getWriteDate(), announcement.descriptions)
     }
 }

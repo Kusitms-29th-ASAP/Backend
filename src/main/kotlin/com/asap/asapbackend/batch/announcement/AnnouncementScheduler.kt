@@ -3,7 +3,7 @@ package com.asap.asapbackend.batch.announcement
 import com.asap.asapbackend.domain.announcement.domain.model.EducationOfficeAnnouncement
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncement
 import com.asap.asapbackend.domain.announcement.domain.service.AnnouncementAppender
-import com.asap.asapbackend.domain.announcement.domain.service.AnnouncementReader
+import com.asap.asapbackend.domain.announcement.domain.service.SchoolAnnouncementReader
 import com.asap.asapbackend.global.util.ImageToTextConverter
 import com.asap.asapbackend.global.util.TextSummaryHelper
 import com.asap.asapbackend.global.util.TransactionUtils
@@ -20,7 +20,7 @@ class AnnouncementScheduler(
     private val imageToTextConverter: ImageToTextConverter,
     private val textSummaryHelper: TextSummaryHelper,
     private val announcementAppender: AnnouncementAppender,
-    private val announcementReader: AnnouncementReader
+    private val schoolAnnouncementReader: SchoolAnnouncementReader
 ) {
     //     매 평일 9시부터 18시까지 1시간마다 실행
     @Scheduled(cron = "0 0 9-18 * * MON-FRI")
@@ -59,7 +59,7 @@ class AnnouncementScheduler(
     @Scheduled(cron = "0 0 9-18 * * MON-FRI")
     fun addEducationOfficeAnnouncement() {
         val batchSize = 100
-        var startIdx = announcementReader.getLastOfficeEducationAnnouncementId()
+        var startIdx = schoolAnnouncementReader.getLastOfficeEducationAnnouncementId()
         do {
             val announcementDataContainer =
                 educationOfficeAnnouncementInfoProvider.retrieveAnnouncementInfo(batchSize, startIdx)

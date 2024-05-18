@@ -5,7 +5,7 @@ import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnounce
 import org.springframework.stereotype.Service
 
 @Service
-class AnnouncementReader(
+class SchoolAnnouncementReader(
     private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
     private val educationOfficeAnnouncementRepository: EducationOfficeAnnouncementRepository
 ) {

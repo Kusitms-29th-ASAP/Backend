@@ -4,9 +4,10 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.TOKEN_HEADER_NAME
 import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.classroom.application.ClassroomService
-import com.asap.asapbackend.domain.classroom.application.dto.CreateAnnouncement
-import com.asap.asapbackend.domain.classroom.application.dto.GetAnnouncements
-import com.asap.asapbackend.domain.classroom.application.dto.GetTodayAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.CreateClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncementDetail
+import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncements
+import com.asap.asapbackend.domain.classroom.application.dto.GetTodayClassroomAnnouncement
 import com.asap.asapbackend.domain.classroom.domain.vo.AnnouncementDescription
 import com.asap.asapbackend.domain.todo.domain.vo.TodoType
 import com.asap.asapbackend.fixture.generateFixture
@@ -32,22 +33,22 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
 
     @Test
     @DisplayName("알림장 추가")
-    fun addAnnouncement() {
+    fun addClassroomAnnouncement() {
         // given
-        val createAnnouncementRequest: CreateAnnouncement.Request = generateFixture {
+        val createClassroomAnnouncementRequest: CreateClassroomAnnouncement.Request = generateFixture {
             it.setExp(
-                CreateAnnouncement.Request::announcementDetails, listOf(
-                    CreateAnnouncement.AnnouncementDetails(
+                CreateClassroomAnnouncement.Request::announcementDetails, listOf(
+                    CreateClassroomAnnouncement.AnnouncementDetails(
                         "독후감 써오기", true, TodoType.HOMEWORK, LocalDate.parse("2024-05-26")
                     ),
-                    CreateAnnouncement.AnnouncementDetails(
+                    CreateClassroomAnnouncement.AnnouncementDetails(
                         "일기 써오기", false, TodoType.NONE, LocalDate.parse("2024-05-31")
                     )
                 )
             )
         }
         val request = RestDocumentationRequestBuilders.post(ClassroomApi.V1.ANNOUNCEMENT)
-            .content(objectMapper.writeValueAsString(createAnnouncementRequest))
+            .content(objectMapper.writeValueAsString(createClassroomAnnouncementRequest))
             .contentType("application/json")
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX teacherToken")
         // when
@@ -69,18 +70,19 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
 
     @Test
     @DisplayName("오늘의 알림장 불러오기")
-    fun getTodayAnnouncement() {
+    fun getTodayClassroomAnnouncement() {
         //given
-        val getTodayAnnouncement: GetTodayAnnouncement.Response = generateFixture {
+        val getTodayClassroomAnnouncement: GetTodayClassroomAnnouncement.Response = generateFixture {
             it.setExp(
-                GetTodayAnnouncement.Response::descriptions, listOf(
+                GetTodayClassroomAnnouncement.Response::descriptions, listOf(
                     AnnouncementDescription("독후감 써오기"),
-                    AnnouncementDescription("일기 써오기")
+                    AnnouncementDescription("일기 써오기"),
+                    AnnouncementDescription("줄넘기 가져오기")
                 )
             )
         }
 
-        given(classroomService.getTodayAnnouncement()).willReturn(getTodayAnnouncement)
+        given(classroomService.getTodayClassroomAnnouncement()).willReturn(getTodayClassroomAnnouncement)
         val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.TODAY_ANNOUNCEMENT)
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
@@ -94,6 +96,7 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
                         headerWithName("Authorization").description("Access Token")
                     ),
                     responseFields(
+                        fieldWithPath("announcementId").description("알림장 id"),
                         fieldWithPath("descriptions[].description").description("알림장 내용")
                     )
                 )
@@ -102,19 +105,19 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
 
     @Test
     @DisplayName("알림장 전체 불러오기")
-    fun getAnnouncements() {
+    fun getClassroomAnnouncements() {
         //given
-        val getAnnouncements: GetAnnouncements.Response = generateFixture {
-            it.setExp(GetAnnouncements.Response::teacher, "윤소민")
+        val getClassroomAnnouncements: GetClassroomAnnouncements.Response = generateFixture {
+            it.setExp(GetClassroomAnnouncements.Response::teacherName, "윤소민")
             it.setExp(
-                GetAnnouncements.Response::announcements, listOf(
-                    GetAnnouncements.AnnouncementInfo(
+                GetClassroomAnnouncements.Response::announcements, listOf(
+                    GetClassroomAnnouncements.AnnouncementInfo(
                         listOf(
                             AnnouncementDescription("독후감 써오기"),
                             AnnouncementDescription("일기 써오기")
                         ), LocalDate.parse("2024-05-16")
                     ),
-                    GetAnnouncements.AnnouncementInfo(
+                    GetClassroomAnnouncements.AnnouncementInfo(
                         listOf(
                             AnnouncementDescription("수학 익힘책 p5~10 풀기"),
                             AnnouncementDescription("줄넘기 가져오기"),
@@ -125,7 +128,7 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
             )
         }
 
-        given(classroomService.getAnnouncements()).willReturn(getAnnouncements)
+        given(classroomService.getClassroomAnnouncements()).willReturn(getClassroomAnnouncements)
         val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.ANNOUNCEMENT)
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
@@ -139,9 +142,49 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
                         headerWithName("Authorization").description("Access Token")
                     ),
                     responseFields(
-                        fieldWithPath("teacher").description("선생님 성함"),
+                        fieldWithPath("teacherName").description("선생님 성함"),
                         fieldWithPath("announcements[].descriptions[].description").description("알림장 내용"),
                         fieldWithPath("announcements[].writeDate").description("알림장 날짜")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("알림장 상세 불러오기")
+    fun getClassroomAnnouncementDetail() {
+        val classroomAnnouncementId = generateFixture<Long>()
+        //given
+        val getClassroomAnnouncementDetail: GetClassroomAnnouncementDetail.Response = generateFixture {
+            it.setExp(GetClassroomAnnouncementDetail.Response::teacherName, "윤소민")
+            it.setExp(GetClassroomAnnouncementDetail.Response::writeDate, LocalDate.parse("2024-05-20"))
+            it.setExp(
+                GetClassroomAnnouncementDetail.Response::descriptions, listOf(
+                    AnnouncementDescription("독후감 써오기"),
+                    AnnouncementDescription("일기 써오기"),
+                    AnnouncementDescription("줄넘기 가져오기")
+                )
+            )
+        }
+
+        given(classroomService.getClassroomAnnouncementDetail(classroomAnnouncementId))
+            .willReturn(getClassroomAnnouncementDetail)
+        val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.ANNOUNCEMENT+"/{classroomAnnouncementId}",classroomAnnouncementId.toString())
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("Access Token")
+                    ),
+                    responseFields(
+                        fieldWithPath("teacherName").description("선생님 성함"),
+                        fieldWithPath("writeDate").description("알림장 날짜"),
+                        fieldWithPath("descriptions[].description").description("알림장 내용")
                     )
                 )
             )

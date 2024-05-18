@@ -9,7 +9,6 @@ import com.asap.asapbackend.domain.teacher.domain.model.Teacher
 import com.asap.asapbackend.global.domain.BaseDateEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.BatchSize
-import java.time.LocalDate
 import java.util.*
 
 @Entity
@@ -43,7 +42,7 @@ class Classroom(
     val teacherClassroomSet: MutableSet<TeacherClassroom> = mutableSetOf()
 
     @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
-    val classAnnouncementList: MutableList<ClassAnnouncement> = mutableListOf()
+    val classroomAnnouncementList: MutableList<ClassroomAnnouncement> = mutableListOf()
 
     fun addChild(child: Child) {
         childClassroomSet.add(ChildClassroom(child, this))
@@ -60,7 +59,7 @@ class Classroom(
 
 
     fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>) {
-        classAnnouncementList.add(ClassAnnouncement(descriptions, this, teacher))
+        classroomAnnouncementList.add(ClassroomAnnouncement(descriptions, this, teacher))
     }
 
     @BatchSize(size = 100)
