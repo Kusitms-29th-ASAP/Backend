@@ -7,28 +7,24 @@ import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncementP
 data class AnnouncementCrawlingResponse(
     val data: List<AnnouncementDetail>
 ){
-    fun convertToAnnouncement(schoolAnnouncementPage: SchoolAnnouncementPage): List<SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo> {
-        return data.flatMap {
-            it.file_info.map { fileInfo ->
-                SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo(
-                    schoolAnnouncementPage = schoolAnnouncementPage,
-                    index = it.idx.toInt(),
-                    title = fileInfo.title,
-                    imageUrls = fileInfo.image_url
-                )
-            }
+    fun convertToSchoolAnnouncement(schoolAnnouncementPage: SchoolAnnouncementPage): List<SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo> {
+        return data.map { announcementDetail ->
+            SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo(
+                schoolAnnouncementPage = schoolAnnouncementPage,
+                index = announcementDetail.idx.toInt(),
+                title = announcementDetail.file_info.first().title,
+                imageUrls = announcementDetail.file_info.flatMap { it.image_url }.sorted(),
+            )
         }
     }
 
-    fun convertToAnnouncement(): List<EducationOfficeAnnouncementInfoProvider.EducationOfficeAnnouncementInfo> {
-        return data.flatMap {
-            it.file_info.map { fileInfo ->
-                EducationOfficeAnnouncementInfoProvider.EducationOfficeAnnouncementInfo(
-                    index = it.idx.toInt(),
-                    title = fileInfo.title,
-                    imageUrls = fileInfo.image_url
-                )
-            }
+    fun convertToEducationOfficeAnnouncement(): List<EducationOfficeAnnouncementInfoProvider.EducationOfficeAnnouncementInfo> {
+        return data.map { announcementDetail ->
+            EducationOfficeAnnouncementInfoProvider.EducationOfficeAnnouncementInfo(
+                index = announcementDetail.idx.toInt(),
+                title = announcementDetail.file_info.first().title,
+                imageUrls = announcementDetail.file_info.flatMap { it.image_url }.sorted()
+            )
         }
     }
 }

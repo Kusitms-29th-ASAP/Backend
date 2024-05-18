@@ -33,15 +33,7 @@ class AnnouncementScheduler(
 
             pageNumber++
 
-            val announcements = announcementDataContainer.schoolAnnouncementInfo.groupBy { it.index }
-                .map {
-                    it.value.reduce { acc, educationOfficeAnnouncementInfo ->
-                        acc.copy(
-                            title = acc.title.isEmpty().let { educationOfficeAnnouncementInfo.title },
-                            imageUrls = acc.imageUrls + educationOfficeAnnouncementInfo.imageUrls.sorted()
-                        )
-                    }
-                }
+            val announcements = announcementDataContainer.schoolAnnouncementInfo
                 .map {
                     val textFromImage = imageToTextConverter.convertImageToText(it.imageUrls)
                     var summarizedText = listOf<String>()
@@ -74,15 +66,7 @@ class AnnouncementScheduler(
 
             startIdx += batchSize
 
-            val announcements = announcementDataContainer.educationOfficeAnnouncementInfo.groupBy { it.index }
-                .map {
-                    it.value.reduce { acc, educationOfficeAnnouncementInfo ->
-                        acc.copy(
-                            title = acc.title,
-                            imageUrls = acc.imageUrls + educationOfficeAnnouncementInfo.imageUrls.sorted()
-                        )
-                    }
-                }
+            val announcements = announcementDataContainer.educationOfficeAnnouncementInfo
                 .map {
                     val textFromImage = imageToTextConverter.convertImageToText(it.imageUrls)
                     var summarizedText = listOf<String>()

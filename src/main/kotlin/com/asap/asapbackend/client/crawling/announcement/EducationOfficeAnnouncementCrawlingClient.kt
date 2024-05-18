@@ -32,7 +32,7 @@ class EducationOfficeAnnouncementCrawlingClient : EducationOfficeAnnouncementInf
             .bodyToMono(AnnouncementCrawlingResponse::class.java)
             .timeout(Duration.ofMinutes(20))
             .map {
-                it.convertToAnnouncement()
+                it.convertToEducationOfficeAnnouncement()
             }
             .block() ?: emptyList()
     }

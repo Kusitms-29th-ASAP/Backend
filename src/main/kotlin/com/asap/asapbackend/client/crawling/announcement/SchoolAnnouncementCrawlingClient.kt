@@ -55,7 +55,7 @@ class SchoolAnnouncementCrawlingClient(
             .bodyToMono(AnnouncementCrawlingResponse::class.java)
             .timeout(Duration.ofMinutes(10))
             .map{
-                it.convertToAnnouncement(schoolAnnouncementPage)
+                it.convertToSchoolAnnouncement(schoolAnnouncementPage)
             }.flatMapMany { Flux.fromIterable(it)}
     }
 
