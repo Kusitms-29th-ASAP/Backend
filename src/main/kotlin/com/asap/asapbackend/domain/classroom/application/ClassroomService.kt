@@ -46,7 +46,7 @@ class ClassroomService(
         val childId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(childId).id
         return GetTodayClassroomAnnouncement.convertClassAnnouncementToResponse{
-            classroomAnnouncementReader.findRecentAnnouncementByClassroomIdOrNull(classroomId)
+            classroomAnnouncementReader.findRecentClassroomAnnouncementByClassroomIdOrNull(classroomId)
         }
     }
 

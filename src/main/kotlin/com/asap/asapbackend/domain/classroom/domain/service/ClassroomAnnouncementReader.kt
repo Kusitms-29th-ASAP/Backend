@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.classroom.domain.service
 
-import com.asap.asapbackend.domain.classroom.domain.exception.AnnouncementException
+import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomAnnouncementException
 import com.asap.asapbackend.domain.classroom.domain.model.ClassroomAnnouncement
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomAnnouncementRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 class ClassroomAnnouncementReader(
     private val classroomAnnouncementRepository: ClassroomAnnouncementRepository
 ) {
-    fun findRecentAnnouncementByClassroomIdOrNull(classroomId: Long): ClassroomAnnouncement? {
+    fun findRecentClassroomAnnouncementByClassroomIdOrNull(classroomId: Long): ClassroomAnnouncement? {
         return classroomAnnouncementRepository.findTopByClassroomIdOrderByCreatedAtDesc(classroomId)
     }
 
@@ -19,12 +19,12 @@ class ClassroomAnnouncementReader(
     }
 
     fun findById(classroomAnnouncementId: Long) : ClassroomAnnouncement {
-        return findAnnouncement {
+        return findClassroomAnnouncement {
             classroomAnnouncementRepository.findByIdOrNull(classroomAnnouncementId)
         }
     }
 
-    private fun findAnnouncement(function: () -> ClassroomAnnouncement?): ClassroomAnnouncement {
-        return function() ?: throw AnnouncementException.AnnouncementNotFound()
+    private fun findClassroomAnnouncement(function: () -> ClassroomAnnouncement?): ClassroomAnnouncement {
+        return function() ?: throw ClassroomAnnouncementException.ClassroomAnnouncementNotFound()
     }
 }
