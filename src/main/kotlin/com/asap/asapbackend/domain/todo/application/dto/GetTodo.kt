@@ -15,7 +15,8 @@ class GetTodo {
         val description: String,
         val todoType: TodoType,
         val deadline: LocalDate,
-        val status: Status
+        val status: Status,
+        val isAssigned:Boolean
     )
 
     fun toTodoInfo(todos: List<Todo>): List<TodoInfo> {
@@ -25,7 +26,8 @@ class GetTodo {
                 description = it.description,
                 todoType = it.type,
                 deadline = it.deadline,
-                status = it.status
+                status = it.status,
+                isAssigned = it.isAssigned
             )
         }
     }

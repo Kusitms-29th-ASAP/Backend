@@ -13,7 +13,8 @@ class Todo (
     type: TodoType,
     description: String,
     child: Child,
-    deadline: LocalDate
+    deadline: LocalDate,
+    isAssigned: Boolean
 ):BaseDateEntity(){
 
     init {
@@ -31,6 +32,8 @@ class Todo (
     val description : String = description
 
     val deadline : LocalDate = deadline
+
+    val isAssigned : Boolean = isAssigned
 
     @Enumerated(EnumType.STRING)
     @Column(
