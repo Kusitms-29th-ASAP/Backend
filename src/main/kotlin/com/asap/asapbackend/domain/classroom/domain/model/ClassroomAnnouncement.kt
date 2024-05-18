@@ -12,7 +12,7 @@ import org.hibernate.type.SqlTypes
 import kotlin.math.min
 
 @Entity
-class Announcement(
+class ClassroomAnnouncement(
     descriptions: List<AnnouncementDescription>,
     classroom: Classroom,
     teacher: Teacher

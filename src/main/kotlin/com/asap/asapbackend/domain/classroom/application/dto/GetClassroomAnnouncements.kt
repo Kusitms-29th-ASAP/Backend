@@ -1,11 +1,11 @@
 package com.asap.asapbackend.domain.classroom.application.dto
 
 
-import com.asap.asapbackend.domain.classroom.domain.model.Announcement
+import com.asap.asapbackend.domain.classroom.domain.model.ClassroomAnnouncement
 import com.asap.asapbackend.domain.classroom.domain.vo.AnnouncementDescription
 import java.time.LocalDate
 
-class GetAnnouncements {
+class GetClassroomAnnouncements {
     data class Response(
         val teacherName: String,
         val announcements : List<AnnouncementInfo>
@@ -16,8 +16,8 @@ class GetAnnouncements {
         val writeDate : LocalDate
     )
 
-    fun toAnnouncementInfo(announcements: List<Announcement>) : List<AnnouncementInfo> {
-        return announcements.map {
+    fun toAnnouncementInfo(classroomAnnouncements: List<ClassroomAnnouncement>) : List<AnnouncementInfo> {
+        return classroomAnnouncements.map {
             AnnouncementInfo(it.descriptions,it.getWriteDate())
         }
     }

@@ -7,6 +7,5 @@ object ClassroomApi {
 
         const val ANNOUNCEMENT = "$BASE_URL/announcements"
         const val TODAY_ANNOUNCEMENT = "$ANNOUNCEMENT/today"
-        const val ANNOUNCEMENT_DETAIL = "$ANNOUNCEMENT/detail"
     }
 }

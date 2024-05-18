@@ -1,10 +1,10 @@
 package com.asap.asapbackend.domain.classroom.presentation
 
 import com.asap.asapbackend.domain.classroom.application.ClassroomService
-import com.asap.asapbackend.domain.classroom.application.dto.CreateAnnouncement
-import com.asap.asapbackend.domain.classroom.application.dto.GetAnnouncementDetail
-import com.asap.asapbackend.domain.classroom.application.dto.GetAnnouncements
-import com.asap.asapbackend.domain.classroom.application.dto.GetTodayAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.CreateClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncementDetail
+import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncements
+import com.asap.asapbackend.domain.classroom.application.dto.GetTodayClassroomAnnouncement
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,24 +12,24 @@ class ClassroomController(
     private val classroomService: ClassroomService
 ) {
     @PostMapping(ClassroomApi.V1.ANNOUNCEMENT)
-    fun addAnnouncement(
-        @RequestBody request: CreateAnnouncement.Request
+    fun addClassroomAnnouncement(
+        @RequestBody request: CreateClassroomAnnouncement.Request
     ) {
-        classroomService.createAnnouncement(request)
+        classroomService.createClassroomAnnouncement(request)
     }
 
     @GetMapping(ClassroomApi.V1.TODAY_ANNOUNCEMENT)
-    fun getTodayAnnouncement(): GetTodayAnnouncement.Response {
-        return classroomService.getTodayAnnouncement()
+    fun getTodayClassroomAnnouncement(): GetTodayClassroomAnnouncement.Response {
+        return classroomService.getTodayClassroomAnnouncement()
     }
 
     @GetMapping(ClassroomApi.V1.ANNOUNCEMENT)
-    fun getAnnouncements(): GetAnnouncements.Response {
-        return classroomService.getAnnouncements()
+    fun getClassroomAnnouncements(): GetClassroomAnnouncements.Response {
+        return classroomService.getClassroomAnnouncements()
     }
 
-    @GetMapping(ClassroomApi.V1.ANNOUNCEMENT_DETAIL)
-    fun getAnnouncementDetail(@RequestParam id:Long) : GetAnnouncementDetail.Response {
-        return classroomService.getAnnouncementDetail(id)
+    @GetMapping(ClassroomApi.V1.ANNOUNCEMENT+"/{classroomAnnouncementId}")
+    fun getAnnouncementDetail(@PathVariable classroomAnnouncementId:Long) : GetClassroomAnnouncementDetail.Response {
+        return classroomService.getClassroomAnnouncementDetail(classroomAnnouncementId)
     }
 }

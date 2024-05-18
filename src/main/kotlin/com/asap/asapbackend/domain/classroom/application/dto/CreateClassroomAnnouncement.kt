@@ -7,7 +7,7 @@ import com.asap.asapbackend.domain.todo.domain.vo.TodoType
 import com.asap.asapbackend.global.exception.DefaultException
 import java.time.LocalDate
 
-class CreateAnnouncement {
+class CreateClassroomAnnouncement {
 
     data class Request(
         val announcementDetails: List<AnnouncementDetails>

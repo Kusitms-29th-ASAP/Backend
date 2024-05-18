@@ -3,10 +3,13 @@
 
 [[Add-Announcement]]
 === 알림장 추가
-operation::ClassroomControllerTest/addAnnouncement[snippets='http-request,request-fields,http-response']
+operation::ClassroomControllerTest/addClassroomAnnouncement[snippets='http-request,request-fields,http-response']
 
 === 오늘의 알림장 불러오기
-operation::ClassroomControllerTest/getTodayAnnouncement[]
+operation::ClassroomControllerTest/getTodayClassroomAnnouncement[]
 
 === 알림장 전체 불러오기
-operation::ClassroomControllerTest/getAnnouncements[]
+operation::ClassroomControllerTest/getClassroomAnnouncements[]
+
+== 알림장 상세 보기
+operation::ClassroomControllerTest/getClassroomAnnouncementDetail[]
