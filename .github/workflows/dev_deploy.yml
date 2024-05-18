@@ -119,6 +119,8 @@ jobs:
             echo "IMAGE_NAME=${{secrets.IMAGE_NAME}}" >> .env
             echo "SEOUL_OPEN_API_KEY=${{secrets.SEOUL_OPEN_API_KEY}}" >> .env
             echo "NEIS_OPEN_API_KEY=${{secrets.NEIS_OPEN_API_KEY}}" >> .env
+            echo "OPENAI_API_KEY=${{secrets.OPENAI_API_KEY}}" >> .env
+            echo "NCP_OCR_API_KEY=${{secrets.NCP_OCR_API_KEY}}" >> .env
 
   run_application:
     runs-on: ubuntu-latest

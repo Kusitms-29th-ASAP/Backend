@@ -11,7 +11,7 @@ import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
 @Entity
-class Announcement(
+class ClassAnnouncement(
     descriptions: List<AnnouncementDescription>,
     classroom: Classroom,
     teacher: Teacher

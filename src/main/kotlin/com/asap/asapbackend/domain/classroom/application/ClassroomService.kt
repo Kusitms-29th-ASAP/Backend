@@ -4,7 +4,7 @@ import com.asap.asapbackend.domain.child.domain.service.ChildReader
 import com.asap.asapbackend.domain.classroom.application.dto.CreateAnnouncement
 import com.asap.asapbackend.domain.classroom.application.dto.GetAnnouncements
 import com.asap.asapbackend.domain.classroom.application.dto.GetTodayAnnouncement
-import com.asap.asapbackend.domain.classroom.domain.service.AnnouncementReader
+import com.asap.asapbackend.domain.classroom.domain.service.ClassAnnouncementReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
 import com.asap.asapbackend.domain.teacher.domain.service.TeacherReader
@@ -23,7 +23,7 @@ class ClassroomService(
     private val teacherReader: TeacherReader,
     private val childReader: ChildReader,
     private val todoAppender: TodoAppender,
-    private val announcementReader: AnnouncementReader
+    private val classAnnouncementReader: ClassAnnouncementReader
 ) {
 
     @Transactional
@@ -58,7 +58,7 @@ class ClassroomService(
         val childId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(childId).id
         val descriptions =
-            announcementReader.getRecentAnnouncementByClassroomIdOrNull(classroomId)?.descriptions ?: emptyList()
+            classAnnouncementReader.getRecentAnnouncementByClassroomIdOrNull(classroomId)?.descriptions ?: emptyList()
         return GetTodayAnnouncement.Response(descriptions)
     }
 
@@ -67,7 +67,7 @@ class ClassroomService(
         val childId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(childId).id
         val teacher = teacherReader.findByClassroomId(classroomId).name
-        val announcementDataList = announcementReader.getAllByClassroomId(classroomId)
+        val announcementDataList = classAnnouncementReader.getAllByClassroomId(classroomId)
         val announcements = GetAnnouncements().toAnnouncementInfo(announcementDataList)
         return GetAnnouncements.Response(teacher, announcements)
     }
