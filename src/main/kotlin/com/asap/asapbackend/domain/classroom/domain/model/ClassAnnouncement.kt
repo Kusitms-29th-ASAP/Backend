@@ -12,7 +12,7 @@ import org.hibernate.type.SqlTypes
 import java.time.LocalDate
 
 @Entity
-class Announcement(
+class ClassAnnouncement(
     descriptions: List<AnnouncementDescription>,
     writeDate: LocalDate,
     classroom: Classroom,

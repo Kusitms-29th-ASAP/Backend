@@ -43,7 +43,7 @@ class Classroom(
     val teacherClassroomSet: MutableSet<TeacherClassroom> = mutableSetOf()
 
     @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
-    val announcementList: MutableList<Announcement> = mutableListOf()
+    val classAnnouncementList: MutableList<ClassAnnouncement> = mutableListOf()
 
     fun addChild(child: Child) {
         childClassroomSet.add(ChildClassroom(child, this))
@@ -60,7 +60,7 @@ class Classroom(
 
 
     fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>, writeDate: LocalDate) {
-        announcementList.add(Announcement(descriptions, writeDate, this, teacher))
+        classAnnouncementList.add(ClassAnnouncement(descriptions, writeDate, this, teacher))
     }
 
     @BatchSize(size = 100)
