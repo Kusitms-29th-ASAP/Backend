@@ -9,7 +9,6 @@ import com.asap.asapbackend.domain.teacher.domain.model.Teacher
 import com.asap.asapbackend.global.domain.BaseDateEntity
 import jakarta.persistence.*
 import org.hibernate.annotations.BatchSize
-import java.time.LocalDate
 import java.util.*
 
 @Entity
@@ -59,8 +58,8 @@ class Classroom(
     }
 
 
-    fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>, writeDate: LocalDate) {
-        announcementList.add(Announcement(descriptions, writeDate, this, teacher))
+    fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>) {
+        announcementList.add(Announcement(descriptions, this, teacher))
     }
 
     @BatchSize(size = 100)

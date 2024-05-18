@@ -8,8 +8,7 @@ import java.time.LocalDate
 class CreateAnnouncement {
 
     data class Request(
-        val announcementDetails: List<AnnouncementDetails>,
-        val writeDate: LocalDate
+        val announcementDetails: List<AnnouncementDetails>
     ){
         init {
             if(announcementDetails.isEmpty()){
