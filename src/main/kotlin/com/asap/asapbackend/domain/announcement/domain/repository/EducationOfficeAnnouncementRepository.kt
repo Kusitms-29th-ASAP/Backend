@@ -4,7 +4,7 @@ import com.asap.asapbackend.domain.announcement.domain.model.EducationOfficeAnno
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface OfficeEducationAnnouncementRepository : JpaRepository<EducationOfficeAnnouncement, Long> {
+interface EducationOfficeAnnouncementRepository : JpaRepository<EducationOfficeAnnouncement, Long> {
     @Query("SELECT COALESCE(MAX(idx), 0) FROM EducationOfficeAnnouncement")
     fun findLastIndex(): Int
 }

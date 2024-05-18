@@ -7,9 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 
 @Component
-class EducationOfficeAnnouncementCrawlingClient(
-
-) : EducationOfficeAnnouncementInfoProvider {
+class EducationOfficeAnnouncementCrawlingClient : EducationOfficeAnnouncementInfoProvider {
     override fun retrieveAnnouncementInfo(
         batchSize: Int,
         startIndex: Int

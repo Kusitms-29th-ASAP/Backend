@@ -16,4 +16,9 @@ class SchoolAnnouncementPage(
     val school: School = school
 
     val schoolAnnouncementPageUrl: String = schoolAnnouncementPageUrl
+
+
+    fun getSchoolId(): Long {
+        return school.id
+    }
 }

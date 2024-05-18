@@ -5,7 +5,6 @@ import com.asap.asapbackend.client.crawling.announcement.dto.AnnouncementCrawlin
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncementPage
 import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnouncementPageRepository
 import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnouncementRepository
-import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -25,7 +24,7 @@ class SchoolAnnouncementCrawlingClient(
         val schoolAnnouncements = schoolAnnouncementPageRepository.findAll(PageRequest.of(pageNumber, batchSize))
         val hasNext = schoolAnnouncements.hasNext()
         val announcementFluxes = schoolAnnouncements.map { schoolAnnouncement ->
-            val startIdx = schoolAnnouncementRepository.findLastIndex()
+            val startIdx = schoolAnnouncementRepository.findLastIndex(schoolAnnouncement.getSchoolId())
             retrieveAnnouncementInfoFromCrawlingServer(schoolAnnouncement, startIdx, batchSize)
         }
         val schoolAnnouncementInfoList = mutableListOf<SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo>()
