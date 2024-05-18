@@ -59,8 +59,8 @@ class Classroom(
     }
 
 
-    fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>, writeDate: LocalDate) {
-        classAnnouncementList.add(ClassAnnouncement(descriptions, writeDate, this, teacher))
+    fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>) {
+        classAnnouncementList.add(ClassAnnouncement(descriptions, this, teacher))
     }
 
     @BatchSize(size = 100)

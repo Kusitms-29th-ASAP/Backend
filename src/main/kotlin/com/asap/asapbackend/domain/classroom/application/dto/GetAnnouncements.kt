@@ -18,7 +18,7 @@ class GetAnnouncements {
 
     fun toAnnouncementInfo(classAnnouncements: List<ClassAnnouncement>) : List<AnnouncementInfo> {
         return classAnnouncements.map {
-            AnnouncementInfo(it.descriptions, it.writeDate)
+            AnnouncementInfo(it.descriptions, it.getWriteDate())
         }
     }
 }
