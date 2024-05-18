@@ -11,8 +11,8 @@ class TodoJdbcRepository(
 ) {
     fun insertBatch(todos: Set<Todo>) {
         val sql = """
-            insert into todo (created_at, updated_at, deadline, description, status, type, child_id)
-            values (now(), now(), ?, ?, ?, ?, ?)
+            insert into todo (created_at, updated_at, deadline, description, status, type, child_id,is_assigned)
+            values (now(), now(), ?, ?, ?, ?, ?,?)
         """.trimIndent()
         jdbcTemplate.batchUpdate(sql, todos, todos.size){ ps : PreparedStatement, todo: Todo ->
             ps.setObject(1, todo.deadline)
@@ -20,6 +20,7 @@ class TodoJdbcRepository(
             ps.setObject(3, todo.status.name)
             ps.setObject(4, todo.type.name)
             ps.setLong(5, todo.child.id)
+            ps.setObject(6,todo.isAssigned)
         }
     }
 }
