@@ -22,7 +22,7 @@ class TimetableService(
         val classroomId = classroomReader.findByStudent(studentId).id
         val todayTimetables = timetableReader.findTodayTimetableByClassroomId(classroomId)
         val timetables = todayTimetables.map {
-            GetTodayTimetable.Timetable(it?.time, it?.subject?.name)
+            GetTodayTimetable.Timetable(it.time, it.subject.name)
         }
         return GetTodayTimetable.Response(timetables)
     }

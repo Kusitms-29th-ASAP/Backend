@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 
 interface TimetableRepository : JpaRepository<Timetable, Long> {
-    fun findBySubjectClassroomIdAndDayOrderByTime(classroomId: Long, day: LocalDate) : List<Timetable?>
+    fun findBySubjectClassroomIdAndDayOrderByTime(classroomId: Long, day: LocalDate) : List<Timetable>
 }

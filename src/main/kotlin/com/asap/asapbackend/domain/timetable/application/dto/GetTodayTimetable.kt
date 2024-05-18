@@ -5,7 +5,7 @@ class GetTodayTimetable {
         val timetables: List<Timetable>
     )
     data class Timetable(
-        val time: Int?,
-        val subject: String?
+        val time: Int,
+        val subject: String
     )
 }

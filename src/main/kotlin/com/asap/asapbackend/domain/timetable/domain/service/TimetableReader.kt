@@ -10,7 +10,7 @@ import java.time.LocalDate
 class TimetableReader(
     private val timetableRepository: TimetableRepository
 ) {
-    fun findTodayTimetableByClassroomId(classroomId: Long): List<Timetable?> {
+    fun findTodayTimetableByClassroomId(classroomId: Long): List<Timetable> {
         return timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now())
     }
 
