@@ -1,9 +1,11 @@
 package com.asap.asapbackend.client.crawling.announcement
 
-import com.asap.asapbackend.batch.announcement.AnnouncementInfoProvider
+import com.asap.asapbackend.batch.announcement.SchoolAnnouncementInfoProvider
 import com.asap.asapbackend.client.crawling.announcement.dto.AnnouncementCrawlingResponse
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncementPage
 import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnouncementPageRepository
+import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnouncementRepository
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -11,40 +13,42 @@ import reactor.core.publisher.Flux
 import java.time.Duration
 
 @Component
-class AnnouncementCrawlingClient(
-    private val schoolAnnouncementPageRepository: SchoolAnnouncementPageRepository
-) : AnnouncementInfoProvider {
+class SchoolAnnouncementCrawlingClient(
+    private val schoolAnnouncementPageRepository: SchoolAnnouncementPageRepository,
+    private val schoolAnnouncementRepository: SchoolAnnouncementRepository
+) : SchoolAnnouncementInfoProvider {
 
     override fun retrieveAnnouncementInfo(
         batchSize: Int,
         pageNumber: Int
-    ): AnnouncementInfoProvider.AnnouncementDataContainer {
+    ): SchoolAnnouncementInfoProvider.SchoolAnnouncementDataContainer {
         val schoolAnnouncements = schoolAnnouncementPageRepository.findAll(PageRequest.of(pageNumber, batchSize))
         val hasNext = schoolAnnouncements.hasNext()
         val announcementFluxes = schoolAnnouncements.map { schoolAnnouncement ->
-            retrieveAnnouncementInfoFromCrawlingServer(schoolAnnouncement)
+            val startIdx = schoolAnnouncementRepository.findLastIndex()
+            retrieveAnnouncementInfoFromCrawlingServer(schoolAnnouncement, startIdx, batchSize)
         }
-        val announcementInfoList = mutableListOf<AnnouncementInfoProvider.AnnouncementInfo>()
+        val schoolAnnouncementInfoList = mutableListOf<SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo>()
         Flux.merge(announcementFluxes)
             .buffer(1000)
             .flatMap {
                 Flux.fromIterable(it)
-                    .doOnNext(announcementInfoList::add)
+                    .doOnNext(schoolAnnouncementInfoList::add)
                     .then()
             }.blockLast()
-        return AnnouncementInfoProvider.AnnouncementDataContainer(
-            announcementInfo = announcementInfoList,
+        return SchoolAnnouncementInfoProvider.SchoolAnnouncementDataContainer(
+            schoolAnnouncementInfo = schoolAnnouncementInfoList,
             hasNext = hasNext
         )
     }
 
-    private fun retrieveAnnouncementInfoFromCrawlingServer(schoolAnnouncementPage: SchoolAnnouncementPage): Flux<AnnouncementInfoProvider.AnnouncementInfo> {
+    private fun retrieveAnnouncementInfoFromCrawlingServer(schoolAnnouncementPage: SchoolAnnouncementPage, startIdx: Int, batchSize: Int): Flux<SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo> {
         return WebClient.create(CRAWLING_SERVER_URL)
             .get()
             .uri { uriBuilder ->
                 uriBuilder
-                    .queryParam("start_idx", 0)
-                    .queryParam("batch_size", 0)
+                    .queryParam("start_idx", startIdx)
+                    .queryParam("batch_size", batchSize)
                     .queryParam("element_school_url", schoolAnnouncementPage.schoolAnnouncementPageUrl)
                     .build()
             }
@@ -57,6 +61,6 @@ class AnnouncementCrawlingClient(
     }
 
     companion object{
-        private val CRAWLING_SERVER_URL = "http://localhost:3000/crawl"
+        private val CRAWLING_SERVER_URL = "http://crawling.ncp.simproject.kr:3000/crawl"
     }
 }

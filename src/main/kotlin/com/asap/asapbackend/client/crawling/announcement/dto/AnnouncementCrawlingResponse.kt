@@ -1,16 +1,29 @@
 package com.asap.asapbackend.client.crawling.announcement.dto
 
-import com.asap.asapbackend.batch.announcement.AnnouncementInfoProvider
+import com.asap.asapbackend.batch.announcement.EducationOfficeAnnouncementInfoProvider
+import com.asap.asapbackend.batch.announcement.SchoolAnnouncementInfoProvider
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncementPage
 
 data class AnnouncementCrawlingResponse(
     val data: List<AnnouncementDetail>
 ){
-    fun convertToAnnouncement(schoolAnnouncementPage: SchoolAnnouncementPage): List<AnnouncementInfoProvider.AnnouncementInfo> {
+    fun convertToAnnouncement(schoolAnnouncementPage: SchoolAnnouncementPage): List<SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo> {
         return data.flatMap {
             it.file_info.map { fileInfo ->
-                AnnouncementInfoProvider.AnnouncementInfo(
+                SchoolAnnouncementInfoProvider.SchoolAnnouncementInfo(
                     schoolAnnouncementPage = schoolAnnouncementPage,
+                    index = it.idx.toInt(),
+                    title = fileInfo.title,
+                    imageUrls = fileInfo.image_url
+                )
+            }
+        }
+    }
+
+    fun convertToAnnouncement(): List<EducationOfficeAnnouncementInfoProvider.EducationOfficeAnnouncementInfo> {
+        return data.flatMap {
+            it.file_info.map { fileInfo ->
+                EducationOfficeAnnouncementInfoProvider.EducationOfficeAnnouncementInfo(
                     index = it.idx.toInt(),
                     title = fileInfo.title,
                     imageUrls = fileInfo.image_url
