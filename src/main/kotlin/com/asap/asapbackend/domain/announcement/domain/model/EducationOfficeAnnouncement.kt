@@ -7,14 +7,15 @@ import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
 @Entity
-class OfficeEducationAnnouncement(
+class EducationOfficeAnnouncement(
+    idx: Int,
     title: String,
-    content: String,
-    imageUrls: List<String>
+    imageUrls: List<String>,
+    summaries: List<String>
 ) : BaseDateEntity() {
 
+    val idx: Int = idx
     val title: String = title
-    val content: String = content
 
 
     @Column(
@@ -23,4 +24,12 @@ class OfficeEducationAnnouncement(
     )
     @JdbcTypeCode(SqlTypes.JSON)
     val imageUrls: List<String> = imageUrls
+
+
+    @Column(
+        nullable = false,
+        columnDefinition = "json"
+    )
+    @JdbcTypeCode(SqlTypes.JSON)
+    val summaries: List<String> = summaries
 }
