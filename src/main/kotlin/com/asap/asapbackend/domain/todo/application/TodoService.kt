@@ -28,7 +28,8 @@ class TodoService(
             type = request.todoType,
             description = request.description,
             child = child,
-            deadline = request.deadline
+            deadline = request.deadline,
+            isAssigned = false
         )
         todoAppender.appendTodo(todo)
     }

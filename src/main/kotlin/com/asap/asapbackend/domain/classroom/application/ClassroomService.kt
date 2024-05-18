@@ -45,7 +45,8 @@ class ClassroomService(
                     child = student,
                     description = it.description,
                     type = it.todoType,
-                    deadline = it.deadline
+                    deadline = it.deadline,
+                    isAssigned = true
                 )
             }
         }.toSet()
