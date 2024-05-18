@@ -13,12 +13,12 @@ class GetAnnouncements {
 
     data class AnnouncementInfo(
         val descriptions: List<AnnouncementDescription>,
-        val writeDate: LocalDate,
+        val writeDate : LocalDate
     )
 
     fun toAnnouncementInfo(announcements: List<Announcement>) : List<AnnouncementInfo> {
         return announcements.map {
-            AnnouncementInfo(it.descriptions, it.writeDate)
+            AnnouncementInfo(it.descriptions,it.getWriteDate())
         }
     }
 }

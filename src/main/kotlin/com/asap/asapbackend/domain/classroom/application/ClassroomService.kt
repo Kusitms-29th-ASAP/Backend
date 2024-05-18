@@ -32,7 +32,7 @@ class ClassroomService(
         val classroom = classroomReader.findByTeacher(teacherId)
         val teacher = teacherReader.findById(teacherId)
 
-        classroom.addAnnouncement(teacher, request.toAnnouncementDescription(), request.writeDate)
+        classroom.addAnnouncement(teacher, request.toAnnouncementDescription())
         classModifier.update(classroom)
 
         val studentIds = classroom.getStudentIds()

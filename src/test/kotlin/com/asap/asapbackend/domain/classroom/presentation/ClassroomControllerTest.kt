@@ -57,7 +57,6 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
             .andDo(
                 resultHandler.document(
                     requestFields(
-                        fieldWithPath("writeDate").description("작성일"),
                         fieldWithPath("announcementDetails").description("알림장 내용"),
                         fieldWithPath("announcementDetails[].description").description("알림장 내용"),
                         fieldWithPath("announcementDetails[].isLinkedWithTodo").description("할일과 연결 여부"),
