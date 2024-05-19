@@ -122,7 +122,8 @@ class SchoolAnnouncementControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("uploadDate").description("업로드 날짜"),
                         fieldWithPath("imageUrls").description("이미지 URL"),
                         fieldWithPath("highlight.keywords").description("가정통신문 키워드"),
-                        fieldWithPath("highlight.summaries").description("가정통신문 3줄 요약")
+                        fieldWithPath("highlight.summaries").description("가정통신문 3줄 요약"),
+                        fieldWithPath("isNew").description("새로운 공지 여부")
                     )
                 )
             )
@@ -227,7 +228,8 @@ class SchoolAnnouncementControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("uploadDate").description("업로드 날짜"),
                         fieldWithPath("imageUrls").description("이미지 URL"),
                         fieldWithPath("highlight.keywords").description("가정통신문 키워드"),
-                        fieldWithPath("highlight.summaries").description("가정통신문 3줄 요약")
+                        fieldWithPath("highlight.summaries").description("가정통신문 3줄 요약"),
+                        fieldWithPath("isNew").description("새로운 공지 여부")
                     )
                 )
             )
