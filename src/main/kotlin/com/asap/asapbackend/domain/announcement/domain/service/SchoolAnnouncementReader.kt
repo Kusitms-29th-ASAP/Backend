@@ -41,19 +41,19 @@ class SchoolAnnouncementReader(
         )
     }
 
-    fun findSchoolAnnouncementCategory(schoolAnnouncementId: Long, classId: Long): AnnouncementCategory {
+    fun findSchoolAnnouncementCategory(schoolAnnouncementId: Long, classroomId: Long): AnnouncementCategory {
         return schoolAnnouncementCategoryRepository.findBySchoolAnnouncementIdAndClassroomId(
-            schoolAnnouncementId, classId
+            schoolAnnouncementId, classroomId
         )?.category
             ?: AnnouncementCategory.NONE
     }
 
     fun findEducationOfficeAnnouncementCategory(
         educationOfficeAnnouncementId: Long,
-        classId: Long
+        classroomId: Long
     ): AnnouncementCategory {
         return educationOfficeAnnouncementCategoryRepository.findByEducationOfficeAnnouncementIdAndClassroomId(
-            educationOfficeAnnouncementId, classId
+            educationOfficeAnnouncementId, classroomId
         )?.category
             ?: AnnouncementCategory.NONE
     }
