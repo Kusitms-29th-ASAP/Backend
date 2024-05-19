@@ -16,7 +16,9 @@ class GetEducationOfficeAnnouncementDetail {
         val highlight: AnnouncementHighlight,
         val uploadDate: LocalDate,
         val imageUrls: List<String>
-    )
+    ){
+        val isNew = (uploadDate == LocalDate.now())
+    }
 
 
     data class AnnouncementHighlight(
