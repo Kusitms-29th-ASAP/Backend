@@ -292,4 +292,123 @@ class SchoolAnnouncementControllerTest : AbstractRestDocsConfigurer() {
                 )
             )
     }
+
+
+    @Test
+    @DisplayName("학교 가정통신문 간단 조회")
+    fun getSimpleSchoolAnnouncement() {
+        //given
+        val getSimpleSchoolAnnouncementPage = GetSimpleSchoolAnnouncementPage.Response(
+            schoolAnnouncements = listOf(
+                GetSimpleSchoolAnnouncementPage.SimpleSchoolAnnouncement(
+                    1,
+                    "학교 공지사항 제목",
+                    category = AnnouncementCategory.SCHOOL_SCHEDULE
+                ),
+                GetSimpleSchoolAnnouncementPage.SimpleSchoolAnnouncement(
+                    2,
+                    "학교 공지사항 제목",
+                    category = AnnouncementCategory.NONE
+                ),
+            ),
+            totalPage = 1,
+            totalElements = 1
+        )
+        given(
+            announcementService.getSimpleSchoolAnnouncement(
+                GetSimpleSchoolAnnouncementPage.Request(
+                    10,
+                    0
+                )
+            )
+        ).willReturn(
+            getSimpleSchoolAnnouncementPage
+        )
+        val request = RestDocumentationRequestBuilders.get(AnnouncementApi.V1.SIMPLE_SCHOOL_ANNOUNCEMENT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer accesstoken")
+            .param("size", "10")
+            .param("page", "0")
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("선생님 Access Token")
+                    ),
+                    queryParameters(
+                        parameterWithName("size").description("페이지 크기"),
+                        parameterWithName("page").description("페이지 번호")
+                    ),
+                    responseFields(
+                        fieldWithPath("schoolAnnouncements[].id").description("공지사항 ID"),
+                        fieldWithPath("schoolAnnouncements[].title").description("제목"),
+                        fieldWithPath("schoolAnnouncements[].category").description("카테고리"),
+                        fieldWithPath("totalPage").description("총 페이지 수"),
+                        fieldWithPath("totalElements").description("총 공지사항 수")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("교육청 가정통신문 간단 조회")
+    fun getSimpleEducationOfficeAnnouncement() {
+        //given
+        val getSimpleEducationOfficeAnnouncementPage = GetSimpleEducationOfficeAnnouncementPage.Response(
+            schoolAnnouncements = listOf(
+                GetSimpleEducationOfficeAnnouncementPage.SimpleSchoolAnnouncement(
+                    1,
+                    "교육청 공지사항 제목",
+                    category = AnnouncementCategory.EDUCATION_BENEFIT
+                ),
+                GetSimpleEducationOfficeAnnouncementPage.SimpleSchoolAnnouncement(
+                    2,
+                    "교육청 공지사항 제목",
+                    category = AnnouncementCategory.NONE
+                ),
+            ),
+            totalPage = 1,
+            totalElements = 1
+        )
+        given(
+            announcementService.getSimpleEducationOfficeAnnouncement(
+                GetSimpleEducationOfficeAnnouncementPage.Request(
+                    10,
+                    0
+                )
+            )
+        ).willReturn(
+            getSimpleEducationOfficeAnnouncementPage
+        )
+        val request = RestDocumentationRequestBuilders.get(AnnouncementApi.V1.SIMPLE_EDUCATION_OFFICE_ANNOUNCEMENT)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer accesstoken")
+            .param("size", "10")
+            .param("page", "0")
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("선생님 Access Token")
+                    ),
+                    queryParameters(
+                        parameterWithName("size").description("페이지 크기"),
+                        parameterWithName("page").description("페이지 번호")
+                    ),
+                    responseFields(
+                        fieldWithPath("schoolAnnouncements[].id").description("공지사항 ID"),
+                        fieldWithPath("schoolAnnouncements[].title").description("제목"),
+                        fieldWithPath("schoolAnnouncements[].category").description("카테고리"),
+                        fieldWithPath("totalPage").description("총 페이지 수"),
+                        fieldWithPath("totalElements").description("총 공지사항 수")
+                    )
+                )
+            )
+    }
 }
