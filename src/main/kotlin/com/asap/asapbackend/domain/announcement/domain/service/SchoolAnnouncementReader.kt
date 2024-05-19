@@ -8,9 +8,9 @@ import com.asap.asapbackend.domain.announcement.domain.repository.EducationOffic
 import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnouncementCategoryRepository
 import com.asap.asapbackend.domain.announcement.domain.repository.SchoolAnnouncementRepository
 import com.asap.asapbackend.domain.announcement.domain.vo.AnnouncementCategory
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Slice
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -27,11 +27,11 @@ class SchoolAnnouncementReader(
         return educationOfficeAnnouncementRepository.findLastIndex()
     }
 
-    fun findAllSchoolAnnouncements(classId: Long, pageable: Pageable): Slice<SchoolAnnouncement> {
+    fun findAllSchoolAnnouncements(classId: Long, pageable: Pageable): Page<SchoolAnnouncement> {
         return schoolAnnouncementRepository.findAllByClassroomId(classId, pageable)
     }
 
-    fun findAllEducationOfficeAnnouncements(pageable: Pageable): Slice<EducationOfficeAnnouncement> {
+    fun findAllEducationOfficeAnnouncements(pageable: Pageable): Page<EducationOfficeAnnouncement> {
         return educationOfficeAnnouncementRepository.findAll(
             PageRequest.of(
                 pageable.pageNumber,

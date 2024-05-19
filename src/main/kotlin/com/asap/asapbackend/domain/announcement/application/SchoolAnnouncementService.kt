@@ -86,6 +86,29 @@ class SchoolAnnouncementService(
         )
     }
 
+    fun getSimpleSchoolAnnouncement(request: GetSimpleSchoolAnnouncementPage.Request): GetSimpleSchoolAnnouncementPage.Response {
+        val classroom = getTeacherClassroom()
+        val schoolAnnouncements = schoolAnnouncementReader.findAllSchoolAnnouncements(
+            classroom.id,
+            PageRequest.of(request.page, request.size)
+        )
+        return GetSimpleSchoolAnnouncementPage.convertSchoolAnnouncementToResponse(schoolAnnouncements) {
+            schoolAnnouncementReader.findSchoolAnnouncementCategory(it, classroom.id)
+        }
+    }
+
+    fun getSimpleEducationOfficeAnnouncement(request: GetSimpleEducationOfficeAnnouncementPage.Request): GetSimpleEducationOfficeAnnouncementPage.Response {
+        val classroom = getTeacherClassroom()
+        val educationOfficeAnnouncements = schoolAnnouncementReader.findAllEducationOfficeAnnouncements(
+            PageRequest.of(request.page, request.size)
+        )
+        return GetSimpleEducationOfficeAnnouncementPage.convertEducationOfficeAnnouncementToResponse(
+            educationOfficeAnnouncements
+        ) {
+            schoolAnnouncementReader.findEducationOfficeAnnouncementCategory(it, classroom.id)
+        }
+    }
+
     private fun getChildClassroom(): Classroom {
         val userId = getCurrentUserId()
         val child = childReader.findPrimaryChild(userId)

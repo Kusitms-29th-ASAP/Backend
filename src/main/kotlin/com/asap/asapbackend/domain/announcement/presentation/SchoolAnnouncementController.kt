@@ -70,4 +70,25 @@ class SchoolAnnouncementController(
     ) {
         announcementService.updateEducationOfficeAnnouncementCategory(updateRequest, educationOfficeAnnouncementId)
     }
+
+    @GetMapping(AnnouncementApi.V1.SIMPLE_SCHOOL_ANNOUNCEMENT)
+    fun getSimpleSchoolAnnouncement(
+        @RequestParam size: Int,
+        @RequestParam page: Int
+    ): GetSimpleSchoolAnnouncementPage.Response {
+        return announcementService.getSimpleSchoolAnnouncement(GetSimpleSchoolAnnouncementPage.Request(size, page))
+    }
+
+    @GetMapping(AnnouncementApi.V1.SIMPLE_EDUCATION_OFFICE_ANNOUNCEMENT)
+    fun getSimpleEducationOfficeAnnouncement(
+        @RequestParam size: Int,
+        @RequestParam page: Int
+    ): GetSimpleEducationOfficeAnnouncementPage.Response {
+        return announcementService.getSimpleEducationOfficeAnnouncement(
+            GetSimpleEducationOfficeAnnouncementPage.Request(
+                size,
+                page
+            )
+        )
+    }
 }

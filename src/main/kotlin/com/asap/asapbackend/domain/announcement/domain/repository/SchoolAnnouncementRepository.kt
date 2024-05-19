@@ -1,8 +1,8 @@
 package com.asap.asapbackend.domain.announcement.domain.repository
 
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncement
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -27,5 +27,5 @@ interface SchoolAnnouncementRepository : JpaRepository<SchoolAnnouncement, Long>
         ORDER BY sa.id DESC
     """
     )
-    fun findAllByClassroomId(classroomId: Long, pageable: Pageable): Slice<SchoolAnnouncement>
+    fun findAllByClassroomId(classroomId: Long, pageable: Pageable): Page<SchoolAnnouncement>
 }
