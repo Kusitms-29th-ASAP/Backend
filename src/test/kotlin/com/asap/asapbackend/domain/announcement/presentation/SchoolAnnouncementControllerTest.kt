@@ -2,10 +2,7 @@ package com.asap.asapbackend.domain.announcement.presentation
 
 import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.domain.announcement.application.SchoolAnnouncementService
-import com.asap.asapbackend.domain.announcement.application.dto.GetEducationOfficeAnnouncementDetail
-import com.asap.asapbackend.domain.announcement.application.dto.GetEducationOfficeAnnouncementSlice
-import com.asap.asapbackend.domain.announcement.application.dto.GetSchoolAnnouncementDetail
-import com.asap.asapbackend.domain.announcement.application.dto.GetSchoolAnnouncementSlice
+import com.asap.asapbackend.domain.announcement.application.dto.*
 import com.asap.asapbackend.domain.announcement.domain.vo.AnnouncementCategory
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -16,8 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
@@ -232,6 +228,66 @@ class SchoolAnnouncementControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("imageUrls").description("이미지 URL"),
                         fieldWithPath("highlight.keywords").description("가정통신문 키워드"),
                         fieldWithPath("highlight.summaries").description("가정통신문 3줄 요약")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("학교 가정통신문 카테고리 변경")
+    fun patchSchoolAnnouncementCategory() {
+        //given
+        val updateRequest = UpdateSchoolAnnouncementCategory.Request(
+            category = AnnouncementCategory.SCHOOL_SCHEDULE
+        )
+        val request = RestDocumentationRequestBuilders.patch(AnnouncementApi.V1.SCHOOL_ANNOUNCEMENT_CATEGORY, 1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer accesstoken")
+            .content(objectMapper.writeValueAsString(updateRequest))
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("선생님 Access Token")
+                    ),
+                    pathParameters(
+                        parameterWithName("schoolAnnouncementId").description("공지사항 ID")
+                    ),
+                    requestFields(
+                        fieldWithPath("category").description("카테고리")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("교육청 가정통신문 카테고리 변경")
+    fun patchEducationOfficeAnnouncementCategory() {
+        //given
+        val updateRequest = UpdateEducationOfficeAnnouncementCategory.Request(
+            category = AnnouncementCategory.EDUCATION_BENEFIT
+        )
+        val request = RestDocumentationRequestBuilders.patch(AnnouncementApi.V1.EDUCATION_OFFICE_ANNOUNCEMENT_CATEGORY, 1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer accesstoken")
+            .content(objectMapper.writeValueAsString(updateRequest))
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("선생님 Access Token")
+                    ),
+                    pathParameters(
+                        parameterWithName("educationOfficeAnnouncementId").description("공지사항 ID")
+                    ),
+                    requestFields(
+                        fieldWithPath("category").description("카테고리")
                     )
                 )
             )
