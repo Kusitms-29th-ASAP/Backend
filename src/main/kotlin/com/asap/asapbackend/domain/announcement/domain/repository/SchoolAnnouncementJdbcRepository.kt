@@ -18,7 +18,8 @@ class SchoolAnnouncementJdbcRepository (
                 it.idx,
                 it.title,
                 objectMapper.writeValueAsString(it.imageUrls),
-                objectMapper.writeValueAsString(it.summaries)
+                objectMapper.writeValueAsString(it.summaries),
+                objectMapper.writeValueAsString(it.keywords)
             )
         })
     }
@@ -31,9 +32,11 @@ class SchoolAnnouncementJdbcRepository (
                 title,
                 image_urls,
                 summaries,
+                keywords,
                 created_at,
                 updated_at
             ) VALUES (
+                ?,
                 ?,
                 ?,
                 ?,

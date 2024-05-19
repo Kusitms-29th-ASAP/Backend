@@ -14,7 +14,8 @@ class SchoolAnnouncement(
     index: Int,
     title: String,
     imageUrls: List<String>,
-    summaries : List<String>
+    summaries : List<String>,
+    keywords: List<String>
 ) : BaseDateEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,4 +37,11 @@ class SchoolAnnouncement(
         columnDefinition = "json"
     )
     val summaries: List<String> = summaries
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(
+        nullable = false,
+        columnDefinition = "json"
+    )
+    val keywords: List<String> = keywords
 }

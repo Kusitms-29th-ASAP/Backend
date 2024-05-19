@@ -11,7 +11,8 @@ class EducationOfficeAnnouncement(
     idx: Int,
     title: String,
     imageUrls: List<String>,
-    summaries: List<String>
+    summaries: List<String>,
+    keywords: List<String>
 ) : BaseDateEntity() {
 
     val idx: Int = idx
@@ -32,4 +33,11 @@ class EducationOfficeAnnouncement(
     )
     @JdbcTypeCode(SqlTypes.JSON)
     val summaries: List<String> = summaries
+
+    @Column(
+        nullable = false,
+        columnDefinition = "json"
+    )
+    @JdbcTypeCode(SqlTypes.JSON)
+    val keywords: List<String> = keywords
 }
