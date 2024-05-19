@@ -35,7 +35,18 @@ operation::SchoolAnnouncementControllerTest/patchSchoolAnnouncementCategory[snip
 
 operation::SchoolAnnouncementControllerTest/patchEducationOfficeAnnouncementCategory[snippets='http-request,request-fields,request-headers,path-parameters,http-response']
 
-[[UPDATE-School-Announcement-Read-Status]]
+[[GET-School-Announcement-Simple]]
+
+=== 학교가정통신문 간단 조회(선생님용)
+
+operation::SchoolAnnouncementControllerTest/getSimpleSchoolAnnouncement[snippets='http-request,query-parameters,request-headers,http-response']
+
+[[GET-Education-Office-Announcement-Simple]]
+
+=== 교육청가정통신문 간단 조회(선생님용)
+
+operation::SchoolAnnouncementControllerTest/getSimpleEducationOfficeAnnouncement[snippets='http-request,query-parameters,request-headers,http-response']
+
 
 [[ANNOUNCEMENT-CATEGORY]]
 === 가정통신문 카테고리
