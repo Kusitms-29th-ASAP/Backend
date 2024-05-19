@@ -1,6 +1,6 @@
 package com.asap.asapbackend.domain.announcement.domain.service
 
-import com.asap.asapbackend.domain.announcement.domain.model.EducationAnnouncementCategory
+import com.asap.asapbackend.domain.announcement.domain.model.EducationOfficeAnnouncementCategory
 import com.asap.asapbackend.domain.announcement.domain.model.EducationOfficeAnnouncement
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncement
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncementCategory
@@ -30,7 +30,7 @@ class SchoolAnnouncementAppender(
         schoolAnnouncementCategoryRepository.save(category)
     }
 
-    fun addEducationAnnouncementCategory(category: EducationAnnouncementCategory){
+    fun addEducationAnnouncementCategory(category: EducationOfficeAnnouncementCategory){
         educationOfficeAnnouncementCategoryRepository.save(category)
     }
 

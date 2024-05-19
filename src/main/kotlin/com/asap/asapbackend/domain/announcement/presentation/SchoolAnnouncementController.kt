@@ -1,15 +1,9 @@
 package com.asap.asapbackend.domain.announcement.presentation
 
 import com.asap.asapbackend.domain.announcement.application.SchoolAnnouncementService
-import com.asap.asapbackend.domain.announcement.application.dto.GetEducationOfficeAnnouncementDetail
-import com.asap.asapbackend.domain.announcement.application.dto.GetEducationOfficeAnnouncementSlice
-import com.asap.asapbackend.domain.announcement.application.dto.GetSchoolAnnouncementDetail
-import com.asap.asapbackend.domain.announcement.application.dto.GetSchoolAnnouncementSlice
+import com.asap.asapbackend.domain.announcement.application.dto.*
 import io.github.oshai.kotlinlogging.KotlinLogging
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 private val logger = KotlinLogging.logger {}
 
@@ -61,4 +55,19 @@ class SchoolAnnouncementController(
     }
 
 
+    @PatchMapping(AnnouncementApi.V1.SCHOOL_ANNOUNCEMENT_CATEGORY)
+    fun patchSchoolAnnouncementCategory(
+        @PathVariable schoolAnnouncementId: Long,
+        @RequestBody updateRequest: UpdateSchoolAnnouncementCategory.Request
+    ) {
+        announcementService.updateSchoolAnnouncementCategory(updateRequest, schoolAnnouncementId)
+    }
+
+    @PatchMapping(AnnouncementApi.V1.EDUCATION_OFFICE_ANNOUNCEMENT_CATEGORY)
+    fun patchEducationOfficeAnnouncementCategory(
+        @PathVariable educationOfficeAnnouncementId: Long,
+        @RequestBody updateRequest: UpdateEducationOfficeAnnouncementCategory.Request
+    ) {
+        announcementService.updateEducationOfficeAnnouncementCategory(updateRequest, educationOfficeAnnouncementId)
+    }
 }
