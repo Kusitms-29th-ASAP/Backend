@@ -1,5 +1,6 @@
 package com.asap.asapbackend.domain.classroom.domain.service
 
+import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomException
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
@@ -41,20 +42,14 @@ class ClassroomReader(
         }
     }
 
-    fun findClassroomMapByStudentId(studentIds: List<Long>): Map<Long, Classroom> {
-        return classroomRepository.findAllByStudentIds(studentIds).flatMap {classroom->
-            classroom.childClassroomSet.map {
-                it.student.id to classroom
+    fun findClassroomMapByChild(child: List<Child>): Map<Child, Classroom> {
+        return classroomRepository.findAllByChildIds(child.map { it.id }).flatMap {classroom->
+            child.map {
+                it to classroom
+            }.filter { (child, classroom)->
+                classroom.childClassroomSet.any { it.student.id == child.id }
             }
         }.toMap()
-//        return classroomRepository.findAllByStudentIds(studentIds).flatMap {classroom->
-//            classroom.getStudentIds().map {
-//                it to classroom
-//            }
-//        }.toMap()
-//        return classroomRepository.findAllByStudentIds(studentIds).associateBy {
-//            it.getStudentIds().find { studentId -> studentIds.contains(studentId) }!!
-//        }
     }
 
 

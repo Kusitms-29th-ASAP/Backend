@@ -15,4 +15,6 @@ interface PrimaryChildRepository: JpaRepository<PrimaryChild, Long> {
     where pc.userId = :userId
     """)
     fun findChildByUserId(userId: Long): Child
+
+    fun findByUserId(userId: Long) : PrimaryChild
 }

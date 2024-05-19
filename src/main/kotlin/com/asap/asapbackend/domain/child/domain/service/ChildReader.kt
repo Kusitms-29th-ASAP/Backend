@@ -4,6 +4,7 @@ import com.asap.asapbackend.domain.child.domain.exception.ChildException
 import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.child.domain.repository.ChildRepository
 import com.asap.asapbackend.domain.child.domain.repository.PrimaryChildRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,6 +24,12 @@ class ChildReader(
 
     fun findAllByParentId(parentId: Long): List<Child> {
         return childRepository.findByParentId(parentId)
+    }
+
+    fun findById(childId: Long): Child {
+        return findChild {
+            childRepository.findByIdOrNull(childId)
+        }
     }
 
     private fun findChild(function: () -> Child?): Child {
