@@ -31,8 +31,8 @@ class TeacherService(
             teacherValidator.validateTeacherCreatable(it.username)
             teacherAppender.appendTeacher(it)
         }
-        request.extractClassroom { schoolName, grade, className ->
-            val classroom = classroomReader.findByClassInfoAndSchoolName(grade, className, schoolName)
+        request.extractClassroom { schoolId, grade, className ->
+            val classroom = classroomReader.findByClassInfoAndSchoolId(grade, className, schoolId)
             classroom.addTeacher(teacher)
             classModifier.update(classroom)
         }

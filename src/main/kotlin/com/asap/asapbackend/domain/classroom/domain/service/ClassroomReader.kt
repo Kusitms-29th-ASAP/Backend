@@ -4,7 +4,6 @@ import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomException
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
 import com.asap.asapbackend.domain.classroom.domain.vo.Grade
-import com.asap.asapbackend.domain.school.domain.model.School
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,9 +23,9 @@ class ClassroomReader(
         }
     }
 
-    fun findByClassInfoAndSchoolName(grade: Grade, className: String, schoolName: String): Classroom {
+    fun findByClassInfoAndSchoolId(grade: Grade, className: String, schoolId: Long): Classroom {
         return findClassroom {
-            classroomRepository.findByGradeAndClassNameAndSchoolName(grade, className, schoolName)
+            classroomRepository.findByGradeAndClassNameAndSchoolId(grade, className, schoolId)
         }
     }
 
