@@ -24,11 +24,10 @@ class SchoolAnnouncementModifier(
         schoolAnnouncementCategoryRepository.findBySchoolAnnouncementIdAndClassroomId(
             schoolAnnouncement.id,
             classroom.id
-        )
-            ?.let {
-                it.updateCategory(announcementCategory)
-                schoolAnnouncementCategoryRepository.save(it)
-            } ?: schoolAnnouncementCategoryRepository.save(
+        )?.let {
+            it.updateCategory(announcementCategory)
+            schoolAnnouncementCategoryRepository.save(it)
+        } ?: schoolAnnouncementCategoryRepository.save(
             SchoolAnnouncementCategory(
                 classroom = classroom,
                 schoolAnnouncement = schoolAnnouncement,
