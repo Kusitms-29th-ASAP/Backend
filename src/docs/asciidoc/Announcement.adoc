@@ -1,0 +1,41 @@
+[[Announcement-API]]
+== 가정통신문 API
+
+[[GET-School-Announcement-List]]
+=== 학교가정통신문 목록 조회
+operation::SchoolAnnouncementControllerTest/getEducationOfficeAnnouncement[snippets='http-request,query-parameters,request-headers,http-response,response-fields']
+
+[[GET-School-Announcement-Detail]]
+
+=== 학교가정통신문 상세 조회
+
+operation::SchoolAnnouncementControllerTest/getEducationOfficeAnnouncementDetail[snippets='http-request,path-parameters,request-headers,http-response,response-fields']
+
+[[GET-Education-Office-Announcement-List]]
+
+=== 교육청가정통신문 목록 조회
+
+operation::SchoolAnnouncementControllerTest/getEducationOfficeAnnouncement[snippets='http-request,query-parameters,request-headers,http-response,response-fields']
+
+[[GET-Education-Office-Announcement-Detail]]
+
+=== 교육청가정통신문 상세 조회
+
+operation::SchoolAnnouncementControllerTest/getEducationOfficeAnnouncementDetail[snippets='http-request,path-parameters,request-headers,http-response,response-fields']
+
+[[ANNOUNCEMENT-CATEGORY]]
+=== 가정통신문 카테고리
+
+[cols="1,2", options="header"]
+|===
+| Category | Description
+| NONE | 미선택
+| MENU | 급식
+| INTERNAL_EXTERNAL_PROGRAM | 교내외 프로그램
+| SCHOOL_MANAGEMENT | 학교 운영
+| HEALTH | 보건
+| SCHOOL_SCHEDULE | 학교 일정
+| EDUCATION_BENEFIT | 교육 혜택
+| LIFE_SAFE | 생활/안전
+| ETC | 기타
+|===
