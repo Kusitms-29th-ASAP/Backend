@@ -4,7 +4,6 @@ import com.asap.asapbackend.domain.child.domain.exception.ChildException
 import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.child.domain.repository.ChildRepository
 import com.asap.asapbackend.domain.child.domain.repository.PrimaryChildRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,9 +17,7 @@ class ChildReader(
 
     fun findPrimaryChild(userId: Long): Child {
         return findChild {
-            primaryChildRepository.findByUserId(userId).let {
-                childRepository.findByIdOrNull(it.childId)
-            }
+            childRepository.findPrimaryChildByParentId(userId)
         }
     }
 
