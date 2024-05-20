@@ -8,6 +8,7 @@ import com.asap.asapbackend.domain.user.domain.service.SocialLoginHandler
 import com.asap.asapbackend.domain.user.domain.service.UserReader
 import com.asap.asapbackend.global.jwt.util.JwtProvider
 import com.asap.asapbackend.global.jwt.util.JwtRegistry
+import com.asap.asapbackend.global.jwt.util.TokenExtractor
 import com.asap.asapbackend.global.jwt.vo.Claims
 import com.asap.asapbackend.global.util.TransactionUtils
 import org.springframework.stereotype.Service
@@ -15,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional
 
 
 @Service
-@Transactional(readOnly = true)
 class AuthService(
     private val authHandler: SocialLoginHandler,
     private val userReader: UserReader,
     private val jwtProvider: JwtProvider,
-    private val jwtRegistry: JwtRegistry
+    private val jwtRegistry: JwtRegistry,
+    private val tokenExtractor: TokenExtractor
 ) {
 
     fun executeSocialLogin(socialLoginRequest: SocialLogin.Request, provider: Provider): SocialLogin.Response {
@@ -45,7 +46,8 @@ class AuthService(
 
     @Transactional
     fun reissueToken(reissueRequest: Reissue.Request): Reissue.Response {
-        val (accessToken, refreshToken) = jwtProvider.reissueToken(reissueRequest.refreshToken)
+        val requestRefreshToken = tokenExtractor.extractValue(reissueRequest.refreshToken)
+        val (accessToken, refreshToken) = jwtProvider.reissueToken(requestRefreshToken)
         return Reissue.Response(accessToken, refreshToken)
     }
 

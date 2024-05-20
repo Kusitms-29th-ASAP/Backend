@@ -13,7 +13,7 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
     private val jwtProperties: JwtProperties,
     private val jwtKeyFactory: JwtKeyFactory,
     private val jwtValidator: JwtValidator,
-    private val jwtRegistry: JwtRegistry
+    private val jwtRegistry: JwtRegistry,
 ) {
 
     fun generateAccessToken(user: Claims.UserClaims): String {
@@ -53,12 +53,10 @@ class JwtProvider( // 토큰을 캐싱하는 역할은 따로 제공할 예정
                 throw TokenException.TokenNotFoundException()
             }
             jwtValidator.validateToken(refreshToken, TokenType.REFRESH_TOKEN)
+            jwtRegistry.delete(refreshToken)
             val userClaims: Claims.UserClaims = extractUserClaimsFromToken(refreshToken, TokenType.REFRESH_TOKEN)
             val accessToken = generateAccessToken(userClaims)
             val newRefreshToken = generateRefreshToken(userClaims)
-
-            jwtRegistry.upsert(userClaims.userId to newRefreshToken)
-
             return@cacheByKey Pair(accessToken, newRefreshToken)
         }
     }
