@@ -14,23 +14,6 @@ services:
     environment:
       - TZ=Asia/Seoul
 
-  mysql:
-    image: mysql:latest
-    container_name: mysql
-    ports:
-      - "3306:3306"
-      - "33060:33060"
-    networks:
-      - asap-backend
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=${RDB_PASSWORD}
-      - MYSQL_DATABASE=${RDB_SCHEMA}
-      - MYSQL_USER=${RDB_USER}
-      - MYSQL_PASSWORD=${RDB_PASSWORD}
-    volumes:
-      - ./mysql-data:/var/lib/mysql
-
 networks:
   asap-backend:
     name: asap-backend
