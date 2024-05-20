@@ -5,6 +5,7 @@ import com.asap.asapbackend.TOKEN_HEADER_NAME
 import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.child.application.ChildService
 import com.asap.asapbackend.domain.child.application.dto.ChangeChildInfo
+import com.asap.asapbackend.domain.child.application.dto.ChangePrimaryChild
 import com.asap.asapbackend.domain.child.application.dto.GetAllChildren
 import com.asap.asapbackend.domain.child.application.dto.GetChild
 import com.asap.asapbackend.domain.menu.domain.model.Allergy
@@ -73,7 +74,7 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
     fun getChild() {
         //given
         val childId = generateFixture<Long>()
-        val getChildRequest: GetChild.Request = generateFixture{
+        val getChildRequest: GetChild.Request = generateFixture {
             it.setExp(GetChild.Request::childId, childId)
         }
         val getChild: GetChild.Response = generateFixture {
@@ -85,7 +86,7 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
             it.setExp(GetChild.Response::allergies, listOf(Allergy.EGG, Allergy.PEANUT))
         }
         given(childService.getChild(getChildRequest)).willReturn(getChild)
-        val request = RestDocumentationRequestBuilders.get(ChildApi.V1.CHILD,childId.toString())
+        val request = RestDocumentationRequestBuilders.get(ChildApi.V1.CHILD, childId.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
         //when
@@ -122,7 +123,7 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
             it.setExp(ChangeChildInfo.Request::birthday, LocalDate.parse("2003-03-24"))
             it.setExp(ChangeChildInfo.Request::allergies, listOf(Allergy.EGG, Allergy.PEANUT))
         }
-        val request = RestDocumentationRequestBuilders.get(ChildApi.V1.CHILD,childId.toString())
+        val request = RestDocumentationRequestBuilders.get(ChildApi.V1.CHILD, childId.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
             .content(objectMapper.writeValueAsString(changeChildInfo))
@@ -142,6 +143,34 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("childName").description("자녀 이름"),
                         fieldWithPath("birthday").description("생일"),
                         fieldWithPath("allergies").description("알러지")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("선택한 자녀 변경")
+    fun changePrimaryChild() {
+        //given
+        val childId = generateFixture<Long>()
+        val changePrimaryChild = generateFixture{
+            it.setExp(ChangePrimaryChild.Request::childId,childId)
+        }
+        val request = RestDocumentationRequestBuilders.put(ChildApi.V1.PRIMARY_CHILD)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+            .content(objectMapper.writeValueAsString(changePrimaryChild))
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("Access Token")
+                    ),
+                    requestFields(
+                        fieldWithPath("childId").description("자녀 ID")
                     )
                 )
             )

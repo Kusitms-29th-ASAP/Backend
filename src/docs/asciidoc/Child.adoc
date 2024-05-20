@@ -11,3 +11,6 @@ operation::ChildControllerTest/getChild[]
 === 자녀 정보 변경
 operation::ChildControllerTest/changeChildInfo[]
 
+=== 선택한 자녀 변경
+operation::ChildControllerTest/changePrimaryChild[]
+
