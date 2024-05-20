@@ -1,6 +1,7 @@
 package com.asap.asapbackend.domain.todo.presentation
 
 import com.asap.asapbackend.domain.todo.application.TodoService
+import com.asap.asapbackend.domain.todo.application.dto.ChangeTodoStatus
 import com.asap.asapbackend.domain.todo.application.dto.CreateTodo
 import com.asap.asapbackend.domain.todo.application.dto.GetTodo
 import org.springframework.web.bind.annotation.*
@@ -21,7 +22,7 @@ class TodoController(
     }
 
     @PutMapping(TodoApi.V1.BASE_URL)
-    fun changeStatus(@RequestParam todoId: Long){
-        todoService.changeStatus(todoId)
+    fun changeStatus(@RequestBody request: ChangeTodoStatus.Request){
+        todoService.changeStatus(request.todoId)
     }
 }
