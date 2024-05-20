@@ -2,9 +2,10 @@ package com.asap.asapbackend.batch.announcement
 
 import com.asap.asapbackend.domain.announcement.domain.model.EducationOfficeAnnouncement
 import com.asap.asapbackend.domain.announcement.domain.model.SchoolAnnouncement
-import com.asap.asapbackend.domain.announcement.domain.service.AnnouncementAppender
+import com.asap.asapbackend.domain.announcement.domain.service.SchoolAnnouncementAppender
 import com.asap.asapbackend.domain.announcement.domain.service.SchoolAnnouncementReader
 import com.asap.asapbackend.global.util.ImageToTextConverter
+import com.asap.asapbackend.global.util.TextKeywordExtractor
 import com.asap.asapbackend.global.util.TextSummaryHelper
 import com.asap.asapbackend.global.util.TransactionUtils
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -19,7 +20,8 @@ class AnnouncementScheduler(
     private val educationOfficeAnnouncementInfoProvider: EducationOfficeAnnouncementInfoProvider,
     private val imageToTextConverter: ImageToTextConverter,
     private val textSummaryHelper: TextSummaryHelper,
-    private val announcementAppender: AnnouncementAppender,
+    private val textKeywordExtractor: TextKeywordExtractor,
+    private val schoolAnnouncementAppender: SchoolAnnouncementAppender,
     private val schoolAnnouncementReader: SchoolAnnouncementReader
 ) {
     //     매 평일 9시부터 18시까지 1시간마다 실행
@@ -35,22 +37,19 @@ class AnnouncementScheduler(
 
             val announcements = announcementDataContainer.schoolAnnouncementInfo
                 .map {
-                    val textFromImage = imageToTextConverter.convertImageToText(it.imageUrls)
-                    var summarizedText = listOf<String>()
-                    if (textFromImage.isNotEmpty()) {
-                        summarizedText = textSummaryHelper.summarizeText(textFromImage)
-                    }
+                    val (summarizedText, keywords) = convertImageToSummariesAndKeywords(it.imageUrls)
                     return@map SchoolAnnouncement(
                         schoolAnnouncementPage = it.schoolAnnouncementPage,
                         index = it.index,
                         title = it.title,
                         imageUrls = it.imageUrls,
-                        summaries = summarizedText
+                        summaries = summarizedText,
+                        keywords = keywords
                     )
                 }
 
             TransactionUtils.writable {
-                announcementAppender.addSchoolAnnouncements(announcements.toSet())
+                schoolAnnouncementAppender.addSchoolAnnouncements(announcements.toSet())
             }
         } while (announcementDataContainer.hasNext)
     }
@@ -68,22 +67,29 @@ class AnnouncementScheduler(
 
             val announcements = announcementDataContainer.educationOfficeAnnouncementInfo
                 .map {
-                    val textFromImage = imageToTextConverter.convertImageToText(it.imageUrls)
-                    var summarizedText = listOf<String>()
-                    if (textFromImage.isNotEmpty()) {
-                        summarizedText = textSummaryHelper.summarizeText(textFromImage)
-                    }
+                    val (summarizedText, keywords) = convertImageToSummariesAndKeywords(it.imageUrls)
                     return@map EducationOfficeAnnouncement(
                         idx = it.index,
                         title = it.title,
                         imageUrls = it.imageUrls,
-                        summaries = summarizedText
+                        summaries = summarizedText,
+                        keywords = keywords
                     )
                 }
 
             TransactionUtils.writable {
-                announcementAppender.addEducationOfficeAnnouncements(announcements.toSet())
+                schoolAnnouncementAppender.addEducationOfficeAnnouncements(announcements.toSet())
             }
         } while (announcementDataContainer.hasNext)
+    }
+
+    private fun convertImageToSummariesAndKeywords(imageUrls: List<String>): Pair<List<String>, List<String>> {
+        val textFromImage = imageToTextConverter.convertImageToText(imageUrls)
+        val summarizedText =
+            textFromImage.takeIf { it.isNotEmpty() }?.let { textSummaryHelper.summarizeText(it) }
+                ?: listOf()
+        val keywords = textFromImage.takeIf { it.isNotEmpty() }?.let { textKeywordExtractor.extractKeywords(it) }
+            ?: listOf()
+        return summarizedText to keywords
     }
 }

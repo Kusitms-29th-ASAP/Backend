@@ -17,6 +17,10 @@ sealed class UtilException(
         message: String = "텍스트 요약 중 오류가 발생했습니다.",
     ) : UtilException(message, 2, HttpStatus.INTERNAL_SERVER_ERROR)
 
+    class TextKeywordExtractionException(
+        message: String = "텍스트 키워드 추출 중 오류가 발생했습니다.",
+    ) : UtilException(message, 3, HttpStatus.INTERNAL_SERVER_ERROR)
+
     companion object {
         private const val ERROR_CODE = "UTIL_ERROR"
     }
