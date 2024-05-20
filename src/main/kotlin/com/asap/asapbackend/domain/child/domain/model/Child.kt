@@ -29,16 +29,21 @@ class Child(
     )
     var gender: Gender = gender
 
-    val birthday: LocalDate = birthday
+    var birthday: LocalDate = birthday
 
     @Column(
         nullable = false,
         columnDefinition = "json"
     )
     @JdbcTypeCode(SqlTypes.JSON)
-    val allergies: MutableSet<Allergy> = allergies.toMutableSet()
-
+    var allergies: MutableSet<Allergy> = allergies.toMutableSet()
 
     @ManyToOne(fetch = FetchType.LAZY)
     val parent: User = parent
+
+    fun changeInfo(childName: String,birthday: LocalDate,allergies: List<Allergy>) {
+        this.name=childName
+        this.birthday=birthday
+        this.allergies=allergies.toMutableSet()
+    }
 }

@@ -34,7 +34,6 @@ class Classroom(
     @ManyToOne(fetch = FetchType.LAZY)
     val school: School = school
 
-
     @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
     val childClassroomSet: MutableSet<ChildClassroom> = mutableSetOf()
 

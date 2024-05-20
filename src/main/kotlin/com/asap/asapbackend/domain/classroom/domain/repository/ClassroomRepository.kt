@@ -35,4 +35,13 @@ interface ClassroomRepository : JpaRepository<Classroom, Long> {
         join ChildClassroom cc on cc.classroom.id = c.id and cc.student.id = :studentId
     """)
     fun findByStudentId(studentId: Long): Classroom?
+
+    @Query("""
+        select class
+        from Classroom class
+        join fetch class.school
+        join ChildClassroom cc on class.id = cc.classroom.id
+        where cc.student.id in :childIds
+    """)
+    fun findAllByChildIds(childIds: List<Long>): List<Classroom>
 }

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface PrimaryChildRepository: JpaRepository<PrimaryChild, Long> {
     fun existsByUserId(userId: Long): Boolean
 
-    fun findByUserId(userId: Long): PrimaryChild
+    fun findByUserId(userId: Long) : PrimaryChild?
 }
