@@ -27,6 +27,7 @@ class PrimaryChild(
         nullable = false
     )
     var childId: Long = childId
+        protected set
 
     fun changePrimaryChild(childId: Long){
         this.childId=childId
