@@ -22,4 +22,6 @@ include::Timetable.adoc[]
 
 include::Menu.adoc[]
 
+include::Announcement.adoc[]
+
 include::Child.adoc[]

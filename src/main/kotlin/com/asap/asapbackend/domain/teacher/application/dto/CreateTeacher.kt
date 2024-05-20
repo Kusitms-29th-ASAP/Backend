@@ -7,7 +7,7 @@ class CreateTeacher{
 
     data class Request(
         val name: String,
-        val schoolName: String,
+        val schoolId: Long, // 학교 id로 해야함
         val grade: Grade,
         val className: String,
         val username: String, // 아이디
@@ -21,8 +21,8 @@ class CreateTeacher{
             )
         }
 
-        fun extractClassroom(classroomQuery: (String, Grade, String) -> Unit) {
-            classroomQuery(schoolName, grade, className)
+        fun extractClassroom(classroomQuery: (Long, Grade, String) -> Unit) {
+            classroomQuery(schoolId, grade, className)
         }
     }
 }

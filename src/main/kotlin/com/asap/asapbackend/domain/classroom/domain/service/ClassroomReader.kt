@@ -24,9 +24,9 @@ class ClassroomReader(
         }
     }
 
-    fun findByClassInfoAndSchoolName(grade: Grade, className: String, schoolName: String): Classroom {
+    fun findByClassInfoAndSchoolId(grade: Grade, className: String, schoolId: Long): Classroom {
         return findClassroom {
-            classroomRepository.findByGradeAndClassNameAndSchoolName(grade, className, schoolName)
+            classroomRepository.findByGradeAndClassNameAndSchoolId(grade, className, schoolId)
         }
     }
 

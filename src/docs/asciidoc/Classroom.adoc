@@ -12,5 +12,5 @@ operation::ClassroomControllerTest/getTodayClassroomAnnouncement[]
 === 알림장 전체 불러오기
 operation::ClassroomControllerTest/getClassroomAnnouncements[]
 
-== 알림장 상세 보기
+=== 알림장 상세 보기
 operation::ClassroomControllerTest/getClassroomAnnouncementDetail[]

@@ -20,6 +20,8 @@ import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
@@ -95,6 +97,9 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
                     requestHeaders(
                         headerWithName("Authorization").description("Access Token")
                     ),
+                    pathParameters(
+                        parameterWithName("childId").description("자녀 ID")
+                    ),
                     responseFields(
                         fieldWithPath("childName").description("자녀 이름"),
                         fieldWithPath("schoolName").description("학교 이름"),
@@ -129,6 +134,9 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
                 resultHandler.document(
                     requestHeaders(
                         headerWithName("Authorization").description("Access Token")
+                    ),
+                    pathParameters(
+                        parameterWithName("childId").description("자녀 ID")
                     ),
                     requestFields(
                         fieldWithPath("childName").description("자녀 이름"),

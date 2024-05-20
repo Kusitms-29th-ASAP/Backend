@@ -1,5 +1,5 @@
-[[Teacher-API]]
-== School API
+[[School-API]]
+== 학교 API
 
 [[Create-Teacher]]
 === 키워드로 학교 조회
