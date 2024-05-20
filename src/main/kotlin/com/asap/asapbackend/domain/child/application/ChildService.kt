@@ -4,6 +4,7 @@ import com.asap.asapbackend.domain.child.application.dto.ChangeChildInfo
 import com.asap.asapbackend.domain.child.application.dto.ChangePrimaryChild
 import com.asap.asapbackend.domain.child.application.dto.GetAllChildren
 import com.asap.asapbackend.domain.child.application.dto.GetChild
+import com.asap.asapbackend.domain.child.domain.exception.ChildException
 import com.asap.asapbackend.domain.child.domain.service.ChildModifier
 import com.asap.asapbackend.domain.child.domain.service.ChildReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
@@ -29,20 +30,33 @@ class ChildService(
     }
 
     fun getChild(request: GetChild.Request): GetChild.Response {
+        val userId = getCurrentUserId()
         val child = childReader.findById(request.childId)
-        val classroom = classroomReader.findByStudent(request.childId)
-        return GetChild.toResponse(child, classroom)
+        if(childReader.findAllByParentId(userId).contains(child)){
+            val classroom = classroomReader.findByStudent(request.childId)
+            return GetChild.toResponse(child, classroom)
+        }else {
+            throw ChildException.ChildAccessDeniedException()
+        }
     }
 
     @Transactional
     fun changeChildInfo(childId: Long, request: ChangeChildInfo.Request) {
+        val userId = getCurrentUserId()
         val child = childReader.findById(childId)
-        childModifier.changeInfo(child, request)
+        childReader.findAllByParentId(userId).contains(child)
+        if(childReader.findAllByParentId(userId).contains(child)){
+            child.changeInfo(request.childName, request.birthday, request.allergies)
+            childModifier.changeInfo(child)
+        }else {
+            throw ChildException.ChildAccessDeniedException()
+        }
     }
 
     @Transactional
     fun changePrimaryChild (request: ChangePrimaryChild.Request){
         val userId = getCurrentUserId()
+
         childModifier.changePrimaryChild(userId,request.childId)
     }
 }

@@ -12,5 +12,5 @@ interface ChildRepository: JpaRepository<Child, Long> {
     """)
     fun findPrimaryChildByParentId(parentId: Long) : Child?
 
-    fun findByParentId(parentId: Long) : List<Child>
+    fun findAllByParentId(parentId: Long) : List<Child>
 }
