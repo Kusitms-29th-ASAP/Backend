@@ -22,7 +22,7 @@ class ChildController(
     }
 
     @PutMapping(ChildApi.V1.CHILD)
-    fun changeChileInfo(
+    fun changeChildInfo(
         @PathVariable childId: Long,
         @RequestBody request: ChangeChildInfo.Request
     ) {

@@ -1,0 +1,13 @@
+[[Child-API]]
+== 마이페이지 자녀 API
+
+[[Get-Child]]
+=== 자녀 전체 불러오기
+operation::ChildControllerTest/getAllChildren[]
+
+=== 단일 자녀 정보 불러오기
+operation::ChildControllerTest/getChild[]
+
+=== 자녀 정보 변경
+operation::ChildControllerTest/changeChildInfo[]
+

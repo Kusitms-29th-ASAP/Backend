@@ -12,7 +12,7 @@ class ChildModifier (
     private val primaryChildRepository: PrimaryChildRepository
 ) {
     fun changeInfo(child: Child, request: ChangeChildInfo.Request) {
-        child.changeInfo(request.name,request.birthday,request.allergies)
+        child.changeInfo(request.childName,request.birthday,request.allergies)
         childRepository.save(child)
     }
 

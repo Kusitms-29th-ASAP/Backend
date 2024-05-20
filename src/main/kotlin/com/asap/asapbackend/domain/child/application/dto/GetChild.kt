@@ -10,11 +10,11 @@ class GetChild {
         val childId : Long
     )
     data class Response(
-        val name: String,
+        val childName: String,
         val schoolName: String,
         val grade: Int,
         val classroomName: String,
-        val birthDay : LocalDate,
+        val birthday : LocalDate,
         val allergies : List<Allergy>
     )
     companion object{

@@ -21,3 +21,5 @@ include::Todo.adoc[]
 include::Timetable.adoc[]
 
 include::Menu.adoc[]
+
+include::Child.adoc[]

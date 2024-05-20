@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 class ChangeChildInfo {
     data class Request (
-        val name: String,
+        val childName: String,
         val birthday: LocalDate,
         val allergies: List<Allergy>
     )
