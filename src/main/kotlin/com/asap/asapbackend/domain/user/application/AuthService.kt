@@ -24,14 +24,20 @@ class AuthService(
 ) {
 
     fun executeSocialLogin(socialLoginRequest: SocialLogin.Request, provider: Provider): SocialLogin.Response {
-        val response = authHandler.handle(SocialLoginHandler.Request(provider,socialLoginRequest.accessToken))
+        val response = authHandler.handle(SocialLoginHandler.Request(provider, socialLoginRequest.accessToken))
         return TransactionUtils.writable {
             return@writable userReader.findBySocialIdOrNull(response.socialId)?.let {
                 val accessToken = jwtProvider.generateAccessToken(Claims.UserClaims(it.id))
                 val refreshToken = jwtProvider.generateRefreshToken(Claims.UserClaims(it.id))
                 SocialLogin.Response.Success(accessToken, refreshToken)
             } ?: run {
-                val registrationToken = jwtProvider.generateRegistrationToken(Claims.RegistrationClaims(response.socialId, provider))
+                val registrationToken =
+                    jwtProvider.generateRegistrationToken(Claims.RegistrationClaims(
+                        socialId = response.socialId,
+                        provider=provider,
+                        name = response.name,
+                        email = response.email
+                    ))
                 SocialLogin.Response.UnRegistered(registrationToken)
             }
         }
