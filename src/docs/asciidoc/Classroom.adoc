@@ -14,3 +14,10 @@ operation::ClassroomControllerTest/getClassroomAnnouncements[]
 
 === 알림장 상세 보기
 operation::ClassroomControllerTest/getClassroomAnnouncementDetail[]
+
+
+[[GET-School-Classrooms]]
+=== 학교의 학급 목록 불러오기
+
+operation::ClassroomControllerTest/getSchoolClassrooms[snippets='http-request,path-parameters,http-response,response-fields']
+
