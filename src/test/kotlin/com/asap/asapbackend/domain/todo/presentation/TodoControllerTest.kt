@@ -4,9 +4,7 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.TOKEN_HEADER_NAME
 import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.todo.application.TodoService
-import com.asap.asapbackend.domain.todo.application.dto.ChangeTodoStatus
 import com.asap.asapbackend.domain.todo.application.dto.CreateTodo
-import com.asap.asapbackend.domain.todo.application.dto.DeleteTodo
 import com.asap.asapbackend.domain.todo.application.dto.GetTodo
 import com.asap.asapbackend.domain.todo.domain.vo.Status
 import com.asap.asapbackend.domain.todo.domain.vo.TodoType
@@ -22,8 +20,7 @@ import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
-import org.springframework.restdocs.request.RequestDocumentation.queryParameters
+import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
@@ -111,12 +108,8 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
     @DisplayName("상태 변경(체크표시)")
     fun changeStatus() {
         val todoId = generateFixture<Long>()
-        val changeStatusRequest : ChangeTodoStatus.Request = generateFixture{
-            it.setExp(ChangeTodoStatus.Request::todoId,todoId)
-        }
         //given
-        val request = RestDocumentationRequestBuilders.put(TodoApi.V1.BASE_URL)
-            .content(objectMapper.writeValueAsString(changeStatusRequest))
+        val request = RestDocumentationRequestBuilders.put(TodoApi.V1.TODO_DETAIL, todoId)
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
         //when
@@ -128,8 +121,8 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
                     requestHeaders(
                         headerWithName("Authorization").description("Access Token")
                     ),
-                    requestFields(
-                        fieldWithPath("todoId").description("todo ID")
+                    pathParameters(
+                        parameterWithName("todoId").description("할 일 ID")
                     )
                 )
             )
@@ -139,12 +132,8 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
     @DisplayName("할 일 삭제")
     fun deleteTodo() {
         val todoId = generateFixture<Long>()
-        val deleteTodoRequest : DeleteTodo.Request = generateFixture{
-            it.setExp(DeleteTodo.Request::todoId,todoId)
-        }
         //given
-        val request = RestDocumentationRequestBuilders.delete(TodoApi.V1.BASE_URL)
-            .content(objectMapper.writeValueAsString(deleteTodoRequest))
+        val request = RestDocumentationRequestBuilders.delete(TodoApi.V1.TODO_DETAIL, todoId)
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
         //when
@@ -156,8 +145,8 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
                     requestHeaders(
                         headerWithName("Authorization").description("Access Token")
                     ),
-                    requestFields(
-                        fieldWithPath("todoId").description("todo ID")
+                    pathParameters(
+                        parameterWithName("todoId").description("할 일 ID")
                     )
                 )
             )
