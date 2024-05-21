@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service
 class TodoRemover(
     private val todoRepository: TodoRepository
 ) {
-    fun delete(todo: Todo?){
-        todo?.let {
+    fun delete(todo: Todo){
+        todo.let {
             todoRepository.delete(it)
         }
     }

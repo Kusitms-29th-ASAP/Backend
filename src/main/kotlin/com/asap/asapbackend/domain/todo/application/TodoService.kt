@@ -49,18 +49,19 @@ class TodoService(
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
         val todo = todoReader.findByIdOrNull(todoId)
-        if(todoReader.findAllByChildId(childId).contains(todo)){
+        if (todoReader.findAllByChildId(childId).contains(todo)) {
             todoModifier.changeTodoStatus(todo)
         }
     }
 
     @Transactional
-    fun deleteTodo(todoId: Long){
+    fun deleteTodo(todoId: Long) {
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
-        val todo = todoReader.findByIdOrNull(todoId)
-        if(todoReader.findAllByChildId(childId).contains(todo)){
-            todoRemover.delete(todo)
+        todoReader.findByIdOrNull(todoId)?.let { todo ->
+            if (todoReader.findAllByChildId(childId).contains(todo) && !todo.isAssigned) {
+                todoRemover.delete(todo)
+            }
         }
     }
 }
