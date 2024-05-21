@@ -9,9 +9,7 @@ class TodoRemover(
     private val todoRepository: TodoRepository
 ) {
     fun delete(todo: Todo) {
-        todo.let {
-            todoRepository.delete(it)
-        }
+        todoRepository.delete(todo)
     }
 
     fun deleteByUserIdAndTodoId(userId: Long, todoId: Long) {
