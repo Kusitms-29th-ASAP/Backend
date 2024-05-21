@@ -29,4 +29,9 @@ class User(
 
     var email: String = email
         protected set
+
+    fun changeUserInfo(name: String,phoneNumber: PhoneNumber){
+        this.name=name
+        this.phoneNumber=phoneNumber
+    }
 }

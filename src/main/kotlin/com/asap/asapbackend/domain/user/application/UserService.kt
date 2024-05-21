@@ -3,9 +3,11 @@ package com.asap.asapbackend.domain.user.application
 import com.asap.asapbackend.domain.child.domain.service.ChildAppender
 import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
+import com.asap.asapbackend.domain.user.application.dto.ChangeUserInfo
 import com.asap.asapbackend.domain.user.application.dto.CreateUser
 import com.asap.asapbackend.domain.user.application.dto.GetUser
 import com.asap.asapbackend.domain.user.domain.service.UserAppender
+import com.asap.asapbackend.domain.user.domain.service.UserModifier
 import com.asap.asapbackend.domain.user.domain.service.UserReader
 import com.asap.asapbackend.global.jwt.util.JwtProvider
 import com.asap.asapbackend.global.jwt.util.TokenExtractor
@@ -23,7 +25,8 @@ class UserService(
     private val classroomReader: ClassroomReader,
     private val childAppender: ChildAppender,
     private val classModifier: ClassModifier,
-    private val userReader: UserReader
+    private val userReader: UserReader,
+    private val userModifier: UserModifier
 ) {
 
     @Transactional
@@ -51,6 +54,14 @@ class UserService(
     fun getUser() : GetUser.Response {
         val userId = getCurrentUserId()
         val user = userReader.findById(userId)
-        return GetUser.Response(user.name,user.phoneNumber,user.email)
+        return GetUser.Response(user.name,user.phoneNumber.number,user.email)
+    }
+
+    @Transactional
+    fun changeUserInfo(request: ChangeUserInfo.Request){
+        val userId = getCurrentUserId()
+        val user = userReader.findById(userId)
+        user.changeUserInfo(request.userName,request.phoneNumber)
+        userModifier.update(user)
     }
 }
