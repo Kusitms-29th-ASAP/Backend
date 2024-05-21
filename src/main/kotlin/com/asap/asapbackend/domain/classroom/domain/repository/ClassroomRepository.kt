@@ -44,4 +44,7 @@ interface ClassroomRepository : JpaRepository<Classroom, Long> {
         where cc.student.id in :childIds
     """)
     fun findAllByChildIds(childIds: List<Long>): List<Classroom>
+
+
+    fun findAllBySchoolId(schoolId: Long): List<Classroom>
 }

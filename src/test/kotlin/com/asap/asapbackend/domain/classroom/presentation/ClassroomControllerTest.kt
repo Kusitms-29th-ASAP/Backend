@@ -4,11 +4,9 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.TOKEN_HEADER_NAME
 import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.classroom.application.ClassroomService
-import com.asap.asapbackend.domain.classroom.application.dto.CreateClassroomAnnouncement
-import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncementDetail
-import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncements
-import com.asap.asapbackend.domain.classroom.application.dto.GetTodayClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.*
 import com.asap.asapbackend.domain.classroom.domain.vo.AnnouncementDescription
+import com.asap.asapbackend.domain.classroom.domain.vo.Grade
 import com.asap.asapbackend.domain.todo.domain.vo.TodoType
 import com.asap.asapbackend.fixture.generateFixture
 import com.navercorp.fixturemonkey.kotlin.setExp
@@ -22,6 +20,8 @@ import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
 import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
+import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDate
 
@@ -166,12 +166,12 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
                 )
             )
         }
-
         given(classroomService.getClassroomAnnouncementDetail(classroomAnnouncementId))
             .willReturn(getClassroomAnnouncementDetail)
-        val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.ANNOUNCEMENT_DETAIL,classroomAnnouncementId.toString())
+        val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.ANNOUNCEMENT_DETAIL, classroomAnnouncementId)
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+
         //when
         val result = mockMvc.perform(request)
         //then
@@ -179,7 +179,7 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
             .andDo(
                 resultHandler.document(
                     requestHeaders(
-                        headerWithName("Authorization").description("Access Token")
+                        headerWithName("Authorization").description("학부모 access Token")
                     ),
                     responseFields(
                         fieldWithPath("teacherName").description("선생님 성함"),
@@ -189,4 +189,44 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
                 )
             )
     }
+
+    @Test
+    @DisplayName("학교 id 기반 학교별 반 불러오기")
+    fun getSchoolClassrooms() {
+        val schoolId = generateFixture<Long>()
+        //given
+        val getSchoolClassroomResponse: GetSchoolClassroom.Response = generateFixture {
+            it.setExp(
+                GetSchoolClassroom.Response::classrooms, listOf(
+                    GetSchoolClassroom.ClassroomInfo(Grade.FIRST, listOf("1", "2", "3", "4")),
+                    GetSchoolClassroom.ClassroomInfo(Grade.SECOND, listOf("1", "2", "3", "4")),
+                    GetSchoolClassroom.ClassroomInfo(Grade.THIRD, listOf("1", "2", "3", "4")),
+                    GetSchoolClassroom.ClassroomInfo(Grade.FOURTH, listOf("1", "2", "3", "4")),
+                    GetSchoolClassroom.ClassroomInfo(Grade.FIFTH, listOf("1", "2", "3", "4")),
+                    GetSchoolClassroom.ClassroomInfo(Grade.SIXTH, listOf("1", "2", "3", "4"))
+                )
+            )
+        }
+
+        given(classroomService.getSchoolClassrooms(GetSchoolClassroom.Request(schoolId)))
+            .willReturn(getSchoolClassroomResponse)
+        val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.SCHOOL_CLASSROOM, schoolId)
+            .contentType(MediaType.APPLICATION_JSON)
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    pathParameters(
+                        parameterWithName("schoolId").description("학교 id")
+                    ),
+                    responseFields(
+                        fieldWithPath("classrooms[].classNumbers").description("반 이름"),
+                        fieldWithPath("classrooms[].grade").description("학년")
+                    )
+                )
+            )
+    }
+
 }

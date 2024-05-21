@@ -53,6 +53,10 @@ class ClassroomReader(
     }
 
 
+    fun findBySchoolId(schoolId: Long): List<Classroom> {
+        return classroomRepository.findAllBySchoolId(schoolId)
+    }
+
     private fun findClassroom(function: () -> Classroom?): Classroom {
         return function() ?: throw ClassroomException.ClassroomNotFoundException()
     }
