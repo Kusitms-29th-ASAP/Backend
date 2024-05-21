@@ -14,7 +14,7 @@ class GetAllChildren {
         val childName: String,
         val schoolName: String,
         val grade: Int,
-        val className: String,
+        val classroomName: String,
     )
     companion object {
         fun convertClassroomMapByChildToChildInfoList(classroomMap: Map<Child, Classroom> ,primaryChild : Child): List<ChildInfo> {
