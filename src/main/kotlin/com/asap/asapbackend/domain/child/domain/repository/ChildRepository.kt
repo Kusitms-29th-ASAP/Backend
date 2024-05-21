@@ -11,4 +11,6 @@ interface ChildRepository: JpaRepository<Child, Long> {
         join PrimaryChild pc on c.id = pc.childId and pc.userId = :parentId
     """)
     fun findPrimaryChildByParentId(parentId: Long) : Child?
+
+    fun findAllByParentId(parentId: Long) : List<Child>
 }

@@ -4,6 +4,7 @@ import com.asap.asapbackend.AbstractRestDocsConfigurer
 import com.asap.asapbackend.TOKEN_HEADER_NAME
 import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.todo.application.TodoService
+import com.asap.asapbackend.domain.todo.application.dto.ChangeTodoStatus
 import com.asap.asapbackend.domain.todo.application.dto.CreateTodo
 import com.asap.asapbackend.domain.todo.application.dto.GetTodo
 import com.asap.asapbackend.domain.todo.domain.vo.Status
@@ -108,9 +109,14 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
     @Test
     @DisplayName("상태 변경(체크표시)")
     fun changeStatus() {
+        val todoId = generateFixture<Long>()
+        val changeStatusRequest : ChangeTodoStatus.Request = generateFixture{
+            it.setExp(ChangeTodoStatus.Request::todoId,todoId)
+        }
         //given
         val request = RestDocumentationRequestBuilders.put(TodoApi.V1.BASE_URL)
-            .queryParam("todoId", "1")
+            .content(objectMapper.writeValueAsString(changeStatusRequest))
+            .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
         //when
         val result = mockMvc.perform(request)
@@ -121,8 +127,8 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
                     requestHeaders(
                         headerWithName("Authorization").description("Access Token")
                     ),
-                    queryParameters(
-                        parameterWithName("todoId").description("todo Id")
+                    requestFields(
+                        fieldWithPath("todoId").description("todo ID")
                     )
                 )
             )
