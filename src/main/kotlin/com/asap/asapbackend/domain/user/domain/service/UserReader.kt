@@ -1,7 +1,9 @@
 package com.asap.asapbackend.domain.user.domain.service
 
+import com.asap.asapbackend.domain.user.domain.exception.UserException
 import com.asap.asapbackend.domain.user.domain.model.User
 import com.asap.asapbackend.domain.user.domain.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,6 +15,12 @@ class UserReader(
     }
 
     fun findById(id: Long): User {
-        return userRepository.findById(id).get()
+        return findUser {
+            userRepository.findByIdOrNull(id)
+        }
+    }
+
+    private fun findUser(function: () -> User?): User {
+        return function() ?: throw UserException.UserNotFoundException()
     }
 }
