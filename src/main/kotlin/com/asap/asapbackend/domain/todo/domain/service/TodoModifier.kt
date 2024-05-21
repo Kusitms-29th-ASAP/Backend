@@ -8,10 +8,8 @@ import org.springframework.stereotype.Service
 class TodoModifier(
     private val todoRepository: TodoRepository,
 ){
-    fun changeTodoStatus(todo: Todo?) {
-        todo?.let {
-            it.changeStatus()
-            todoRepository.save(it)
-        }
+    fun changeTodoStatus(todo: Todo) {
+        todo.changeStatus()
+        todoRepository.save(todo)
     }
 }

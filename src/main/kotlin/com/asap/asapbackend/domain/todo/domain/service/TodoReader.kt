@@ -14,11 +14,11 @@ class TodoReader(
         return todoRepository.findAllByChildIdAndDeadlineAfter(childId, date.minusDays(1))
     }
 
-    fun findAllByChildId(todoId: Long) : List<Todo> {
-        return todoRepository.findAllByChildId(todoId)
-    }
-
     fun findByIdOrNull(todoId: Long) : Todo? {
         return todoRepository.findByIdOrNull(todoId)
+    }
+
+    fun findAllByUserId(userId: Long) : List<Todo> {
+        return todoRepository.findAllByUserId(userId)
     }
 }
