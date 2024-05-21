@@ -20,10 +20,13 @@ class CreateUser {
         val children: List<ChildDetail>
     ){
         fun extractUser(registrationExtractor: (String) -> Claims.RegistrationClaims): User {
+            val userInfo = registrationExtractor(registrationToken)
             return User(
-                registrationExtractor(registrationToken).let { SocialInfo(it.socialId, it.provider) },
+                SocialInfo(userInfo.socialId, userInfo.provider),
                 phoneNumber,
-                agreement
+                agreement,
+                userInfo.name,
+                userInfo.email
             )
         }
 

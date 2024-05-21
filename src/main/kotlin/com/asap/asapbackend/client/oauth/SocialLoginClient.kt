@@ -13,7 +13,9 @@ interface SocialLoginClient {
 
 
     data class Response(
-        val socialId: String
+        val socialId: String,
+        val email: String,
+        val name: String
     )
 
 }

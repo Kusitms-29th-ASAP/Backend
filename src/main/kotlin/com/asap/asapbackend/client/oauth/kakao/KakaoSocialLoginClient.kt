@@ -13,6 +13,10 @@ class KakaoSocialLoginClient(
     override fun handle(request: SocialLoginClient.Request): SocialLoginClient.Response {
         val kakaoUserInfo = kakaoOAuthClient.retrieveUserInfo(request.accessToken)
             ?: throw AuthException.AuthFailedException()
-        return SocialLoginClient.Response(kakaoUserInfo.id)
+        return SocialLoginClient.Response(
+            socialId = kakaoUserInfo.id,
+            email = kakaoUserInfo.getEmail(),
+            name = kakaoUserInfo.getName()
+        )
     }
 }
