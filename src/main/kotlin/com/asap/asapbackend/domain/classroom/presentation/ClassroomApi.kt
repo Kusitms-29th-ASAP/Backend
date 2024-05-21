@@ -8,5 +8,6 @@ object ClassroomApi {
         const val ANNOUNCEMENT = "$BASE_URL/announcements"
         const val TODAY_ANNOUNCEMENT = "$ANNOUNCEMENT/today"
         const val ANNOUNCEMENT_DETAIL = "$ANNOUNCEMENT/{classroomAnnouncementId}"
+        const val SCHOOL_CLASSROOM = "/api/v1/schools/{schoolId}/classrooms"
     }
 }

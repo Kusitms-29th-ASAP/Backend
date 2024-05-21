@@ -1,10 +1,7 @@
 package com.asap.asapbackend.domain.classroom.presentation
 
 import com.asap.asapbackend.domain.classroom.application.ClassroomService
-import com.asap.asapbackend.domain.classroom.application.dto.CreateClassroomAnnouncement
-import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncementDetail
-import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncements
-import com.asap.asapbackend.domain.classroom.application.dto.GetTodayClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -31,5 +28,10 @@ class ClassroomController(
     @GetMapping(ClassroomApi.V1.ANNOUNCEMENT_DETAIL)
     fun getAnnouncementDetail(@PathVariable classroomAnnouncementId:Long) : GetClassroomAnnouncementDetail.Response {
         return classroomService.getClassroomAnnouncementDetail(classroomAnnouncementId)
+    }
+
+    @GetMapping(ClassroomApi.V1.SCHOOL_CLASSROOM)
+    fun getSchoolClassrooms(@PathVariable schoolId: Long): GetSchoolClassroom.Response {
+        return classroomService.getSchoolClassrooms(GetSchoolClassroom.Request(schoolId))
     }
 }
