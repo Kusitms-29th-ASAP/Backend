@@ -12,4 +12,11 @@ class TodoModifier(
         todo.changeStatus()
         todoRepository.save(todo)
     }
+
+    fun changeTodoStatusBtUserIdAndTodoId(userId: Long, todoId: Long){
+        todoRepository.findByUserIdAndTodoId(userId, todoId)?.let {
+            changeTodoStatus(it)
+            todoRepository.save(it)
+        }
+    }
 }
