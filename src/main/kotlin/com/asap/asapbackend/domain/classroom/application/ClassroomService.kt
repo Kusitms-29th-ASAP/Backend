@@ -1,10 +1,7 @@
 package com.asap.asapbackend.domain.classroom.application
 
 import com.asap.asapbackend.domain.child.domain.service.ChildReader
-import com.asap.asapbackend.domain.classroom.application.dto.CreateClassroomAnnouncement
-import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncementDetail
-import com.asap.asapbackend.domain.classroom.application.dto.GetClassroomAnnouncements
-import com.asap.asapbackend.domain.classroom.application.dto.GetTodayClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.application.dto.*
 import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomAnnouncementReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
@@ -45,7 +42,7 @@ class ClassroomService(
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
         val classroomId = classroomReader.findByStudent(childId).id
-        return GetTodayClassroomAnnouncement.convertClassAnnouncementToResponse{
+        return GetTodayClassroomAnnouncement.convertClassAnnouncementToResponse {
             classroomAnnouncementReader.findRecentClassroomAnnouncementByClassroomIdOrNull(classroomId)
         }
     }
@@ -66,6 +63,14 @@ class ClassroomService(
         val classroomId = classroomReader.findByStudent(childId).id
         val teacherName = teacherReader.findByClassroomId(classroomId).name
         val announcement = classroomAnnouncementReader.findById(classroomAnnouncementId)
-        return GetClassroomAnnouncementDetail.Response(teacherName, announcement.getWriteDate(), announcement.descriptions)
+        return GetClassroomAnnouncementDetail.Response(
+            teacherName,
+            announcement.getWriteDate(),
+            announcement.descriptions
+        )
+    }
+
+    fun getSchoolClassrooms(request: GetSchoolClassroom.Request): GetSchoolClassroom.Response {
+        return GetSchoolClassroom.convertClassroomToResponse(classroomReader.findBySchoolId(request.schoolId))
     }
 }

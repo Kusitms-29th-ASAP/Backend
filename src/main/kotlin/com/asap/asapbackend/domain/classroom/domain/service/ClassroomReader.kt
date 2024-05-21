@@ -5,6 +5,7 @@ import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomException
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
 import com.asap.asapbackend.domain.classroom.domain.vo.Grade
+import com.asap.asapbackend.global.util.CacheManager
 import org.springframework.stereotype.Service
 
 @Service
@@ -52,6 +53,10 @@ class ClassroomReader(
         }.toMap()
     }
 
+
+    fun findBySchoolId(schoolId: Long): List<Classroom> = CacheManager.cacheByKey("schools_${schoolId}_classrooms") {
+        return@cacheByKey classroomRepository.findAllBySchoolId(schoolId)
+    }
 
     private fun findClassroom(function: () -> Classroom?): Classroom {
         return function() ?: throw ClassroomException.ClassroomNotFoundException()
