@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 
 interface TodoRepository : JpaRepository<Todo, Long> {
-    fun findAllByChildIdAndDeadlineBefore(childId: Long, deadline: LocalDate): List<Todo>
+    fun findAllByChildIdAndDeadlineAfter(childId: Long, deadline: LocalDate): List<Todo>
+
+    fun findAllByChildId(childId: Long): List<Todo>
 }

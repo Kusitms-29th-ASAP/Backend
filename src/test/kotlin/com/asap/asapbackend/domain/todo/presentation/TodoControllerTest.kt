@@ -6,6 +6,7 @@ import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.todo.application.TodoService
 import com.asap.asapbackend.domain.todo.application.dto.ChangeTodoStatus
 import com.asap.asapbackend.domain.todo.application.dto.CreateTodo
+import com.asap.asapbackend.domain.todo.application.dto.DeleteTodo
 import com.asap.asapbackend.domain.todo.application.dto.GetTodo
 import com.asap.asapbackend.domain.todo.domain.vo.Status
 import com.asap.asapbackend.domain.todo.domain.vo.TodoType
@@ -65,10 +66,10 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
     }
 
     @Test
-    @DisplayName("할일 전체 불러오기")
+    @DisplayName("기한이 남은 할일 전체 불러오기")
     fun getTodo() {
         //given
-        val deadline = LocalDate.parse("2024-05-23")
+        val date = LocalDate.parse("2024-05-23")
         val getTodo: GetTodo.Response = generateFixture {
             it.setExp(GetTodo.Response::todoList, listOf(
                 GetTodo.TodoInfo(1,"체육복 챙기기",TodoType.SUPPLY,LocalDate.parse("2024-05-28"),Status.COMPLETE, true),
@@ -76,9 +77,9 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
             ))
         }
 
-        given(todoService.getTodoUntilDeadLine(deadline)).willReturn(getTodo)
+        given(todoService.getTodoDueAfterDate(date)).willReturn(getTodo)
         val request = RestDocumentationRequestBuilders.get(TodoApi.V1.BASE_URL)
-            .queryParam("deadline", "2024-05-23")
+            .queryParam("date", date.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
 
@@ -92,7 +93,7 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
                         headerWithName("Authorization").description("Access Token")
                     ),
                     queryParameters(
-                        parameterWithName("deadline").description("마감일")
+                        parameterWithName("date").description("설정한 날짜")
                     ),
                     responseFields(
                         fieldWithPath("todoList[].todoId").description("todo Id"),
@@ -116,6 +117,34 @@ class TodoControllerTest : AbstractRestDocsConfigurer() {
         //given
         val request = RestDocumentationRequestBuilders.put(TodoApi.V1.BASE_URL)
             .content(objectMapper.writeValueAsString(changeStatusRequest))
+            .contentType(MediaType.APPLICATION_JSON)
+            .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("Access Token")
+                    ),
+                    requestFields(
+                        fieldWithPath("todoId").description("todo ID")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("할 일 삭제")
+    fun deleteTodo() {
+        val todoId = generateFixture<Long>()
+        val deleteTodoRequest : DeleteTodo.Request = generateFixture{
+            it.setExp(DeleteTodo.Request::todoId,todoId)
+        }
+        //given
+        val request = RestDocumentationRequestBuilders.delete(TodoApi.V1.BASE_URL)
+            .content(objectMapper.writeValueAsString(deleteTodoRequest))
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
         //when
