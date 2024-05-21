@@ -8,6 +8,8 @@ import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.user.application.dto.CreateUser
 import com.asap.asapbackend.domain.user.domain.model.Agreement
 import com.asap.asapbackend.domain.user.domain.service.UserAppender
+import com.asap.asapbackend.domain.user.domain.service.UserModifier
+import com.asap.asapbackend.domain.user.domain.service.UserReader
 import com.asap.asapbackend.fixture.generateFixture
 import com.asap.asapbackend.fixture.user.MockUserAppender
 import com.asap.asapbackend.global.jwt.util.JwtProvider
@@ -29,8 +31,10 @@ class UserServiceTest:BehaviorSpec({
     val classroomReader: ClassroomReader = mockk()
     val childAppender: ChildAppender = mockk(relaxed = true)
     val classModifier: ClassModifier = mockk(relaxed = true)
+    val userReader: UserReader = mockk()
+    val userModifier: UserModifier = mockk()
 
-    val userService = UserService(jwtProvider, tokenExtractor, userAppender, classroomReader, childAppender, classModifier)
+    val userService = UserService(jwtProvider, tokenExtractor, userAppender, classroomReader, childAppender, classModifier, userReader, userModifier )
 
 
     given("UserService.createUser") {

@@ -1,22 +1,29 @@
 package com.asap.asapbackend.domain.user.presentation
 
 import com.asap.asapbackend.AbstractRestDocsConfigurer
+import com.asap.asapbackend.TOKEN_HEADER_NAME
+import com.asap.asapbackend.TOKEN_PREFIX
 import com.asap.asapbackend.domain.user.application.UserService
+import com.asap.asapbackend.domain.user.application.dto.ChangeUserInfo
 import com.asap.asapbackend.domain.user.application.dto.CreateUser
+import com.asap.asapbackend.domain.user.application.dto.GetUser
 import com.asap.asapbackend.domain.user.domain.model.PhoneNumber
 import com.asap.asapbackend.fixture.generateFixture
+import com.navercorp.fixturemonkey.kotlin.setExp
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @WebMvcTest(UserController::class)
-class UserControllerTest: AbstractRestDocsConfigurer() {
+class UserControllerTest : AbstractRestDocsConfigurer() {
 
     @MockBean
     private lateinit var userService: UserService
@@ -25,14 +32,14 @@ class UserControllerTest: AbstractRestDocsConfigurer() {
     @DisplayName("유저 생성시 유저 정보를 생성한다.")
     fun createUser() {
         //given
-        val createUserRequest : CreateUser.Request = generateFixture {
+        val createUserRequest: CreateUser.Request = generateFixture {
             it.set("agreement.termsOfService", true)
             it.set("agreement.privacyPolicy", true)
             it.set("agreement.marketing", true)
             it.set("phoneNumber", PhoneNumber("01012345678"))
             it.set("children", listOf(generateFixture<CreateUser.ChildDetail>()))
         }
-        val createUserResponse : CreateUser.Response = generateFixture()
+        val createUserResponse: CreateUser.Response = generateFixture()
         given(userService.createUser(createUserRequest)).willReturn(createUserResponse)
         val request = RestDocumentationRequestBuilders.post(UserApi.V1.BASE_URL)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -63,6 +70,66 @@ class UserControllerTest: AbstractRestDocsConfigurer() {
                     responseFields(
                         fieldWithPath("accessToken").description("서버 접근을 위한 accessToken"),
                         fieldWithPath("refreshToken").description("서버 접근을 위한 refreshToken")
+                    )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("유저 정보 불러오기")
+    fun getUser() {
+        //given
+        val getUserResponse: GetUser.Response = generateFixture {
+            it.setExp(GetUser.Response::userName, "김동우")
+            it.setExp(GetUser.Response::phoneNumber, "01012341234")
+            it.setExp(GetUser.Response::email, "email@email.com")
+        }
+        given(userService.getUser()).willReturn(getUserResponse)
+        val request = RestDocumentationRequestBuilders.get(UserApi.V1.BASE_URL)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("Access Token")
+                    ),
+                    responseFields(
+                        fieldWithPath("userName").description("이름"),
+                        fieldWithPath("phoneNumber").description("전화번호"),
+                        fieldWithPath("email").description("이메일"),
+                        )
+                )
+            )
+    }
+
+    @Test
+    @DisplayName("유저 정보 수정")
+    fun changeUserInfo() {
+        //given
+        val changeUserInfoRequest: ChangeUserInfo.Request = generateFixture {
+            it.setExp(ChangeUserInfo.Request::userName, "김동우")
+            it.setExp(ChangeUserInfo.Request::phoneNumber, PhoneNumber("01012341234"))
+        }
+        val request = RestDocumentationRequestBuilders.put(UserApi.V1.BASE_URL)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
+            .content(objectMapper.writeValueAsString(changeUserInfoRequest))
+        //when
+        val result = mockMvc.perform(request)
+        //then
+        result.andExpect(status().isOk)
+            .andDo(
+                resultHandler.document(
+                    requestHeaders(
+                        headerWithName("Authorization").description("Access Token")
+                    ),
+                    requestFields(
+                        fieldWithPath("userName").description("이름"),
+                        fieldWithPath("phoneNumber.number").description("전화번호"),
                     )
                 )
             )
