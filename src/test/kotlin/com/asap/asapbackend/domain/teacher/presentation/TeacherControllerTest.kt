@@ -39,7 +39,7 @@ class TeacherControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("username").description("선생님 아이디"),
                         fieldWithPath("password").description("선생님 비밀번호"),
                         fieldWithPath("name").description("선생님 이름"),
-                        fieldWithPath("schoolName").description("선생님 학교 이름"),
+                        fieldWithPath("schoolId").description("선생님 학교 id"),
                         fieldWithPath("grade").description("선생님 학년"),
                         fieldWithPath("className").description("선생님 반 이름")
                     )

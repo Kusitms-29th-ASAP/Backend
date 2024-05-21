@@ -1,10 +1,10 @@
 package com.asap.asapbackend.domain.classroom.domain.service
 
+import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.classroom.domain.exception.ClassroomException
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
 import com.asap.asapbackend.domain.classroom.domain.vo.Grade
-import com.asap.asapbackend.domain.school.domain.model.School
 import org.springframework.stereotype.Service
 
 @Service
@@ -24,9 +24,9 @@ class ClassroomReader(
         }
     }
 
-    fun findByClassInfoAndSchoolName(grade: Grade, className: String, schoolName: String): Classroom {
+    fun findByClassInfoAndSchoolId(grade: Grade, className: String, schoolId: Long): Classroom {
         return findClassroom {
-            classroomRepository.findByGradeAndClassNameAndSchoolName(grade, className, schoolName)
+            classroomRepository.findByGradeAndClassNameAndSchoolId(grade, className, schoolId)
         }
     }
 
@@ -36,11 +36,22 @@ class ClassroomReader(
         }
     }
 
-    fun findByStudent(studentId: Long): Classroom{
+    fun findByStudent(studentId: Long): Classroom {
         return findClassroom {
             classroomRepository.findByStudentId(studentId)
         }
     }
+
+    fun findClassroomMapByChild(child: List<Child>): Map<Child, Classroom> {
+        return classroomRepository.findAllByChildIds(child.map { it.id }).flatMap {classroom->
+            child.map {
+                it to classroom
+            }.filter { (child, classroom)->
+                classroom.childClassroomSet.any { it.student.id == child.id }
+            }
+        }.toMap()
+    }
+
 
     private fun findClassroom(function: () -> Classroom?): Classroom {
         return function() ?: throw ClassroomException.ClassroomNotFoundException()

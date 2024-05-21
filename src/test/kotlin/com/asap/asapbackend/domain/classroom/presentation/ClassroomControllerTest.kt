@@ -169,7 +169,7 @@ class ClassroomControllerTest : AbstractRestDocsConfigurer() {
 
         given(classroomService.getClassroomAnnouncementDetail(classroomAnnouncementId))
             .willReturn(getClassroomAnnouncementDetail)
-        val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.ANNOUNCEMENT+"/{classroomAnnouncementId}",classroomAnnouncementId.toString())
+        val request = RestDocumentationRequestBuilders.get(ClassroomApi.V1.ANNOUNCEMENT_DETAIL,classroomAnnouncementId.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .header(TOKEN_HEADER_NAME, "$TOKEN_PREFIX accessToken")
         //when

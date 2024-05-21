@@ -28,7 +28,7 @@ class ClassroomController(
         return classroomService.getClassroomAnnouncements()
     }
 
-    @GetMapping(ClassroomApi.V1.ANNOUNCEMENT+"/{classroomAnnouncementId}")
+    @GetMapping(ClassroomApi.V1.ANNOUNCEMENT_DETAIL)
     fun getAnnouncementDetail(@PathVariable classroomAnnouncementId:Long) : GetClassroomAnnouncementDetail.Response {
         return classroomService.getClassroomAnnouncementDetail(classroomAnnouncementId)
     }

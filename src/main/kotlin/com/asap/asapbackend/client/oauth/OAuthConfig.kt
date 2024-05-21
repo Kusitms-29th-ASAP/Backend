@@ -20,7 +20,11 @@ class OAuthConfig(
                 else -> throw AuthException.UnSupportedProviderException()
             }
 
-            return SocialLoginHandler.Response(socialLoginClientResponse.socialId)
+            return SocialLoginHandler.Response(
+                socialId = socialLoginClientResponse.socialId,
+                email = socialLoginClientResponse.email,
+                name = socialLoginClientResponse.name
+            )
         }
     }
 }

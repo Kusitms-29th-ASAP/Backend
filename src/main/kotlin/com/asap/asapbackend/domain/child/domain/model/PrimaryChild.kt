@@ -1,7 +1,10 @@
 package com.asap.asapbackend.domain.child.domain.model
 
 import com.asap.asapbackend.global.domain.BaseDateEntity
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Index
+import jakarta.persistence.Table
 
 @Entity
 @Table(
@@ -23,5 +26,10 @@ class PrimaryChild(
         unique = true,
         nullable = false
     )
-    val childId: Long = childId
+    var childId: Long = childId
+        protected set
+
+    fun changePrimaryChild(childId: Long){
+        this.childId=childId
+    }
 }
