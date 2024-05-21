@@ -36,10 +36,10 @@ class TodoService(
         todoAppender.appendTodo(todo)
     }
 
-    fun getTodoDueAfterDate(day: LocalDate): GetTodo.Response {
+    fun getTodoDueAfterDate(date: LocalDate): GetTodo.Response {
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
-        val todoDataList = todoReader.findTodoDueAfterDayByChildId(childId, day)
+        val todoDataList = todoReader.findTodoDueAfterDayByChildId(childId, date)
         val todoList = GetTodo().toTodoInfo(todoDataList)
         return GetTodo.Response(todoList)
     }

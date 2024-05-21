@@ -10,8 +10,8 @@ import java.time.LocalDate
 class TodoReader(
     private val todoRepository: TodoRepository
 ) {
-    fun findTodoDueAfterDayByChildId(childId: Long, deadline: LocalDate): List<Todo> {
-        return todoRepository.findAllByChildIdAndDeadlineAfter(childId, deadline.minusDays(1))
+    fun findTodoDueAfterDayByChildId(childId: Long, date: LocalDate): List<Todo> {
+        return todoRepository.findAllByChildIdAndDeadlineAfter(childId, date.minusDays(1))
     }
 
     fun findAllByChildId(todoId: Long) : List<Todo> {
