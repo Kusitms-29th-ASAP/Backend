@@ -5,8 +5,11 @@
 === 할일 추가
 operation::TodoControllerTest/createTodo[]
 
-=== 전체 할일 조회
+=== 기한이 남은 전체 할일 조회
 operation::TodoControllerTest/getTodo[]
 
-=== todo 상태 변경
+=== 할일 상태 변경
 operation::TodoControllerTest/changeStatus[]
+
+=== 할일 삭제
+operation::TodoControllerTest/deleteTodo[]

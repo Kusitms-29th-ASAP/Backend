@@ -7,6 +7,7 @@ import com.asap.asapbackend.domain.todo.domain.model.Todo
 import com.asap.asapbackend.domain.todo.domain.service.TodoAppender
 import com.asap.asapbackend.domain.todo.domain.service.TodoModifier
 import com.asap.asapbackend.domain.todo.domain.service.TodoReader
+import com.asap.asapbackend.domain.todo.domain.service.TodoRemover
 import com.asap.asapbackend.global.security.getCurrentUserId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,7 +19,8 @@ class TodoService(
     private val todoAppender: TodoAppender,
     private val childReader: ChildReader,
     private val todoReader: TodoReader,
-    private val todoModifier: TodoModifier
+    private val todoModifier: TodoModifier,
+    private val todoRemover: TodoRemover
 ) {
     @Transactional
     fun createTodo(request: CreateTodo.Request) {
@@ -34,16 +36,33 @@ class TodoService(
         todoAppender.appendTodo(todo)
     }
 
-    fun getTodoUntilDeadLine(deadline: LocalDate): GetTodo.Response {
+    fun getTodoDueAfterDate(date: LocalDate): GetTodo.Response {
         val userId = getCurrentUserId()
         val childId = childReader.findPrimaryChild(userId).id
-        val todoDataList = todoReader.findByChildIdUntilDeadline(childId, deadline)
+        val todoDataList = todoReader.findTodoDueAfterDayByChildId(childId, date)
         val todoList = GetTodo().toTodoInfo(todoDataList)
         return GetTodo.Response(todoList)
     }
 
     @Transactional
     fun changeStatus(todoId: Long) {
-        todoModifier.changeStatus(todoId)
+        val userId = getCurrentUserId()
+        val todoList = todoReader.findAllByUserId(userId)
+        todoReader.findByIdOrNull(todoId)?.let { todo->
+            if (todoList.contains(todo)) {
+                todoModifier.changeTodoStatus(todo)
+            }
+        }
+    }
+
+    @Transactional
+    fun deleteTodo(todoId: Long) {
+        val userId = getCurrentUserId()
+        val todoList = todoReader.findAllByUserId(userId)
+        todoReader.findByIdOrNull(todoId)?.let { todo ->
+            if (todoList.contains(todo) && !todo.isAssigned) {
+                todoRemover.delete(todo)
+            }
+        }
     }
 }
