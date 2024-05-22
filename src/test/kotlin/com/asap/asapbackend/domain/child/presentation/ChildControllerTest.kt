@@ -63,7 +63,7 @@ class ChildControllerTest : AbstractRestDocsConfigurer() {
                         fieldWithPath("childList[].childName").description("자녀 이름"),
                         fieldWithPath("childList[].schoolName").description("학교 이름"),
                         fieldWithPath("childList[].grade").description("학년"),
-                        fieldWithPath("childList[].className").description("반 이름")
+                        fieldWithPath("childList[].classroomName").description("반 이름")
                     )
                 )
             )
