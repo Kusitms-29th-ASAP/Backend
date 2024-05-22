@@ -47,22 +47,12 @@ class TodoService(
     @Transactional
     fun changeStatus(todoId: Long) {
         val userId = getCurrentUserId()
-        val todoList = todoReader.findAllByUserId(userId)
-        todoReader.findByIdOrNull(todoId)?.let { todo->
-            if (todoList.contains(todo)) {
-                todoModifier.changeTodoStatus(todo)
-            }
-        }
+        todoModifier.changeTodoStatusBtUserIdAndTodoId(userId, todoId)
     }
 
     @Transactional
     fun deleteTodo(todoId: Long) {
         val userId = getCurrentUserId()
-        val todoList = todoReader.findAllByUserId(userId)
-        todoReader.findByIdOrNull(todoId)?.let { todo ->
-            if (todoList.contains(todo) && !todo.isAssigned) {
-                todoRemover.delete(todo)
-            }
-        }
+        todoRemover.deleteByUserIdAndTodoId(userId, todoId)
     }
 }

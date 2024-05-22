@@ -15,4 +15,13 @@ interface TodoRepository : JpaRepository<Todo, Long> {
         join PrimaryChild p on p.childId = t.child.id and p.userId = :userId
     """)
     fun findAllByUserId(userId: Long): List<Todo>
+
+
+    @Query("""
+        select t
+        from Todo t
+        join t.child c on c.id = t.child.id and c.parent.id = :userId
+        where t.id = :todoId
+    """)
+    fun findByUserIdAndTodoId(userId: Long, todoId: Long): Todo?
 }

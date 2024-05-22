@@ -8,9 +8,15 @@ import org.springframework.stereotype.Service
 class TodoRemover(
     private val todoRepository: TodoRepository
 ) {
-    fun delete(todo: Todo){
-        todo.let {
-            todoRepository.delete(it)
+    fun delete(todo: Todo) {
+        todoRepository.delete(todo)
+    }
+
+    fun deleteByUserIdAndTodoId(userId: Long, todoId: Long) {
+        todoRepository.findByUserIdAndTodoId(userId, todoId)?.let {
+            if (it.isAssigned.not()) {
+                todoRepository.delete(it)
+            }
         }
     }
 }
