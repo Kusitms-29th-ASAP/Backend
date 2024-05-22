@@ -12,6 +12,8 @@ sealed class UserException(
 
     class UserNotFoundException(message: String = "사용자를 찾을 수 없습니다.") : UserException(message, 1, HttpStatus.NOT_FOUND)
 
+    class UserAlreadyExistsException(message: String = "이미 존재하는 사용자입니다.") : UserException(message, 2, HttpStatus.CONFLICT)
+
     companion object {
         const val DEFAULT_CODE_PREFIX = "USER"
     }
