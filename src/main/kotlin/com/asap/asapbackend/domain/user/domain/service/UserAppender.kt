@@ -11,7 +11,7 @@ class UserAppender(
 ) {
 
     fun appendUser(user: User){
-        userRepository.findBySocialInfo_SocialId(user.socialInfo.socialId)?.let {
+        if(userRepository.existsBySocialInfo_SocialId(user.socialInfo.socialId)){
             throw UserException.UserAlreadyExistsException()
         }
         userRepository.save(user)
