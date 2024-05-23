@@ -24,7 +24,7 @@ interface SchoolAnnouncementRepository : JpaRepository<SchoolAnnouncement, Long>
         join sa.schoolAnnouncementPage as sap on sap.id = sa.schoolAnnouncementPage.id
         join sap.school as s on s.id = sap.school.id
         join Classroom as c on c.school.id = s.id and c.id = :classroomId
-        ORDER BY sa.id DESC
+        ORDER BY sa.idx DESC
     """
     )
     fun findAllByClassroomId(classroomId: Long, pageable: Pageable): Page<SchoolAnnouncement>
