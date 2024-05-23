@@ -36,7 +36,7 @@ class SchoolAnnouncementReader(
             PageRequest.of(
                 pageable.pageNumber,
                 pageable.pageSize,
-                Sort.by(Sort.Direction.DESC, "id")
+                Sort.by(Sort.Direction.DESC, "idx")
             )
         )
     }
