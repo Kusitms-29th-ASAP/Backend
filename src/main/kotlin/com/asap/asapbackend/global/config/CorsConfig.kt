@@ -11,8 +11,9 @@ class CorsConfig : WebMvcConfigurer {
         registry.addMapping("/api/**")
             .allowedOrigins(
                 "http://localhost:3000",
-                "https://dev-school-point.vercel.app",
-                "https://admin-teacher.vercel.app"
+                "https://www.schoolpoint.site",
+                "https://schoolpoint.site",
+                "https://teacher.schoolpoint.site",
             )
             .allowedMethods("*")
             .allowedHeaders("*")
