@@ -1,5 +1,6 @@
 package com.asap.asapbackend.domain.school.domain.service
 
+import com.asap.asapbackend.domain.school.domain.exception.SchoolException
 import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.school.domain.repository.SchoolRepository
 import com.asap.asapbackend.global.util.CacheManager
@@ -20,5 +21,9 @@ class SchoolReader(
         return schoolCache.values.filter {
             it.isContainingName(keyword)
         }.toList()
+    }
+
+    fun findById(id: Long): School {
+        return schoolCache[id] ?: throw SchoolException.SchoolNotFoundException()
     }
 }
