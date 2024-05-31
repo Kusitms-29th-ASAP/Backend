@@ -65,4 +65,6 @@ class Classroom(
     fun getStudentIds(): Set<Long>{
         return childClassroomSet.map { it.student.id }.toSet()
     }
+
+    fun getSchoolId() = this.school.id
 }
