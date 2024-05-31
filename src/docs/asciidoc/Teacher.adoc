@@ -11,3 +11,10 @@ operation::TeacherControllerTest/createTeacher[snippets='http-request,request-fi
 
 operation::TeacherControllerTest/loginTeacher[snippets='http-request,request-fields,http-response,response-fields']
 
+
+[[Get-Teacher-Info]]
+=== 선생님 정보 조회
+
+operation::TeacherControllerTest/getTeacherInfo[snippets='http-request,request-headers,http-response,response-fields']
+
+
