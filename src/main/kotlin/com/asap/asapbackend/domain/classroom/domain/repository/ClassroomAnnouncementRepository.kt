@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ClassroomAnnouncementRepository: JpaRepository<ClassroomAnnouncement,Long> {
     fun findTopByClassroomIdOrderByCreatedAtDesc(classroomId : Long) : ClassroomAnnouncement?
 
-    fun findAllByClassroomId(classroomId : Long) : List<ClassroomAnnouncement>
+    fun findAllByClassroomIdOrderByCreatedAtDesc(classroomId : Long) : List<ClassroomAnnouncement>
 }
