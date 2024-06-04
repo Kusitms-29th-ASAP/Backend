@@ -15,7 +15,7 @@ class ClassroomAnnouncementReader(
     }
 
     fun findAllByClassroomId(classroomId: Long): List<ClassroomAnnouncement> {
-        return classroomAnnouncementRepository.findAllByClassroomId(classroomId)
+        return classroomAnnouncementRepository.findAllByClassroomIdOrderByCreatedAtDesc(classroomId)
     }
 
     fun findById(classroomAnnouncementId: Long) : ClassroomAnnouncement {
