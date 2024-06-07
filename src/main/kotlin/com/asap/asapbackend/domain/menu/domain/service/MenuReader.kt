@@ -18,6 +18,6 @@ class MenuReader(
         val lastDayOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())
         val daysOfMonth = firstDayOfMonth.datesUntil(lastDayOfMonth.plusDays(1)).toList()
 
-        return menuRepository.findBySchoolIdAndDayIn(schoolId, daysOfMonth)
+        return menuRepository.findBySchoolIdAndDayInOrderByDayAsc(schoolId, daysOfMonth)
     }
 }
