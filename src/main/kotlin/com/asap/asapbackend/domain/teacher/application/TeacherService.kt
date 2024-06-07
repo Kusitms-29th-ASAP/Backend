@@ -58,7 +58,7 @@ class TeacherService(
             schoolName = school.name,
             grade = classroom.grade,
             className = classroom.className,
-            teacherName = teacher.username
+            teacherName = teacher.name
         )
     }
 }
