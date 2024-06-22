@@ -99,7 +99,6 @@ jobs:
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
-          password: ${{ secrets.NCP_PASSWORD }}
           key: ${{ secrets.NCP_SSH_KEY }}
           script: |
             sudo rm -rf .env
@@ -137,7 +136,6 @@ jobs:
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
-          password: ${{ secrets.NCP_PASSWORD }}
           key: ${{ secrets.NCP_SSH_KEY }}
           envs: VERSION, DOCKER_REGISTRY, DOCKER_USERNAME, DOCKER_PASSWORD, IMAGE_NAME
           script: |
