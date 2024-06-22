@@ -19,7 +19,6 @@ jobs:
         with:
           host: ${{ secrets.NCP_HOST }}
           username: ${{ secrets.NCP_USERNAME }}
-          password: ${{ secrets.NCP_PASSWORD }}
           source: ".deploy/docker-compose.yml"
           target: "/root"
           strip_components: 2
