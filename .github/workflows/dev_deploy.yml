@@ -97,9 +97,9 @@ jobs:
       - name: config environment
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.NCP_HOST }}
-          username: ${{ secrets.NCP_USERNAME }}
-          key: ${{ secrets.NCP_SSH_KEY }}
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USERNAME }}
+          key: ${{ secrets.OCI_SSH_KEY }}
           script: |
             sudo rm -rf .env
             touch .env
@@ -134,9 +134,9 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
         with:
-          host: ${{ secrets.NCP_HOST }}
-          username: ${{ secrets.NCP_USERNAME }}
-          key: ${{ secrets.NCP_SSH_KEY }}
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USERNAME }}
+          key: ${{ secrets.OCI_SSH_KEY }}
           envs: VERSION, DOCKER_REGISTRY, DOCKER_USERNAME, DOCKER_PASSWORD, IMAGE_NAME
           script: |
             echo "new application version is $VERSION"
