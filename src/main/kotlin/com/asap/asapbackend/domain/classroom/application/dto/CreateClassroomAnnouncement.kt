@@ -30,7 +30,7 @@ class CreateClassroomAnnouncement {
             }.flatMap {  // 30*4 = 120
                 students.map { student ->
                     Todo(
-                        child = student,
+                        childId = student.id,
                         description = it.description,
                         type = it.todoType,
                         deadline = it.deadline,
