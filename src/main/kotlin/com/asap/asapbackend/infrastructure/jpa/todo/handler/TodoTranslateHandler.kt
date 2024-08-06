@@ -1,5 +1,6 @@
 package com.asap.asapbackend.infrastructure.jpa.todo.handler
 
+import com.asap.asapbackend.domain.todo.domain.model.Todo
 import com.asap.asapbackend.domain.todo.event.MultiTodoCreateEvent
 import com.asap.asapbackend.domain.todo.event.TodoCreateEvent
 import com.asap.asapbackend.global.util.TextTranslator
@@ -17,21 +18,27 @@ class TodoTranslateHandler(
 
     @ApplicationModuleListener
     fun handle(event: TodoCreateEvent) {
-        val translatedDescription = textTranslator.translate(event.todo.description)
-        translatedDescription.forEach { (language, text) ->
-            translatedTodoJpaRepository.save(
-                TranslatedTodoEntity(
-                    id = event.todo.id,
-                    language = language,
-                    description = text
-                )
-            )
-        }
+        translateTodo(event.todo)
     }
 
 
     @ApplicationModuleListener
     fun handle(event: MultiTodoCreateEvent) {
-        println("TodoCreateEvent: $event")
+        event.todos.forEach {
+            translateTodo(it)
+        }
+    }
+
+    private fun translateTodo(todo: Todo) {
+        val translatedDescription = textTranslator.translate(todo.description)
+        translatedDescription.forEach { (language, text) ->
+            translatedTodoJpaRepository.save(
+                TranslatedTodoEntity(
+                    id = todo.id,
+                    language = language,
+                    description = text
+                )
+            )
+        }
     }
 }
