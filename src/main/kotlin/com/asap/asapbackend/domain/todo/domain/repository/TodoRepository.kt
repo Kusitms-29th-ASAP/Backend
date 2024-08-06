@@ -1,27 +1,16 @@
 package com.asap.asapbackend.domain.todo.domain.repository
 
 import com.asap.asapbackend.domain.todo.domain.model.Todo
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
 import java.time.LocalDate
 
-interface TodoRepository : JpaRepository<Todo, Long> {
+interface TodoRepository {
     fun findAllByChildIdAndDeadlineAfter(childId: Long, deadline: LocalDate): List<Todo>
 
-    @Query("""
-        select t
-        from Todo t
-        join fetch t.child
-        join PrimaryChild p on p.childId = t.child.id and p.userId = :userId
-    """)
-    fun findAllByUserId(userId: Long): List<Todo>
-
-
-    @Query("""
-        select t
-        from Todo t
-        join t.child c on c.id = t.child.id and c.parent.id = :userId
-        where t.id = :todoId
-    """)
     fun findByUserIdAndTodoId(userId: Long, todoId: Long): Todo?
+
+    fun save(todo: Todo): Todo
+
+    fun insertBatch(todos: Set<Todo>)
+
+    fun delete(todo: Todo)
 }

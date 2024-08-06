@@ -29,7 +29,7 @@ class TodoService(
         val todo = Todo(
             type = request.todoType,
             description = request.description,
-            child = child,
+            childId = child.id,
             deadline = request.deadline,
             isAssigned = false
         )

@@ -1,32 +1,30 @@
 package com.asap.asapbackend.domain.todo.domain.model
 
-import com.asap.asapbackend.domain.child.domain.model.Child
 import com.asap.asapbackend.domain.todo.domain.vo.Status
 import com.asap.asapbackend.domain.todo.domain.vo.TodoType
-import com.asap.asapbackend.global.domain.BaseDateEntity
 import com.asap.asapbackend.global.exception.validateProperty
-import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
-@Entity
+
 class Todo (
+    id: Long = 0L,
     type: TodoType,
     description: String,
-    child: Child,
+    childId: Long,
     deadline: LocalDate,
-    isAssigned: Boolean
-):BaseDateEntity(){
+    isAssigned: Boolean,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
+){
 
     init {
         validateProperty(description.isNotBlank())
         validateProperty(deadline.isAfter(LocalDate.now().minusDays(1)))
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(
-        nullable = false,
-        columnDefinition = "varchar(255)"
-    )
+    val id: Long = id
+
     val type: TodoType = type
 
     val description : String = description
@@ -35,16 +33,13 @@ class Todo (
 
     val isAssigned : Boolean = isAssigned
 
-    @Enumerated(EnumType.STRING)
-    @Column(
-        nullable = false,
-        columnDefinition = "varchar(255)"
-    )
     var status: Status = Status.INCOMPLETE
         protected set
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val child : Child = child
+    val childId : Long = childId
+
+    val createdAt : LocalDateTime = createdAt
+    var updatedAt : LocalDateTime = updatedAt
 
     fun changeStatus(){
         status = if(status == Status.COMPLETE) Status.INCOMPLETE else Status.COMPLETE
