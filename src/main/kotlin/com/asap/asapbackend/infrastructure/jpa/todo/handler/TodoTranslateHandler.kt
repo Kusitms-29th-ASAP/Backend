@@ -34,7 +34,7 @@ class TodoTranslateHandler(
         translatedDescription.forEach { (language, text) ->
             translatedTodoJpaRepository.save(
                 TranslatedTodoEntity(
-                    id = todo.id,
+                    todoId = todo.id,
                     language = language,
                     description = text
                 )

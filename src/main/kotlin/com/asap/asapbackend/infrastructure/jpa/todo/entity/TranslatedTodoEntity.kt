@@ -10,13 +10,13 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "translated_todo")
 class TranslatedTodoEntity(
-    id: Long, // todo id
+    todoId: Long, // todo id
     language: Language,
     description: String,
 ) {
 
     @EmbeddedId
-    val id: MultiLanguageId = MultiLanguageId(id, language)
+    val id: MultiLanguageId = MultiLanguageId(todoId, language)
 
     @Column(
         nullable = false,
