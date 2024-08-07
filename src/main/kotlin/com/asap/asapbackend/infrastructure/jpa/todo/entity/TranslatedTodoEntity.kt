@@ -10,7 +10,7 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "translated_todo")
 class TranslatedTodoEntity(
-    todoId: Long, // todo id
+    todoId: Long,
     language: Language,
     description: String,
 ) {
