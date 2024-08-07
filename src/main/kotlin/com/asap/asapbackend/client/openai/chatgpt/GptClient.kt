@@ -23,7 +23,7 @@ class GptClient(
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(
                 mapOf(
-                    "model" to "gpt-4o",
+                    "model" to "gpt-4o-mini",
                     "messages" to listOf(
                         mapOf(
                             "role" to "system",
