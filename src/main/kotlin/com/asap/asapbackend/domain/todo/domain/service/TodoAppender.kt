@@ -1,25 +1,26 @@
 package com.asap.asapbackend.domain.todo.domain.service
 
 import com.asap.asapbackend.domain.todo.domain.model.Todo
-import com.asap.asapbackend.domain.todo.domain.repository.TodoJdbcRepository
 import com.asap.asapbackend.domain.todo.domain.repository.TodoRepository
+import com.asap.asapbackend.domain.todo.event.MultiTodoCreateEvent
+import com.asap.asapbackend.domain.todo.event.TodoCreateEvent
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
 class TodoAppender(
     private val todoRepository: TodoRepository,
-    private val todoJdbcRepository: TodoJdbcRepository
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) {
 
-    fun appendAll(todos: Set<Todo>) {
-        todoRepository.saveAll(todos)
-    }
-
     fun appendAllBatch(todos: Set<Todo>) {
-        todoJdbcRepository.insertBatch(todos)
+        todoRepository.insertBatch(todos)
+        applicationEventPublisher.publishEvent(MultiTodoCreateEvent(todos))
     }
 
     fun appendTodo(todo: Todo): Todo {
-        return todoRepository.save(todo)
+        val createdTodo = todoRepository.save(todo)
+        applicationEventPublisher.publishEvent(TodoCreateEvent(createdTodo))
+        return createdTodo
     }
 }

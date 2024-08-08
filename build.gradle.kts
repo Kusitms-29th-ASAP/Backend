@@ -27,6 +27,7 @@ repositories {
 
 val kotestVersion = "5.8.1"
 val mockkVersion = "1.13.10"
+extra["springModulithVersion"] = "1.2.0"
 
 
 val asciidoctorExt = "asciidoctorExt"
@@ -82,7 +83,10 @@ dependencies {
     testFixturesImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
     // webclient
+//    if(System.getProperty("os.name") == "Mac OS X" && System.getProperty("os.arch") == "aarch64")
+    runtimeOnly("io.netty:netty-resolver-dns-native-macos:4.1.109.Final:osx-aarch_64")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+
 
     // logger
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
@@ -91,6 +95,19 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.8.0")
 
+
+    // spring modulith
+    implementation("org.springframework.modulith:spring-modulith-starter-core")
+    implementation("org.springframework.modulith:spring-modulith-starter-jpa")
+
+}
+
+
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
+    }
 }
 
 tasks.withType<KotlinCompile> {
