@@ -1,25 +1,24 @@
 package com.asap.asapbackend.domain.menu.domain.model
 
-import com.asap.asapbackend.domain.school.domain.model.School
-import com.asap.asapbackend.global.domain.BaseDateEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
 import java.time.LocalDate
+import java.time.LocalDateTime
 
-@Entity
 class Menu(
-    school: School,
+    id: Long = 0L,
+    schoolId: Long,
     day: LocalDate,
-    foods: List<Food>
-) : BaseDateEntity() {
-    @ManyToOne(fetch = FetchType.LAZY)
-    val school: School = school
+    foods: List<Food>,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
+){
+    val id: Long = id
+
+    val schoolId: Long = schoolId
 
     val day: LocalDate = day
 
-    @JdbcTypeCode(SqlTypes.JSON)
     val foods: List<Food> = foods
+
+    val createdAt: LocalDateTime = createdAt
+    val updatedAt: LocalDateTime = updatedAt
 }
