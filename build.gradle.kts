@@ -27,7 +27,7 @@ repositories {
 
 val kotestVersion = "5.8.1"
 val mockkVersion = "1.13.10"
-extra["springModulithVersion"] = "1.2.0"
+extra["springModulithVersion"] = "1.2.1"
 
 
 val asciidoctorExt = "asciidoctorExt"
