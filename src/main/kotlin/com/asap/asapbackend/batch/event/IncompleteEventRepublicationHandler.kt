@@ -12,7 +12,7 @@ class IncompleteEventRepublicationHandler(
     private val applicationEventMulticaster: IncompleteEventPublications
 ) {
 
-    // 매 분마다 실행
+    // 매 시간마다 실행
     @Scheduled(cron = "0 0 * * * ?")
     fun resubmitIncompletePublications() {
         applicationEventMulticaster.resubmitIncompletePublications { true }

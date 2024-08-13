@@ -34,7 +34,8 @@ data class Row(
 ) {
     fun toMenu(school: School): Menu {
         return Menu(
-            school = school,
+
+            schoolId = school.id,
             foods = convertToFoods(DDISH_NM),
             day = LocalDate.parse(MLSV_YMD, DateTimeFormatter.BASIC_ISO_DATE)
         )
