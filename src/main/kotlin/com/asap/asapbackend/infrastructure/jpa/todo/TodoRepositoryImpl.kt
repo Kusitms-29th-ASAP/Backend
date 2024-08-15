@@ -21,7 +21,6 @@ class TodoRepositoryImpl(
     private val translatedTodoJpaRepository: TranslatedTodoJpaRepository,
     private val languageExtractor: LanguageExtractor,
     private val jdbcTemplate: JdbcTemplate,
-    private val applicationEventPublisher: ApplicationEventPublisher
 ) : TodoRepository {
 
     override fun findAllByChildIdAndDeadlineAfter(childId: Long, deadline: LocalDate): List<Todo> {

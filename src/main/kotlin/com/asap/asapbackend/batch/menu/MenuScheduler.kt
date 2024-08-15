@@ -26,7 +26,7 @@ class MenuScheduler (
             pageNumber++
 
             TransactionUtils.writable {
-                menuAppender.addMenu(menuDataContainer.menuInfo)
+                menuAppender.addMenus(menuDataContainer.menuInfo)
             }
         }while (menuDataContainer.hasNext)
         val endTime = System.currentTimeMillis()

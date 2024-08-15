@@ -25,11 +25,11 @@ class MenuOpenApiClient (
         val pageable = PageRequest.of(pageNumber, batchSize)
         val schools = schoolRepository.findAll(pageable)
         val hasNext = schools.hasNext()
-        val menuFluxex = schools.content.map { school ->
+        val menuFluxes = schools.content.map { school ->
             getMenuResponse(school)
         }
         val menuInfoList = mutableListOf<Menu>()
-        Flux.merge(menuFluxex)
+        Flux.merge(menuFluxes)
             .buffer(1000)
             .doOnNext(menuInfoList::addAll)
             .blockLast()
@@ -38,6 +38,7 @@ class MenuOpenApiClient (
             hasNext = hasNext
         )
     }
+
     private fun getMenuResponse(school: School): Flux<Menu> {
         val formatter = DateTimeFormatter.ofPattern("yyyyMM")
         val date = LocalDate.now().format(formatter)
@@ -57,8 +58,8 @@ class MenuOpenApiClient (
             .bodyToMono(String::class.java)
             .map {
                 val menuOpenApiResponse = objectMapper.readValue(it, MenuOpenApiResponse::class.java)
-                menuOpenApiResponse?.mealServiceDietInfo?.flatMap { menlInfo ->
-                    menlInfo.row?.map {
+                menuOpenApiResponse?.mealServiceDietInfo?.flatMap { menuInfo ->
+                    menuInfo.row?.map {
                         it.toMenu(school)
                     } ?: emptyList()
                 } ?: emptyList()
