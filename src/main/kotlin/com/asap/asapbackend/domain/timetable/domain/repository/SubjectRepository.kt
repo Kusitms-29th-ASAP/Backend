@@ -9,4 +9,5 @@ interface SubjectRepository{
     fun findOriginalSubjectsByClassroomIn(classroom: List<Classroom>) : List<Subject>
 
     fun findAllByClassroomId(classroomId: Long): List<Subject>
+    fun save(subject: Subject): Subject
 }

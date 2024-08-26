@@ -56,4 +56,9 @@ class SubjectRepositoryImpl(
                 toSubjectModel(it)
             }
     }
+
+    override fun save(subject: Subject): Subject {
+        val savedSubject = subjectJpaRepository.save(TimetableMapper.toSubjectEntity(subject))
+        return toSubjectModel(savedSubject)
+    }
 }

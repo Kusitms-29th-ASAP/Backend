@@ -3,6 +3,7 @@ package com.asap.asapbackend.domain.timetable.domain.service
 import com.asap.asapbackend.batch.timetable.TimetableInfoProvider
 import com.asap.asapbackend.domain.classroom.domain.model.Classroom
 import com.asap.asapbackend.domain.classroom.domain.repository.ClassroomRepository
+import com.asap.asapbackend.domain.school.domain.model.School
 import com.asap.asapbackend.domain.timetable.domain.model.Subject
 import com.asap.asapbackend.domain.timetable.domain.model.Timetable
 import com.asap.asapbackend.domain.timetable.domain.repository.SubjectRepository
@@ -27,43 +28,14 @@ class TimetableAppender(
         val subjectList = subjectRepository.findOriginalSubjectsByClassroomIn(existClassroomMap.values.flatten())
             .groupByTo(mutableMapOf()) { it.classroomId }
 
-        timetables.forEach {
-            if (it.name == null) return@forEach
-
-            val classroom = existClassroomMap[it.school]?.find { subject ->
-                subject.isSameClassroom(Classroom(it.grade, it.className, it.school))
-            } ?: return@forEach
-
-            subjectList[classroom.id] ?: Subject(
-                classroomId = classroom.id,
-                name = it.name,
-                semester = it.semester
-            ).also {
-                subjectList.getOrPut(classroom.id) { mutableListOf() }.add(it)
-            }
-
-        }
-
-        val savedSubjects = subjectRepository.saveAll(subjectList.values.flatten())
-
         val savedTimetables = mutableSetOf<Timetable>()
 
-        timetables.forEach {
-            if (it.name == null) return@forEach
-
-            val classroom = existClassroomMap[it.school]?.find { classroom ->
-                classroom.isSameClassroom(Classroom(it.grade, it.className, it.school))
-            } ?: return@forEach
-
-            val existSubject = savedSubjects.find { subject ->
-                subject.isSameSubject(it.name, it.semester, classroom.id)
-            } ?: return@forEach
-
+        handleTimetables(timetables, existClassroomMap, subjectList) { subject, timetableResponse ->
             savedTimetables.add(
                 Timetable(
-                    subject = existSubject,
-                    day = it.day,
-                    time = it.time
+                    subject = subject,
+                    day = timetableResponse.day,
+                    time = timetableResponse.time
                 )
             )
         }
@@ -71,5 +43,38 @@ class TimetableAppender(
         timetableRepository.insertBatch(savedTimetables)
 
         applicationEventPublisher.publishEvent(MultiSubjectCreateEvent(subjectList.values.flatten().toSet()))
+    }
+
+    private fun handleTimetables(
+        timetables: List<TimetableInfoProvider.TimetableResponse>,
+        existClassroomMap: Map<School, List<Classroom>>,
+        subjectList: MutableMap<Long, MutableList<Subject>>,
+        subjectHandler: (Subject, TimetableInfoProvider.TimetableResponse) -> Unit = { _, _ -> }
+    ) {
+        timetables.forEach {
+            if (it.name == null) return@forEach
+
+            val classroom = existClassroomMap[it.school]?.find { subject ->
+                subject.isSameClassroom(Classroom(it.grade, it.className, it.school))
+            } ?: return@forEach
+
+            val subject = subjectList[classroom.id]?.let { findSubjectList ->
+                findSubjectList.find { subject ->
+                    subject.isSameSubject(it.name, it.semester, classroom.id)
+                }
+            } ?: run {
+                val savedSubject = subjectRepository.save(
+                    Subject(
+                        name = it.name,
+                        semester = it.semester,
+                        classroomId = classroom.id
+                    )
+                )
+                subjectList.getOrPut(classroom.id) { mutableListOf() }.add(savedSubject)
+                savedSubject
+            }
+
+            subjectHandler(subject, it)
+        }
     }
 }
