@@ -1,26 +1,32 @@
 package com.asap.asapbackend.domain.timetable.domain.model
 
-import com.asap.asapbackend.domain.classroom.domain.model.Classroom
-import com.asap.asapbackend.global.domain.BaseDateEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
+import java.time.LocalDateTime
 
-@Entity
 class Subject(
-    classroom: Classroom,
+    id: Long = 0,
+    classroomId: Long,
     name: String,
-    semester: String
-) : BaseDateEntity() {
+    semester: String,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
+) {
+    val id: Long = id
 
     val name : String = name
 
     val semester : String = semester
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val classroom: Classroom = classroom
+    val classroomId: Long = classroomId
 
-    fun isSameSubject(subject: Subject): Boolean {
-        return this.name == subject.name && this.semester == subject.semester && this.classroom.id == subject.classroom.id
+    val createdAt: LocalDateTime = createdAt
+    val updatedAt: LocalDateTime = updatedAt
+
+
+    fun isSameSubject(
+        name: String,
+        semester: String,
+        classroomId: Long
+    ): Boolean {
+        return this.name == name && this.semester == semester && this.classroomId == classroomId
     }
 }

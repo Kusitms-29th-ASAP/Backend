@@ -11,10 +11,10 @@ class TimetableReader(
     private val timetableRepository: TimetableRepository
 ) {
     fun findTodayTimetableByClassroomId(classroomId: Long): List<Timetable> {
-        return timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now())
+        return timetableRepository.findByClassroomIdAndDayOrderByTime(classroomId, LocalDate.now())
     }
 
-    fun findThisWeekTimetableByClassroomId(classroomId: Long): Map<DayOfWeek, List<Timetable?>> {
+    fun findThisWeekTimetableByClassroomId(classroomId: Long): Map<DayOfWeek, List<Timetable>> {
         val daysOfWeek = listOf(
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,
@@ -23,7 +23,7 @@ class TimetableReader(
             DayOfWeek.FRIDAY
         )
         return daysOfWeek.associateWith { day ->
-            timetableRepository.findBySubjectClassroomIdAndDayOrderByTime(classroomId, LocalDate.now().with(day))
+            timetableRepository.findByClassroomIdAndDayOrderByTime(classroomId, LocalDate.now().with(day))
         }
     }
 }
