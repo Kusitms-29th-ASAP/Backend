@@ -15,7 +15,6 @@ class TimetableScheduler(
     private val timetableAppender: TimetableAppender
 ) {
     @Scheduled(cron = "0 0 5 * * MON") //매주 월요일 05:00:00에 실행
-//    @Scheduled(fixedDelay = 1000000000)
     fun addTimetable() {
         val batchSize = 100
         var pageNumber = 0
