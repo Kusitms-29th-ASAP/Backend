@@ -46,7 +46,6 @@ class TodoRepositoryImpl(
 
     override fun save(todo: Todo): Todo {
         val savedTodo = todoJpaRepository.save(TodoMapper.toEntity(todo))
-
         return TodoMapper.toModel(savedTodo)
     }
 
