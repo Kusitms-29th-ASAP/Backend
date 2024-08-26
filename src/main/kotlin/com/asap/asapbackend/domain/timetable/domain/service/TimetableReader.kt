@@ -14,7 +14,7 @@ class TimetableReader(
         return timetableRepository.findByClassroomIdAndDayOrderByTime(classroomId, LocalDate.now())
     }
 
-    fun findThisWeekTimetableByClassroomId(classroomId: Long): Map<DayOfWeek, List<Timetable?>> {
+    fun findThisWeekTimetableByClassroomId(classroomId: Long): Map<DayOfWeek, List<Timetable>> {
         val daysOfWeek = listOf(
             DayOfWeek.MONDAY,
             DayOfWeek.TUESDAY,

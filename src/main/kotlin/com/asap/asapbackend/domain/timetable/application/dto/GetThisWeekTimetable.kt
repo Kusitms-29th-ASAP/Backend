@@ -7,7 +7,7 @@ class GetThisWeekTimetable {
         val timetables : Map<DayOfWeek,List<Timetable>>
     )
     data class Timetable(
-        val time: Int?,
-        val subject: String?
+        val time: Int,
+        val subject: String
     )
 }

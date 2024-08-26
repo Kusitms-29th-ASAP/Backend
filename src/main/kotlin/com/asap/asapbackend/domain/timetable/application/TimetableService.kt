@@ -18,6 +18,7 @@ class TimetableService(
     private val timetableReader: TimetableReader,
     private val subjectReader: SubjectReader
 ) {
+
     fun getTodayTimetable(): GetTodayTimetable.Response {
         val userId = getCurrentUserId()
         val studentId = childReader.findPrimaryChild(userId).id
@@ -38,7 +39,7 @@ class TimetableService(
         val subjectMap = subjectReader.findSubjectMapByClassroomId(classroomId)
         val weekDataList = weekTimetables.mapValues { (_, timetables) ->
             timetables.map { timetable ->
-                GetThisWeekTimetable.Timetable(timetable?.time, subjectMap[timetable?.subject?.id]?.name ?: "")
+                GetThisWeekTimetable.Timetable(timetable.time, subjectMap[timetable.subject.id]?.name ?: "")
             }
         }
         return GetThisWeekTimetable.Response(weekDataList)
