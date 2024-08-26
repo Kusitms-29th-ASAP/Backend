@@ -139,4 +139,7 @@ jobs:
             docker stop $IMAGE_NAME || true
             docker rm $IMAGE_NAME || true
             docker compose up -d
+            
+            docker exec -i nginx-nginx-1 service nginx reload
+            
             docker image prune -f
