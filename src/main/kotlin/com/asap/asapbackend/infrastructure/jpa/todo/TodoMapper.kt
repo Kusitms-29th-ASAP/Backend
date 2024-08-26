@@ -13,6 +13,7 @@ object TodoMapper {
             childId = todoEntity.childId,
             deadline = todoEntity.deadline,
             isAssigned = todoEntity.isAssigned,
+            status = todoEntity.status,
             createdAt = todoEntity.createdAt,
             updatedAt = todoEntity.updatedAt
         )
@@ -26,6 +27,7 @@ object TodoMapper {
             childId = todo.childId,
             deadline = todo.deadline,
             isAssigned = todo.isAssigned,
+            status = todo.status,
             createdAt = todo.createdAt,
             updatedAt = todo.updatedAt
         )

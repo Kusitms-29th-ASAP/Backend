@@ -20,6 +20,7 @@ class TodoEntity(
     childId: Long,
     deadline: LocalDate,
     isAssigned: Boolean,
+    status: Status,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime
 ) : BaseEntity(createdAt, updatedAt){
@@ -46,11 +47,12 @@ class TodoEntity(
         nullable = false,
         columnDefinition = "varchar(50)"
     )
-    val status: Status = Status.INCOMPLETE
+    val status: Status = status
 
 
     @Column(name = "child_id")
     val childId: Long = childId
+
 
 
     fun changeDescription(description: String?){

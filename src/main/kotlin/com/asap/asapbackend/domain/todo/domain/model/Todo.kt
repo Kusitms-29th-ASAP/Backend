@@ -14,6 +14,7 @@ class Todo (
     childId: Long,
     deadline: LocalDate,
     isAssigned: Boolean,
+    status: Status = Status.INCOMPLETE,
     createdAt: LocalDateTime = LocalDateTime.now(),
     updatedAt: LocalDateTime = LocalDateTime.now()
 ){
@@ -33,7 +34,7 @@ class Todo (
 
     val isAssigned : Boolean = isAssigned
 
-    var status: Status = Status.INCOMPLETE
+    var status: Status = status
         protected set
 
     val childId : Long = childId
