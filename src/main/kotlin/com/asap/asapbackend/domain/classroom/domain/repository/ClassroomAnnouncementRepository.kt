@@ -1,10 +1,13 @@
 package com.asap.asapbackend.domain.classroom.domain.repository
 
 import com.asap.asapbackend.domain.classroom.domain.model.ClassroomAnnouncement
-import org.springframework.data.jpa.repository.JpaRepository
 
-interface ClassroomAnnouncementRepository: JpaRepository<ClassroomAnnouncement,Long> {
+interface ClassroomAnnouncementRepository{
     fun findTopByClassroomIdOrderByCreatedAtDesc(classroomId : Long) : ClassroomAnnouncement?
 
     fun findAllByClassroomIdOrderByCreatedAtDesc(classroomId : Long) : List<ClassroomAnnouncement>
+
+    fun findByIdOrNull(classroomAnnouncementId : Long) : ClassroomAnnouncement?
+
+    fun save(classroomAnnouncement : ClassroomAnnouncement) : ClassroomAnnouncement
 }
