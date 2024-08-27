@@ -10,7 +10,7 @@ interface TodoRepository {
 
     fun save(todo: Todo): Todo
 
-    fun insertBatch(todos: Set<Todo>)
-
     fun delete(todo: Todo)
+
+    fun saveAll(todos: List<Todo>): List<Todo>
 }

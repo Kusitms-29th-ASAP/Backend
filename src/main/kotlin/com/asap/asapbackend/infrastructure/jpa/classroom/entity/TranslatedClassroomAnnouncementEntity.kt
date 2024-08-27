@@ -6,10 +6,12 @@ import com.asap.asapbackend.infrastructure.jpa.MultiLanguageId
 import jakarta.persistence.Column
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
+import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 
 @Entity
+@Table(name = "translated_classroom_announcement")
 class TranslatedClassroomAnnouncementEntity(
     classroomAnnouncementId: Long,
     language: Language,

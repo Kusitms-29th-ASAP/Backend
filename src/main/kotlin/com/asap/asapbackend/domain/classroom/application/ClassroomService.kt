@@ -9,6 +9,7 @@ import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
 import com.asap.asapbackend.domain.classroom.event.ClassroomAnnouncementCreateEvent
 import com.asap.asapbackend.domain.teacher.domain.service.TeacherReader
 import com.asap.asapbackend.domain.todo.domain.service.TodoAppender
+import com.asap.asapbackend.domain.todo.event.MultiTodoCreateEvent
 import com.asap.asapbackend.global.security.getCurrentUserId
 import com.asap.asapbackend.global.security.getTeacherId
 import org.springframework.context.ApplicationEventPublisher
@@ -41,12 +42,14 @@ class ClassroomService(
             )
         )
 
-        applicationEventPublisher.publishEvent(ClassroomAnnouncementCreateEvent(createAnnouncement))
-
         val studentIds = classroom.getStudentIds()
         val students = childReader.findAllByIds(studentIds)
         val todos = request.toTodo(students)
-        todoAppender.appendAllBatch(todos)
+        val savedTodos = todoAppender.appendAllBatch(todos)
+
+
+        applicationEventPublisher.publishEvent(ClassroomAnnouncementCreateEvent(createAnnouncement))
+        applicationEventPublisher.publishEvent(MultiTodoCreateEvent(savedTodos))
     }
 
     fun getTodayClassroomAnnouncement(): GetTodayClassroomAnnouncement.Response {
