@@ -1,38 +1,30 @@
 package com.asap.asapbackend.domain.classroom.domain.model
 
 import com.asap.asapbackend.domain.classroom.domain.vo.AnnouncementDescription
-import com.asap.asapbackend.domain.teacher.domain.model.Teacher
-import com.asap.asapbackend.global.domain.BaseDateEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
+import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.math.min
 
-@Entity
 class ClassroomAnnouncement(
+    id: Long = 0,
     descriptions: List<AnnouncementDescription>,
-    classroom: Classroom,
-    teacher: Teacher
-) : BaseDateEntity() {
+    classroomId: Long,
+    teacherId: Long,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
+) {
+    val id: Long = id
 
-
-    @Column(
-        nullable = false,
-        columnDefinition = "json"
-    )
-    @JdbcTypeCode(SqlTypes.JSON)
     val descriptions: List<AnnouncementDescription> = descriptions
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val classroom: Classroom = classroom
+    val classroomId: Long = classroomId
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val teacher: Teacher = teacher
+    val teacherId : Long = teacherId
 
-    fun getWriteDate() = this.createdAt.toLocalDate()
+    val createdAt: LocalDateTime = createdAt
+    val updatedAt: LocalDateTime = updatedAt
+
+    val writeDate: LocalDate = this.createdAt.toLocalDate()
 
     fun getSubListFromDescription(fromIndex: Int, toIndex: Int) : List<AnnouncementDescription>{
         return this.descriptions.subList(fromIndex, min(toIndex, this.descriptions.size))

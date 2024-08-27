@@ -2,13 +2,16 @@ package com.asap.asapbackend.domain.classroom.application
 
 import com.asap.asapbackend.domain.child.domain.service.ChildReader
 import com.asap.asapbackend.domain.classroom.application.dto.*
-import com.asap.asapbackend.domain.classroom.domain.service.ClassModifier
+import com.asap.asapbackend.domain.classroom.domain.model.ClassroomAnnouncement
+import com.asap.asapbackend.domain.classroom.domain.service.ClassroomAnnouncementAppender
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomAnnouncementReader
 import com.asap.asapbackend.domain.classroom.domain.service.ClassroomReader
+import com.asap.asapbackend.domain.classroom.event.ClassroomAnnouncementCreateEvent
 import com.asap.asapbackend.domain.teacher.domain.service.TeacherReader
 import com.asap.asapbackend.domain.todo.domain.service.TodoAppender
 import com.asap.asapbackend.global.security.getCurrentUserId
 import com.asap.asapbackend.global.security.getTeacherId
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,11 +19,12 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class ClassroomService(
     private val classroomReader: ClassroomReader,
-    private val classModifier: ClassModifier,
     private val teacherReader: TeacherReader,
     private val childReader: ChildReader,
     private val todoAppender: TodoAppender,
-    private val classroomAnnouncementReader: ClassroomAnnouncementReader
+    private val classroomAnnouncementReader: ClassroomAnnouncementReader,
+    private val classroomAnnouncementAppender: ClassroomAnnouncementAppender,
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) {
 
     @Transactional
@@ -29,8 +33,15 @@ class ClassroomService(
         val classroom = classroomReader.findByTeacher(teacherId)
         val teacher = teacherReader.findById(teacherId)
 
-        classroom.addAnnouncement(teacher, request.toAnnouncementDescription())
-        classModifier.update(classroom)
+        val createAnnouncement = classroomAnnouncementAppender.append(
+            ClassroomAnnouncement(
+                descriptions = request.toAnnouncementDescription(),
+                classroomId = classroom.id,
+                teacherId = teacher.id
+            )
+        )
+
+        applicationEventPublisher.publishEvent(ClassroomAnnouncementCreateEvent(createAnnouncement))
 
         val studentIds = classroom.getStudentIds()
         val students = childReader.findAllByIds(studentIds)
@@ -65,7 +76,7 @@ class ClassroomService(
         val announcement = classroomAnnouncementReader.findById(classroomAnnouncementId)
         return GetClassroomAnnouncementDetail.Response(
             teacherName,
-            announcement.getWriteDate(),
+            announcement.writeDate,
             announcement.descriptions
         )
     }

@@ -1,7 +1,6 @@
 package com.asap.asapbackend.domain.classroom.domain.model
 
 import com.asap.asapbackend.domain.child.domain.model.Child
-import com.asap.asapbackend.domain.classroom.domain.vo.AnnouncementDescription
 import com.asap.asapbackend.domain.classroom.domain.vo.Grade
 import com.asap.asapbackend.domain.classroom.domain.vo.Year
 import com.asap.asapbackend.domain.school.domain.model.School
@@ -40,9 +39,6 @@ class Classroom(
     @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
     val teacherClassroomSet: MutableSet<TeacherClassroom> = mutableSetOf()
 
-    @OneToMany(mappedBy = "classroom", cascade = [CascadeType.ALL])
-    val classroomAnnouncementList: MutableList<ClassroomAnnouncement> = mutableListOf()
-
     fun addChild(child: Child) {
         childClassroomSet.add(ChildClassroom(child, this))
     }
@@ -54,11 +50,6 @@ class Classroom(
 
     fun isSameClassroom(classroom: Classroom): Boolean {
         return this.grade == classroom.grade && this.className == classroom.className && this.school.id == classroom.school.id
-    }
-
-
-    fun addAnnouncement(teacher: Teacher, descriptions: List<AnnouncementDescription>) {
-        classroomAnnouncementList.add(ClassroomAnnouncement(descriptions, this, teacher))
     }
 
     @BatchSize(size = 100)
