@@ -4,7 +4,5 @@ import com.asap.asapbackend.domain.announcement.domain.model.EducationOfficeAnno
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface EducationOfficeAnnouncementCategoryRepository: JpaRepository<EducationOfficeAnnouncementCategory, Long> {
-    fun findByEducationOfficeAnnouncementId(educationOfficeAnnouncementId: Long): EducationOfficeAnnouncementCategory?
-
     fun findByEducationOfficeAnnouncementIdAndClassroomId(educationOfficeAnnouncementId: Long, classroomId: Long): EducationOfficeAnnouncementCategory?
 }

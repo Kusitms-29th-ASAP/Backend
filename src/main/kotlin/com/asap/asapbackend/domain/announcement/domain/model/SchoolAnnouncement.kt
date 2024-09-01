@@ -1,47 +1,29 @@
 package com.asap.asapbackend.domain.announcement.domain.model
 
-import com.asap.asapbackend.global.domain.BaseDateEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.ManyToOne
-import org.hibernate.annotations.JdbcTypeCode
-import org.hibernate.type.SqlTypes
+import java.time.LocalDateTime
 
-@Entity
 class SchoolAnnouncement(
-    schoolAnnouncementPage: SchoolAnnouncementPage,
+    id: Long = 0,
+    schoolAnnouncementPageId: Long,
     index: Int,
     title: String,
     imageUrls: List<String>,
     summaries : List<String>,
-    keywords: List<String>
-) : BaseDateEntity() {
+    keywords: List<String>,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
+){
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val schoolAnnouncementPage: SchoolAnnouncementPage = schoolAnnouncementPage
-
+    val id: Long = id
+    val schoolAnnouncementPageId: Long = schoolAnnouncementPageId
     val idx: Int = index
     val title: String = title
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(
-        nullable = false,
-        columnDefinition = "json"
-    )
     val imageUrls: List<String> = imageUrls
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(
-        nullable = false,
-        columnDefinition = "json"
-    )
     val summaries: List<String> = summaries
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(
-        nullable = false,
-        columnDefinition = "json"
-    )
     val keywords: List<String> = keywords
+
+    val createdAt: LocalDateTime = createdAt
+    val updatedAt: LocalDateTime = updatedAt
 }

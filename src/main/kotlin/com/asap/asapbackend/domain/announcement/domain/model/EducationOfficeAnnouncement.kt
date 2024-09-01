@@ -1,19 +1,22 @@
 package com.asap.asapbackend.domain.announcement.domain.model
 
-import com.asap.asapbackend.global.domain.BaseDateEntity
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
+import java.time.LocalDateTime
 
-@Entity
 class EducationOfficeAnnouncement(
+    id: Long = 0L,
     idx: Int,
     title: String,
     imageUrls: List<String>,
     summaries: List<String>,
-    keywords: List<String>
-) : BaseDateEntity() {
+    keywords: List<String>,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
+){
+
+    val id: Long = id
 
     val idx: Int = idx
     val title: String = title
@@ -40,4 +43,7 @@ class EducationOfficeAnnouncement(
     )
     @JdbcTypeCode(SqlTypes.JSON)
     val keywords: List<String> = keywords
+
+    val createdAt: LocalDateTime = createdAt
+    val updatedAt: LocalDateTime = updatedAt
 }

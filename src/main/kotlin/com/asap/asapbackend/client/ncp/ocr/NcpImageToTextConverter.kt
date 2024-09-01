@@ -57,6 +57,6 @@ class NcpImageToTextConverter(
 
     companion object {
         private val NCP_OCR_API_URL =
-            "https://79vlzuxe20.apigw.ntruss.com/custom/v1/31007/86118a3b7fc92492b026562882076481e99119cc9563879b4f0076cf8d7bff31/general"
+            "https://dyu1s3jpzv.apigw.ntruss.com/custom/v1/31007/86118a3b7fc92492b026562882076481e99119cc9563879b4f0076cf8d7bff31/general"
     }
 }
