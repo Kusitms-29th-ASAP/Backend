@@ -14,7 +14,6 @@ private val logger = KotlinLogging.logger {}
 class MenuAppender(
     private val menuRepository: MenuRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val objectMapper: ObjectMapper
 ) {
     fun addMenus(menus: List<Menu>) {
         val savedMenu = menuRepository.saveAll(menus)

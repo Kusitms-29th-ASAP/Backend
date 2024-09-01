@@ -3,7 +3,7 @@ package com.asap.asapbackend.client.openai
 object OpenAIUtils {
 
     fun chatGptRequestFormat(prompt: String, requestMessage: String)= mapOf(
-        "model" to "gpt-4o",
+        "model" to "gpt-4o-mini",
         "messages" to listOf(
             mapOf(
                 "role" to "system",

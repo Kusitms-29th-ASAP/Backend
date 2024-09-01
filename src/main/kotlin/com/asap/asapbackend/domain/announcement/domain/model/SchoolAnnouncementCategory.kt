@@ -16,8 +16,7 @@ class SchoolAnnouncementCategory(
     @ManyToOne(fetch = FetchType.LAZY)
     val classroom: Classroom = classroom
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    val schoolAnnouncement: SchoolAnnouncement = schoolAnnouncement
+    val schoolAnnouncementId: Long = schoolAnnouncement.id
 
     @Enumerated(EnumType.STRING)
     @Column(

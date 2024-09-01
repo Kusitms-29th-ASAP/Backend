@@ -39,7 +39,7 @@ class AnnouncementScheduler(
                 .map {
                     val (summarizedText, keywords) = convertImageToSummariesAndKeywords(it.imageUrls)
                     return@map SchoolAnnouncement(
-                        schoolAnnouncementPage = it.schoolAnnouncementPage,
+                        schoolAnnouncementPageId = it.schoolAnnouncementPage.id,
                         index = it.index,
                         title = it.title,
                         imageUrls = it.imageUrls,
