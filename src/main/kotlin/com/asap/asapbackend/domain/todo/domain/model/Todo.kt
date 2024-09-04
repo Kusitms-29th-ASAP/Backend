@@ -21,7 +21,6 @@ class Todo (
 
     init {
         validateProperty(description.isNotBlank())
-        validateProperty(deadline.isAfter(LocalDate.now().minusDays(1)))
     }
 
     val id: Long = id
